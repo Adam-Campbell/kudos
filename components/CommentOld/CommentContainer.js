@@ -1,20 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as ActionCreators from '../../actions';
 import Comment from './Comment';
 
 class CommentContainer extends Component {
     constructor(props) {
         super(props);
         this.toggleReplyForm = this.toggleReplyForm.bind(this);
-        this.boundReplyToComment = this.boundReplyToComment.bind(this);
         this.state = {
             replyFormIsVisible: false
         };
-    }
-
-    boundReplyToComment(commentText) {
-        this.props.replyToComment(commentText, this.props._id, this.props.token);
     }
 
     toggleReplyForm() {
@@ -35,7 +29,7 @@ class CommentContainer extends Component {
             isLoggedIn={this.props.isLoggedIn}
             toggleReplyForm={this.toggleReplyForm}
             replyFormIsVisible={this.state.replyFormIsVisible}
-            boundReplyToComment={this.boundReplyToComment}
+
         />
     }
 }
@@ -43,13 +37,7 @@ class CommentContainer extends Component {
 const mapStateToProps = state => ({
     comments: state.comments,
     users: state.users.models,
-    isLoggedIn: state.currentUser.isLoggedIn,
-    token: state.currentUser.token
+    isLoggedIn: state.currentUser.isLoggedIn
 });
 
-export default connect(
-    mapStateToProps,
-    {
-        replyToComment: ActionCreators.replyToComment
-    }
-)(CommentContainer);
+export default connect(mapStateToProps)(CommentContainer);

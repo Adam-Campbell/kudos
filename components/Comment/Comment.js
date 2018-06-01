@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { Button } from '../Button';
 import CommentReplyForm from './CommentReplyForm';
 import CommentMetaBlock from './CommentMetaBlock';
+import CommentDisplay from '../CommentDisplay';
+import CommentEditor from '../CommentEditor';
 
 const CommentDepth = styled.div`
     width: 100%;
@@ -36,7 +38,7 @@ const Comment = props => (
                 commentCreatedAt={props.commentCreatedAt}
             />
             <InnerContainer>
-                <CommentText>{props.commentText}</CommentText>
+                <CommentDisplay comment_id={props.comment_id} />
             </InnerContainer>
             <InnerContainer>
                 {props.isLoggedIn && <Button onClick={props.toggleReplyForm}>Reply</Button>}
@@ -44,9 +46,10 @@ const Comment = props => (
             {
                 props.isLoggedIn && 
                 props.replyFormIsVisible &&
-                <CommentReplyForm 
-                    _id={props.comment_id}
-                    toggleReplyForm={props.toggleReplyForm}
+                <CommentEditor 
+                    submitCallback={props.boundReplyToComment}
+                    cancelCallback={props.toggleReplyForm}
+                    isCancellable={true}
                 />
             }
         </CommentContainer>

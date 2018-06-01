@@ -4,8 +4,6 @@ import Link from 'next/link';
 import CommentMetaBlock from './CommentMetaBlock';
 import CommentReplyForm from './CommentReplyForm';
 import { Button } from '../Button';
-import CommentDisplay from '../CommentDisplay';
-import CommentEditor from '../CommentEditor';
 
 const CommentDepth = styled.div`
     width: 100%;
@@ -55,16 +53,22 @@ const OwnComment = props => (
             />
             {
                 props.isEditing ? (
-                    <CommentEditor 
-                        submitCallback={props.boundSubmitEditComment}
-                        cancelCallback={props.toggleEditing}
-                        isCancellable={true}
-                        optionalComment_id={props.comment_id}
-                    />
+                    <React.Fragment>
+                        <InnerContainer>
+                            <CommentEditorInput 
+                                value={props.commentEditorText}
+                                onChange={props.handleCommentEditorUpdate}
+                            />
+                        </InnerContainer>
+                        <InnerContainer>
+                            <ControlButton onClick={props.cancelEdit}>Cancel</ControlButton>
+                            <ControlButton onClick={props.handleEditSubmit}>Save</ControlButton>
+                        </InnerContainer>
+                    </React.Fragment>
                 ) : (
                     <React.Fragment>
                         <InnerContainer>
-                            <CommentDisplay optionalComment_id={props.comment_id} />
+                                <CommentText>{props.commentText}</CommentText>
                         </InnerContainer>
                         <InnerContainer>
                             <ControlButton onClick={props.toggleReplyForm}>Reply</ControlButton>
@@ -73,10 +77,9 @@ const OwnComment = props => (
                         </InnerContainer> 
                         {
                             props.replyFormIsVisible &&
-                            <CommentEditor
-                                submitCallback={props.boundReplyToComment}
-                                cancelCallback={props.toggleReplyForm}
-                                isCancellable={true} 
+                            <CommentReplyForm 
+                                _id={props.comment_id}
+                                toggleReplyForm={props.toggleReplyForm}
                             />
                         }
                     </React.Fragment>
@@ -87,19 +90,3 @@ const OwnComment = props => (
 );
 
 export default OwnComment;
-
-
-
-
-                    // <React.Fragment>
-                    //     <InnerContainer>
-                    //         <CommentEditorInput 
-                    //             value={props.commentEditorText}
-                    //             onChange={props.handleCommentEditorUpdate}
-                    //         />
-                    //     </InnerContainer>
-                    //     <InnerContainer>
-                    //         <ControlButton onClick={props.cancelEdit}>Cancel</ControlButton>
-                    //         <ControlButton onClick={props.handleEditSubmit}>Save</ControlButton>
-                    //     </InnerContainer>
-                    // </React.Fragment>

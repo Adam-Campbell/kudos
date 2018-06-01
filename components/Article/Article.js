@@ -4,9 +4,11 @@ import AuthorBlock from '../AuthorBlock';
 import { Wrapper } from '../Layout';
 import Comment from '../Comment';
 import CommentForm from '../CommentForm';
+import CommentEditor from '../CommentEditor';
 import { AnchorButton } from '../Button';
 import Link from 'next/link';
 import KudosButton from '../KudosButton';
+import ArticleCommentBoxContainer from './ArticleCommentBoxContainer';
 
 const ArticleOuter = styled.article`
 
@@ -148,7 +150,7 @@ const Article = props => (
         </section>
         <section>
             <Wrapper tight>
-                {props.isLoggedIn && <CommentForm post_id={props.article_id}/>}
+                {props.isLoggedIn && <ArticleCommentBoxContainer article_id={props.article_id}/>}
                 {props.commentIds.map((comment_id, index) => (
                     <Comment _id={comment_id} key={index} />
                 ))}
