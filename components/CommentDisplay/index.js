@@ -12,37 +12,7 @@ import {
 } from 'draft-js';
 import CustomCodeBlockWrapper from './CustomCodeBlockWrapper';
 import LinkDecorator from './LinkDecorator';
-
 const Immutable = require('immutable');
-
-/*
-The problem I'm encountering:
-
-I need to have it so when a user edits one of their comments and then clicks submit, it toggles
-straight back into the non editing state, and then renders the CommentDisplay component with the new
-text. 
-
-Currently, it does not do this. This is because it renders the CommentDisplay component straight away, 
-technically before the new props (the updated comment text) have reached it. And then because it doesn't
-work off of props, only internal state (it only gets its initial mounting state from props), it doesn't have
-the correct text anymore, and it won't until the component is forcibly rerendered. 
-
-Maybe there is a solution to this using getDerivedStateFromProps.
-
-However, I think ultimately the best way to go is just not to have seperate components for editable / readOnly
-text editors (I'm referring to CommentEditor and CommentDisplay here).
-
-If I store isEditing in the state I can then toggle it to switch between editing and readOnly modes. I can
-also conditionally render the editing controls depending on this part of state. This should resolve the issue
-outlined above.
-
-One small issue might be the reply to post comment editor, as this should always be in editing mode, so I will 
-need to find a way to force it to stay in editing mode in this one instance. This shouldn't present too much
-of a problem however. 
-
-*/
-
-
 
 const EditorContainer = styled.div`
     background-color: #eee;
@@ -83,7 +53,7 @@ class CommentDisplay extends Component {
                 component: LinkDecorator
             }
         ]);
-        const comment = this.props.comments[this.props.optionalComment_id];       
+        const comment = this.props.comments[this.props.optionalComment_id];    
         this.state = {
             editorState: EditorState.createWithContent(convertFromRaw(comment.text), decorator),
         };

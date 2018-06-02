@@ -2,10 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Header from './Header';
 
-// const HeaderContainer = props => (
-//     <Header isLoggedIn={props.isLoggedIn} hasFetched={props.hasFetched} />
-// );
-
 class HeaderContainer extends Component {
     constructor(props) {
         super(props);

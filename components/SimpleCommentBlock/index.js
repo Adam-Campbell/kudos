@@ -4,7 +4,7 @@ import SimpleCommentBlock from './SimpleCommentBlock';
 const SimpleCommentBlockContainer = props => {
     const comment = props.comments[props._id]
     return <SimpleCommentBlock 
-        commentText={comment.text}
+        comment_id={props._id}
         discussion_id={comment.discussion}
     />
 };

@@ -53,4 +53,3 @@ export default connect(
         updateUserDetails: ActionCreators.updateUserDetails
     }
 )(UserDetailsFormContainer);
-

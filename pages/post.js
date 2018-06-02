@@ -1,18 +1,12 @@
 import withRedux from 'next-redux-wrapper';
 import makeStore from '../store';
-import { injectGlobal } from 'styled-components';
-import NavBar from '../components/NavBar';
-import FullPost from '../components/FullPost';
 import { fetchPost, fetchCurrentUser } from '../actions';
 import { fetchCurrentUserIfNeeded, fetchPostIfNeeded, cleanseErrorsAndSuccesses } from '../utils';
-import PostCommentCollection from '../components/PostCommentCollection';
 import Link from 'next/link';
-import CommentForm from '../components/CommentForm';
 import Article from '../components/Article';
 import Header from '../components/Header';
 
 const post = props => {
-
     const currentPost = props.posts[props._id];
     const isAuthor = props.isLoggedIn && currentPost.author === props.currentUser_id ? true : false;
 

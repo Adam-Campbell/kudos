@@ -45,7 +45,6 @@ const mapStateToProps = state => ({
     isLoggedIn: state.currentUser.isLoggedIn
 });
 
-// actions require post_id, currentUser_id, token as arguments in that order.
 export default connect(
     mapStateToProps,
     {

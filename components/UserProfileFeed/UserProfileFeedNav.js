@@ -28,7 +28,6 @@ const NavAnchor = styled.a`
     }
 `;
 
-
 const UserProfileFeedNav = props => (
     <section>
         <Nav>

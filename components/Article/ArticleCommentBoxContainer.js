@@ -9,8 +9,9 @@ class ArticleCommentBoxContainer extends Component {
         this.boundSubmitHandler = this.boundSubmitHandler.bind(this);
     }
 
-    boundSubmitHandler(commentData) {
-        this.props.replyToPost(commentData, this.props.article_id, this.props.token);
+    boundSubmitHandler(commentData, clearFieldCallback) {
+        this.props.replyToPost(commentData, this.props.article_id, this.props.token)
+        .then(() => clearFieldCallback());
     }
 
     render() {

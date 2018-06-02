@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import * as styleConstants from '../styleConstants';
 import Link from 'next/link';
 import CommentMetaBlock from './CommentMetaBlock';
-import CommentReplyForm from './CommentReplyForm';
 import { Button } from '../Button';
 import CommentDisplay from '../CommentDisplay';
 import CommentEditor from '../CommentEditor';
@@ -87,19 +86,3 @@ const OwnComment = props => (
 );
 
 export default OwnComment;
-
-
-
-
-                    // <React.Fragment>
-                    //     <InnerContainer>
-                    //         <CommentEditorInput 
-                    //             value={props.commentEditorText}
-                    //             onChange={props.handleCommentEditorUpdate}
-                    //         />
-                    //     </InnerContainer>
-                    //     <InnerContainer>
-                    //         <ControlButton onClick={props.cancelEdit}>Cancel</ControlButton>
-                    //         <ControlButton onClick={props.handleEditSubmit}>Save</ControlButton>
-                    //     </InnerContainer>
-                    // </React.Fragment>

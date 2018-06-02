@@ -1,10 +1,7 @@
 import withRedux from 'next-redux-wrapper';
 import makeStore from '../store';
-import NavBar from '../components/NavBar';
 import { fetchUser, fetchCurrentUser } from '../actions';
 import { fetchCurrentUserIfNeeded, fetchUserIfNeeded, cleanseErrorsAndSuccesses } from '../utils';
-import UserDetails from '../components/UserDetails';
-import UserSubNav from '../components/UserSubNav';
 import { Wrapper } from '../components/Layout';
 import Header from '../components/Header';
 import UserProfileHeader from '../components/UserProfileHeader';

@@ -55,7 +55,6 @@ const ModalButton = Button.extend`
     }
 `;
 
-
 const SuccessModal = props => (
     <PageOverlay>
         <SuccessModalWrapper>

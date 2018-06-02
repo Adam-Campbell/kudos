@@ -3,8 +3,6 @@ import * as styleConstants from '../styleConstants';
 import AuthorBlock from '../AuthorBlock';
 import { Wrapper } from '../Layout';
 import Comment from '../Comment';
-import CommentForm from '../CommentForm';
-import CommentEditor from '../CommentEditor';
 import { AnchorButton } from '../Button';
 import Link from 'next/link';
 import KudosButton from '../KudosButton';
@@ -151,8 +149,8 @@ const Article = props => (
         <section>
             <Wrapper tight>
                 {props.isLoggedIn && <ArticleCommentBoxContainer article_id={props.article_id}/>}
-                {props.commentIds.map((comment_id, index) => (
-                    <Comment _id={comment_id} key={index} />
+                {props.commentIds.map(comment_id => (
+                    <Comment _id={comment_id} key={comment_id} />
                 ))}
             </Wrapper>
         </section>

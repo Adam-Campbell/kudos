@@ -55,7 +55,6 @@ const ModalButton = Button.extend`
     }
 `;
 
-
 const ErrorModal = props => (
     <PageOverlay>
         <ErrorModalWrapper>

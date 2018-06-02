@@ -6,13 +6,6 @@ import Header from '../components/Header';
 import NewPostForm from '../components/NewPostForm';
 import Router from 'next/router';
 
-// const newPost = props => (
-//     <React.Fragment>
-//         <NavBar />
-//         {props.isLoggedIn ? <NewPostForm /> : <p>Sorry, you have to be logged in to view this page.</p>}
-//     </React.Fragment>
-// );
-
 const newPost = props => {
     if (props.isLoggedIn) {
         return (

@@ -19,9 +19,6 @@ export const Wrapper = styled.div`
     }};
 `;
 
-//display: flex;
-//flex-wrap: wrap;
-
 export const Column = styled.div`
     width: 100%;
     padding-top: 8px;

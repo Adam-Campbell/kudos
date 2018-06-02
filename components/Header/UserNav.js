@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import * as styleConstants from '../styleConstants';
 import Link from 'next/link';
 
-const UserNav = styled.nav`
+const Nav = styled.nav`
     background-color: ${styleConstants.colorPrimary};
     overflow: hidden;
     height: ${props => props.isOpen ? '200px' : '0'};
@@ -47,11 +47,10 @@ const Anchor = styled.a`
     text-decoration: none;
 `;
 
-
-const ComposedUserNav = props => {
+const UserNav = props => {
     return (
         <UserNavWrapper>
-            <UserNav isOpen={props.isOpen}>
+            <Nav isOpen={props.isOpen}>
                 <List>
                     <ListItem>
                         <Link passHref as={`/user/${props.currentUser_id}`} href={`/user?user=${props.currentUser_id}`}>
@@ -72,7 +71,7 @@ const ComposedUserNav = props => {
                         <Anchor>Log out</Anchor>
                     </ListItem>
                 </List>
-            </UserNav>
+            </Nav>
         </UserNavWrapper>
     );
 };
@@ -81,4 +80,4 @@ const mapStateToProps = state => ({
     currentUser_id: state.currentUser._id
 });
 
-export default connect(mapStateToProps)(ComposedUserNav);
+export default connect(mapStateToProps)(UserNav);

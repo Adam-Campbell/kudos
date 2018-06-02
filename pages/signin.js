@@ -6,13 +6,6 @@ import { fetchCurrentUserIfNeeded, cleanseErrorsAndSuccesses } from '../utils';
 import Router from 'next/router';
 import { Wrapper } from '../components/Layout';
 
-// const signin = props => (
-//     <React.Fragment>
-//         <NavBar />
-//         <SignInForm />
-//     </React.Fragment>
-// );
-
 const signin = props => {
     if (!props.isLoggedIn) {
         return (

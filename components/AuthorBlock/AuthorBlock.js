@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import * as styleConstants from '../styleConstants';
 import Link from 'next/link';
-//import { Button } from '../Button';
 import FollowButton from '../FollowButton';
 
 const AuthorBlockOuter = styled.div`
@@ -49,11 +48,6 @@ const AuthorBio = styled.p`
     margin-top: 8px;
     margin-bottom: 4px;
 `;
-
-// const FollowButton = Button.extend`
-//     margin-left: 16px;
-//     align-self: center;
-// `;
 
 const StyledFollowButton = styled(FollowButton)`
     margin-left: 16px;

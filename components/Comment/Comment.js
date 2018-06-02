@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import * as styleConstants from '../styleConstants';
 import Link from 'next/link';
 import { Button } from '../Button';
-import CommentReplyForm from './CommentReplyForm';
 import CommentMetaBlock from './CommentMetaBlock';
 import CommentDisplay from '../CommentDisplay';
 import CommentEditor from '../CommentEditor';
@@ -38,7 +37,7 @@ const Comment = props => (
                 commentCreatedAt={props.commentCreatedAt}
             />
             <InnerContainer>
-                <CommentDisplay comment_id={props.comment_id} />
+                <CommentDisplay optionalComment_id={props.comment_id} />
             </InnerContainer>
             <InnerContainer>
                 {props.isLoggedIn && <Button onClick={props.toggleReplyForm}>Reply</Button>}

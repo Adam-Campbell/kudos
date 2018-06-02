@@ -54,36 +54,3 @@ export default connect(
     mapStateToProps,
     { updateUserPassword: ActionCreators.updateUserPassword }
 )(UserPasswordFormContainer);
-
-
-
-// return (
-//     <form method="put" id="passwordForm" onSubmit={this.handleSubmit}>
-//         <fieldset>
-//             <legend>Update your password</legend>
-
-//             <label htmlFor="currentPassword">Enter your current password:</label>
-//             <input 
-//                 type="password" 
-//                 id="currentPassword" 
-//                 name="current_password" 
-//                 onChange={(e) => this.handleFieldUpdate('currentPw', e.target.value)}
-//             />
-//             <label htmlFor="newPassword">Enter your new password:</label>
-//             <input 
-//                 type="password" 
-//                 id="newPassword" 
-//                 name="new_password" 
-//                 onChange={(e) => this.handleFieldUpdate('newPw', e.target.value)}
-//             />
-//             <label htmlFor="newPasswordConfirm">Confirm your new password:</label>
-//             <input 
-//                 type="password" 
-//                 id="newPasswordConfirm" 
-//                 name="new_password_confirm" 
-//                 onChange={(e) => this.handleFieldUpdate('newPwConfirm', e.target.value)}
-//             />
-//             <button type="submit">Save Password</button>
-//         </fieldset>
-//     </form>
-// )

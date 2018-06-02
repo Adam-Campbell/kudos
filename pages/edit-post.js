@@ -6,28 +6,10 @@ import Header from '../components/Header';
 import EditPostForm from '../components/EditPostForm';
 import Router from 'next/router';
 
-// const editPost = props => {
-
-//     const currentPost = props.posts[props.post_id];
-//     const isAuthor = currentPost.author === props.currentUser_id;
-
-//     return (
-//         <React.Fragment>
-//             <NavBar />
-//             {
-//                 props.isLoggedIn && isAuthor ? 
-//                 <EditPostForm post_id={props.post_id} /> : 
-//                 <p>Sorry, you do not have permission to edit this post.</p>
-//             }
-//         </React.Fragment>
-//     );
-// };
-
 const editPost = props => {
-
     const currentPost = props.posts[props.post_id];
     const isAuthor = currentPost.author === props.currentUser_id;
-
+    
     if (isAuthor) {
         return <React.Fragment>
                     <Header />

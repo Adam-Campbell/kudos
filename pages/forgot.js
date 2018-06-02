@@ -19,8 +19,4 @@ forgot.getInitialProps = async ({store, isServer, req, pathname, query}) => {
     return;
 };
 
-const mapStateToProps = state => ({
-
-});
-
-export default withRedux(makeStore, mapStateToProps)(forgot);
+export default withRedux(makeStore)(forgot);

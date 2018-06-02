@@ -77,7 +77,7 @@ class CommentEditor extends Component {
     constructor(props) {
         super(props);
         this.setEditorRef = ref => this.domEditor = ref;
-        const decorator = new CompositeDecorator([
+        this.decorator = new CompositeDecorator([
             {
                 strategy: this.findLinkEntities,
                 component: LinkDecorator
@@ -85,6 +85,7 @@ class CommentEditor extends Component {
         ]);
         let initialEditorState;
         if (this.props.optionalComment_id) {
+            console.log(this.props.comments[this.props.optionalComment_id].text);
             initialEditorState = convertFromRaw(
                 this.props.comments[this.props.optionalComment_id].text
             );
@@ -92,7 +93,7 @@ class CommentEditor extends Component {
             initialEditorState = emptyContentState;
         }
         this.state = {
-            editorState: EditorState.createWithContent(initialEditorState, decorator),
+            editorState: EditorState.createWithContent(initialEditorState, this.decorator),
             linkUrl: '',
             linkMenuIsOpen: false
         };
@@ -108,6 +109,7 @@ class CommentEditor extends Component {
         this.toggleInlineStyle = this.toggleInlineStyle.bind(this);
         this.toggleLinkMenu = this.toggleLinkMenu.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.clearEditor = this.clearEditor.bind(this);
     }
 
     componentDidMount() {
@@ -116,6 +118,10 @@ class CommentEditor extends Component {
 
     focusEditor() {
         this.domEditor.focus();
+    }
+
+    clearEditor() {
+        this.onChange(EditorState.createWithContent(emptyContentState, this.decorator));
     }
 
     toggleLinkMenu(e) {
@@ -231,7 +237,7 @@ class CommentEditor extends Component {
         const { editorState } = this.state;
         const currentContent = editorState.getCurrentContent();
         const raw = convertToRaw(currentContent);
-        this.props.submitCallback(raw);
+        this.props.submitCallback(raw, this.clearEditor);
     }
 
     render() {
