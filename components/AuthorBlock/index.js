@@ -1,8 +1,9 @@
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import AuthorBlock from './AuthorBlock';
 
 const AuthorBlockContainer = props => {
-    const article = props.articles[props._id];
+    const article = props.articles[props.article_id];
     const author = props.users[article.author];
     return <AuthorBlock 
         author_id={author._id}
@@ -10,6 +11,10 @@ const AuthorBlockContainer = props => {
         authorUsername={author.username}
         authorBio={author.bio}
     />
+};
+
+AuthorBlockContainer.propTypes = {
+    article_id: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({

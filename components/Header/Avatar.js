@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import * as styleConstants from '../styleConstants';
 
@@ -38,6 +39,10 @@ const Avatar = props => {
             {currentUserModel.avatar ? <Image src={currentUserModel.avatar}/> : <Placeholder />}
         </LinkWrapper>
     );
+};
+
+Avatar.propTypes = {
+    handleClick: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({

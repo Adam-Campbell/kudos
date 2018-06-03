@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import * as styleConstants from '../styleConstants';
 import AuthorBlock from '../AuthorBlock';
 import { Wrapper } from '../Layout';
@@ -122,7 +123,7 @@ const Article = props => (
                     <EditArticleButton>Edit this article</EditArticleButton>
                 </Link>
             }
-            <AuthorBlock _id={props.article_id} />
+            <AuthorBlock article_id={props.article_id} />
             <ArticleHeader>
                 <ArticleTitle>{props.articleTitle}</ArticleTitle>
                 <ArticleDescription>{props.articleDescription}</ArticleDescription>
@@ -150,11 +151,23 @@ const Article = props => (
             <Wrapper tight>
                 {props.isLoggedIn && <ArticleCommentBoxContainer article_id={props.article_id}/>}
                 {props.commentIds.map(comment_id => (
-                    <Comment _id={comment_id} key={comment_id} />
+                    <Comment comment_id={comment_id} key={comment_id} />
                 ))}
             </Wrapper>
         </section>
     </ArticleOuter>
 );
+
+Article.propTypes = {
+    article_id: PropTypes.string.isRequired,
+    articleTitle: PropTypes.string.isRequired,
+    articleDescription: PropTypes.string.isRequired,
+    articleImage: PropTypes.string.isRequired,
+    articleText: PropTypes.string.isRequired,
+    articleKudos: PropTypes.number.isRequired,
+    commentIds: PropTypes.arrayOf(PropTypes.string),
+    isLoggedIn: PropTypes.bool.isRequired,
+    isAuthor: PropTypes.bool.isRequired,
+}
 
 export default Article;

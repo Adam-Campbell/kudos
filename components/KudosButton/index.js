@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import * as ActionCreators from '../../actions';
 import KudosButton from './KudosButton';
 
@@ -37,6 +38,10 @@ class KudosButtonContainer extends Component {
         />
     }
 }
+
+KudosButtonContainer.propTypes = {
+    article_id: PropTypes.string.isRequired
+};
 
 const mapStateToProps = state => ({
     users: state.users.models,

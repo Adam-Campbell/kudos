@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Wrapper } from '../Layout';
 import { Button } from '../Button';
 import {
@@ -45,5 +46,15 @@ const UserPasswordForm = props => (
         </FormContainer>
     </Wrapper>
 );
+
+UserPasswordForm.propTypes = {
+    handleSubmit: PropTypes.func.isRequired,
+    handleCurrentPasswordUpdate: PropTypes.func.isRequired,
+    handleNewPasswordUpdate: PropTypes.func.isRequired,
+    handleConfirmPasswordUpdate: PropTypes.func.isRequired,
+    currentPassword: PropTypes.string.isRequired,
+    newPassword: PropTypes.string.isRequired,
+    confirmPassword: PropTypes.string.isRequired
+};
 
 export default UserPasswordForm;

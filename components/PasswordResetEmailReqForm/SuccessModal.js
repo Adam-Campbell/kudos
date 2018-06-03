@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import * as styleConstants from '../styleConstants';
 import { Button } from '../Button';
@@ -66,5 +67,9 @@ const SuccessModal = props => (
         </SuccessModalWrapper>
     </PageOverlay>
 );
+
+SuccessModal.propTypes = {
+    closeModal: PropTypes.func.isRequired
+};
 
 export default SuccessModal;

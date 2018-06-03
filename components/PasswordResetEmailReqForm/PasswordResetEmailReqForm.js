@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Button } from '../Button';
 import { Wrapper } from '../Layout';
 import Portal from '../Portal';
@@ -40,5 +41,15 @@ const PasswordResetEmailReqForm = props => (
         }
     </Wrapper>
 );
+
+PasswordResetEmailReqForm.propTypes = {
+    handleSubmit: PropTypes.func.isRequired,
+    handleEmailUpdate: PropTypes.func.isRequired,
+    email: PropTypes.string.isRequired,
+    emailNotFound: PropTypes.bool.isRequired,
+    passwordResetEmailSent: PropTypes.bool.isRequired,
+    closeSuccessModal: PropTypes.func.isRequired,
+    closeErrorModal: PropTypes.func.isRequired,
+};
 
 export default PasswordResetEmailReqForm;

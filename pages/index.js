@@ -11,9 +11,9 @@ const index = props => (
         <Header />
         <Wrapper flex regular>
             {
-                props.posts.map((post, index) => (
+                props.articles.map((article_id, index) => (
                     <Column key={index}>
-                        <JumboArticleCard _id={post} key={index}/>  
+                        <JumboArticleCard article_id={article_id} key={index}/>  
                     </Column>
                 ))
             }
@@ -31,7 +31,7 @@ index.getInitialProps = async ({store, isServer, req, pathname, query}) => {
 };
 
 const mapStateToProps = state => ({
-    posts: state.categories.all.postIds
+    articles: state.categories.all.postIds
 });
 
 export default withRedux(

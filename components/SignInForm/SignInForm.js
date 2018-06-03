@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Button } from '../Button';
 import Link from 'next/link';
 import {
@@ -43,5 +44,13 @@ const SignInForm = props => (
         </Link>
     </FormContainer>
 );
+
+SignInForm.propTypes = {
+    handleSubmit: PropTypes.func.isRequired,
+    handleUsernameUpdate: PropTypes.func.isRequired,
+    handlePasswordUpdate: PropTypes.func.isRequired,
+    username: PropTypes.string.isRequired,
+    password: PropTypes.string.isRequired,
+};
 
 export default SignInForm;

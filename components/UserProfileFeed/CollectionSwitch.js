@@ -1,40 +1,9 @@
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import SimpleArticleBlock from '../SimpleArticleBlock';
-import SimpleCommentBlock from '../SimpleCommentBlock';
-import SimpleKudosBlock from '../SimpleKudosBlock';
-import SimpleHighlightBlock from '../SimpleHighlightBlock';
-
-const UsersArticlesCollection = props => (
-    <div>
-        {props.article_ids.map((_id, index) => (
-            <SimpleArticleBlock _id={_id} key={index} />
-        ))}
-    </div>
-);
-
-const UsersCommentsCollection = props => (
-    <div>
-        {props.comment_ids.map((_id, index) => (
-            <SimpleCommentBlock _id={_id} key={index} />
-        ))}
-    </div>
-);
-
-const UsersKudosCollection = props => (
-    <div>
-        {props.kudos_ids.map((_id, index) => (
-            <SimpleKudosBlock _id={_id} key={index} />
-        ))}
-    </div>
-);
-
-const UsersHighlightsCollection = props => (
-    <div>
-        {props.highlight_ids.map((_id, index) => (
-            <SimpleHighlightBlock _id={_id} key={index} />
-        ))}
-    </div>
-);
+import UsersArticlesCollection from './UsersArticlesCollection';
+import UsersCommentsCollection from './UsersCommentsCollection';
+import UsersKudosCollection from './UsersKudosCollection';
+import UsersHighlightsCollection from './UsersHighlightsCollection';
 
 const CollectionSwitch = props => {
     const user = props.users[props.user_id];
@@ -56,6 +25,11 @@ const CollectionSwitch = props => {
             return <UsersArticlesCollection article_ids={user.postIds} />
     }
 }
+
+CollectionSwitch.propTypes = {
+    filter: PropTypes.string.isRequired,
+    user_id: PropTypes.string.isRequired
+};
 
 const mapStateStateToProps = state => ({
     users: state.users.models

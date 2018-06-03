@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Button } from '../Button';
 import { Wrapper } from '../Layout';
 import { 
@@ -44,5 +45,15 @@ const UserDetailsForm = props => (
         </FormContainer>
     </Wrapper>
 );
+
+UserDetailsForm.propTypes = {
+    handleSubmit: PropTypes.func.isRequired,
+    handleUsernameUpdate: PropTypes.func.isRequired,
+    handleEmailUpdate: PropTypes.func.isRequired,
+    handleBioUpdate: PropTypes.func.isRequired,
+    username: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
+    bio: PropTypes.string.isRequired
+};
 
 export default UserDetailsForm;

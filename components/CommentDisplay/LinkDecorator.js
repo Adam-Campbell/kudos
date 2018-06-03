@@ -1,8 +1,11 @@
 import styled from 'styled-components';
+import * as styleConstants from '../styleConstants';
 
 const StyledLink = styled.a`
-    color: seagreen;
-
+    color: ${styleConstants.colorPrimary};
+    &:hover {
+        color: ${styleConstants.colorPrimaryAlt};
+    }
 `;
 
 const LinkDecorator = props => {

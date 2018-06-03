@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import * as ActionCreators from '../../actions';
 import PasswordResetForm from './PasswordResetForm';
 
@@ -46,6 +47,10 @@ class PasswordResetFormContainer extends Component {
         />
     }
 } 
+
+PasswordResetFormContainer.propTypes = {
+    resetPasswordToken: PropTypes.string.isRequired
+};
 
 
 

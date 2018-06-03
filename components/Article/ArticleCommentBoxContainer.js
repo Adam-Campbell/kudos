@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import * as ActionCreators from '../../actions';
 import CommentEditor from '../CommentEditor';
 
@@ -21,6 +22,10 @@ class ArticleCommentBoxContainer extends Component {
         />
     }
 }
+
+ArticleCommentBoxContainer.propTypes = {
+    article_id: PropTypes.string.isRequired
+};
 
 const mapStateToProps = state => ({
     token: state.currentUser.token

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import * as styleConstants from '../styleConstants';
 import Link from 'next/link';
@@ -67,5 +68,12 @@ const AuthorBlock = props => (
         </AuthorInfo>
     </AuthorBlockOuter>
 );
+
+AuthorBlock.propTypes = {
+    author_id: PropTypes.string.isRequired,
+    authorAvatar: PropTypes.string.isRequired,
+    authorUsername: PropTypes.string.isRequired,
+    authorBio: PropTypes.string.isRequired
+};
 
 export default AuthorBlock;

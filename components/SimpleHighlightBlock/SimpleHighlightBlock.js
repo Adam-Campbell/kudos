@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import * as styleConstants from '../styleConstants';
 import Link from 'next/link';
@@ -15,6 +16,7 @@ const HighlightedText = styled.p`
     font-weight: 300;
     color: ${styleConstants.colorBodyText};
     line-height: 1.4;
+    background-color: lime;
 `;
 
 const SimpleHighlightBlock = props => (
@@ -25,5 +27,10 @@ const SimpleHighlightBlock = props => (
         </Link>
     </BlockContainer>
 );
+
+SimpleHighlightBlock.propTypes = {
+    excerpt: PropTypes.string.isRequired,
+    article_id: PropTypes.string.isRequired
+};
 
 export default SimpleHighlightBlock;

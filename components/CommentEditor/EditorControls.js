@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import * as styleConstants from '../styleConstants';
 import {
     BoldIcon, 
     ItalicIcon, 
@@ -13,11 +15,9 @@ import {
     LinkIcon 
 } from './Icons';
 import ControlButton from './ControlButton';
-//import InlineStyleControls from './InlineStyleControls';
-//import BlockStyleControls from './BlockStyleControls';
 
 const ControlsContainer = styled.div`
-    border-top: solid 2px #333;
+    border-top: solid 2px ${styleConstants.colorBodyText};
     padding: 8px;
     display: flex;
     justify-content: space-between;
@@ -26,9 +26,9 @@ const ControlsContainer = styled.div`
 `;
 
 const SubmitButton = styled.button`
-    background-color: seagreen;
-    color: snow;
-    font-family: 'Open Sans', sans-serif;
+    background-color: ${styleConstants.colorPrimary};
+    color: ${styleConstants.colorSecondary};
+    font-family: ${styleConstants.fontSecondary};
     font-weight: 400;
     padding: 8px 16px;
     border-radius: 3px;
@@ -39,7 +39,7 @@ const SubmitButton = styled.button`
 `;
 
 const CancelButton = SubmitButton.extend`
-    background-color: palevioletred;
+    background-color: ${styleConstants.colorWarning};
     margin-right: 8px;
 `;
 
@@ -49,18 +49,18 @@ const LinkMenuContainer = styled.div`
     position: absolute;
     left: 8px;
     bottom: 8px;
-    background-color: #333;
+    background-color: ${styleConstants.colorBodyText};
     border-radius: 3px;
     padding: 16px;
     margin-right: 8px;
 `;
 
 const LinkInput = styled.input`
-    background-color: #ddd;
-    border: solid 2px #bbb;
+    background-color: ${styleConstants.colorInputBackground};
+    border: solid 2px ${styleConstants.colorInputBorder};
     border-radius: 3px;
-    color: #333;
-    font-family: 'Open Sans', sans-serif;
+    color: ${styleConstants.colorBodyText};
+    font-family: ${styleConstants.fontSecondary};
     font-weight: 400;
     padding: 6px 8px 6px 0;
     vertical-align: top;
@@ -69,9 +69,9 @@ const LinkInput = styled.input`
 `;
 
 const AddLinkButton = styled.button`
-    background-color: seagreen;
-    color: snow;
-    font-family: 'Open Sans', sans-serif;
+    background-color: ${styleConstants.colorPrimary};
+    color: ${styleConstants.colorSecondary};
+    font-family: ${styleConstants.fontSecondary};
     font-weight: 400;
     padding: 8px;
     border-radius: 3px;
@@ -80,9 +80,9 @@ const AddLinkButton = styled.button`
 `;
 
 const CancelLinkButton = styled.button`
-    background-color: palevioletred;
-    color: snow;
-    font-family: 'Open Sans', sans-serif;
+    background-color: ${styleConstants.colorWarning};
+    color: ${styleConstants.colorSecondary};
+    font-family: ${styleConstants.fontSecondary};
     font-weight: 400;
     padding: 8px;
     border-radius: 3px;
@@ -220,5 +220,20 @@ const EditorControls = props => (
         </div>
     </ControlsContainer>
 );
+
+EditorControls.propTypes = {
+    editorState: PropTypes.object.isRequired,
+    toggleInlineStyle: PropTypes.func.isRequired,
+    toggleCode: PropTypes.func.isRequired,
+    changeBlockType: PropTypes.func.isRequired,
+    linkMenuIsOpen: PropTypes.bool.isRequired,
+    linkUrl: PropTypes.string.isRequired,
+    updateLinkUrl: PropTypes.func.isRequired,
+    toggleLinkMenu: PropTypes.func.isRequired,
+    createLink: PropTypes.func.isRequired,
+    isCancellable: PropTypes.bool.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
+    handleCancel: PropTypes.func
+};
 
 export default EditorControls;

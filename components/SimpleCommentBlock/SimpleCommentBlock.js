@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import * as styleConstants from '../styleConstants';
 import Link from 'next/link';
@@ -25,11 +26,16 @@ const DiscussionAnchor = AnchorButton.extend`
 
 const SimpleCommentBlock = props => (
     <BlockContainer>
-        <CommentDisplay optionalComment_id={props.comment_id} />
+        <CommentDisplay comment_id={props.comment_id} />
         <Link passHref as={`/post/${props.discussion_id}`} href={`/post?post=${props.discussion_id}`}>
             <DiscussionAnchor>View Discussion</DiscussionAnchor>
         </Link>
     </BlockContainer>
 );
+
+SimpleCommentBlock.propTypes = {
+    comment_id: PropTypes.string.isRequired,
+    discussion_id: PropTypes.string.isRequired
+};
 
 export default SimpleCommentBlock;

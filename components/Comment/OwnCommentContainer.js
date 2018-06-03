@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import * as ActionCreators from '../../actions';
 import OwnComment from './OwnComment';
 
@@ -35,7 +36,7 @@ class OwnCommentContainer extends Component {
     handleEditSubmit(e) {
         e.preventDefault();
         const { commentEditorText } = this.state;
-        this.props.editComment(commentEditorText, this.props._id, this.props.token);
+        this.props.editComment(commentEditorText, this.props.comment_id, this.props.token);
         this.setState({ isEditing: false });
     }
 
@@ -49,17 +50,17 @@ class OwnCommentContainer extends Component {
     }
 
     boundReplyToComment(commentText) {
-        this.props.replyToComment(commentText, this.props._id, this.props.token)
+        this.props.replyToComment(commentText, this.props.comment_id, this.props.token)
         .then(() => this.toggleReplyForm());
     }
 
     boundSubmitEditComment(commentText) {
-        this.props.editComment(commentText, this.props._id, this.props.token)
+        this.props.editComment(commentText, this.props.comment_id, this.props.token)
         .then(() => this.toggleEditing());
     }
 
     render() {
-        const comment = this.props.comments[this.props._id];
+        const comment = this.props.comments[this.props.comment_id];
         const author = this.props.users[comment.author];
         return <OwnComment 
             authorAvatar={author.avatar}
@@ -68,7 +69,6 @@ class OwnCommentContainer extends Component {
             comment_id={comment._id}
             commentParentsLength={comment.parents.length}
             commentCreatedAt={comment.createdAt}
-            commentText={comment.text}
             replyFormIsVisible={this.state.replyFormIsVisible}
             isEditing={this.state.isEditing}
             toggleReplyForm={this.toggleReplyForm}
@@ -80,6 +80,10 @@ class OwnCommentContainer extends Component {
         />
     }
 }
+
+OwnCommentContainer.propTypes = {
+    comment_id: PropTypes.string.isRequired
+};
 
 const mapStateToProps = state => ({
     comments: state.comments,

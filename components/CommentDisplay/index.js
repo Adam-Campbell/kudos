@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import styled, { injectGlobal } from 'styled-components';
 import { 
     Editor, 
@@ -12,17 +13,15 @@ import {
 } from 'draft-js';
 import CustomCodeBlockWrapper from './CustomCodeBlockWrapper';
 import LinkDecorator from './LinkDecorator';
+import * as styleConstants from '../styleConstants';
 const Immutable = require('immutable');
 
 const EditorContainer = styled.div`
-    background-color: #eee;
-    border: solid 2px #ddd;
-    border-radius: 3px;
     position: relative;
 `;
 
 const EditorInnerContainer = styled.div`
-    min-height: 160px;
+    min-height: 80px;
     cursor: text;
 `;
 
@@ -53,7 +52,7 @@ class CommentDisplay extends Component {
                 component: LinkDecorator
             }
         ]);
-        const comment = this.props.comments[this.props.optionalComment_id];    
+        const comment = this.props.comments[this.props.comment_id];   
         this.state = {
             editorState: EditorState.createWithContent(convertFromRaw(comment.text), decorator),
         };
@@ -110,6 +109,10 @@ class CommentDisplay extends Component {
         );
     }
 }
+
+CommentDisplay.propTypes = {
+    comment_id: PropTypes.string.isRequired
+};
 
 
 const mapStateToProps = state => ({

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import * as styleConstants from '../styleConstants';
 import Link from 'next/link';
@@ -100,11 +101,22 @@ const JumboArticleCard = props => (
         <ArticleInfo>
             <ArticleTitle>{props.articleTitle}</ArticleTitle>
             <ArticleDescription>{props.articleDescription}</ArticleDescription>
-            <Link passHref as={`/post/${props._id}`} href={`post?post=${props._id}`}>
+            <Link passHref as={`/post/${props.article_id}`} href={`post?post=${props.article_id}`}>
                 <ArticleAnchor>Read More</ArticleAnchor>
             </Link>
         </ArticleInfo>
     </CardOuter>
 );
+
+JumboArticleCard.propTypes = {
+    article_id: PropTypes.string.isRequired,
+    articleImage: PropTypes.string.isRequired,
+    articleCategory: PropTypes.string.isRequired,
+    articleTitle: PropTypes.string.isRequired,
+    articleDescription: PropTypes.string.isRequired,
+    authorUsername: PropTypes.string.isRequired,
+    author_id: PropTypes.string.isRequired,
+    authorAvatar: PropTypes.string.isRequired
+};
 
 export default JumboArticleCard;

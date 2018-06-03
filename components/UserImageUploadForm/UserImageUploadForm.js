@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Wrapper } from '../Layout';
 import { Button } from '../Button';
 import {
@@ -28,5 +29,11 @@ const UserImageUploadForm = props => (
         </FormContainer>
     </Wrapper>
 );
+
+UserImageUploadForm.propTypes = {
+    handleSubmit: PropTypes.func.isRequired,
+    checkForFile: PropTypes.func.isRequired,
+    fileInputRef: PropTypes.any.isRequired
+};
 
 export default UserImageUploadForm;

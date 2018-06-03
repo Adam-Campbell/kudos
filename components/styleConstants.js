@@ -7,10 +7,12 @@ export const colorBodyText = '#333';
 export const colorShadow = 'rgb(206,206,206)';
 export const colorInputBorder = '#CCC';
 export const colorInputBackground = '#EEE';
+export const colorInputActive = '#DDD';
 export const colorWarning = 'palevioletred';
 export const colorSuccess = 'mediumseagreen';
 
 // Typography 
 export const fontPrimary = `'Playfair Display', serif`;
 export const fontSecondary = `'Open Sans', sans-serif`;
+export const fontCode = `'Roboto Mono', monospace`;
 

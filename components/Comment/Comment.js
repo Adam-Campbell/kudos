@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import * as styleConstants from '../styleConstants';
 import Link from 'next/link';
@@ -37,7 +38,7 @@ const Comment = props => (
                 commentCreatedAt={props.commentCreatedAt}
             />
             <InnerContainer>
-                <CommentDisplay optionalComment_id={props.comment_id} />
+                <CommentDisplay comment_id={props.comment_id} />
             </InnerContainer>
             <InnerContainer>
                 {props.isLoggedIn && <Button onClick={props.toggleReplyForm}>Reply</Button>}
@@ -54,5 +55,18 @@ const Comment = props => (
         </CommentContainer>
     </CommentDepth>
 );
+
+Comment.propTypes = {
+    authorAvatar: PropTypes.string.isRequired,
+    author_id: PropTypes.string.isRequired,
+    authorUsername: PropTypes.string.isRequired,
+    commentParentsLength: PropTypes.number.isRequired,
+    commentCreatedAt: PropTypes.number.isRequired,
+    comment_id: PropTypes.string.isRequired,
+    isLoggedIn: PropTypes.bool.isRequired,
+    toggleReplyForm: PropTypes.func.isRequired,
+    replyFormIsVisible: PropTypes.bool.isRequired,
+    boundReplyToComment: PropTypes.func.isRequired,
+};
 
 export default Comment;

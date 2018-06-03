@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled, { injectGlobal } from 'styled-components';
 import { 
@@ -13,26 +14,21 @@ import {
 import CustomCodeBlockWrapper from './CustomCodeBlockWrapper';
 import LinkDecorator from './LinkDecorator';
 import EditorControls from './EditorControls';
-
+import * as styleConstants from '../styleConstants';
 const Immutable = require('immutable');
 
-/*
-props passed from parent
-submitCallback - callback function, sig - handleSubmit => commentData
-cancelCallback - callback function, no arguments, just toggles a boolean in parents state.
-isCancellable - boolean to indicate if we can cancel it
-optionalComment_id - the _id
-*/
+const EditorModuleOuterContainer = styled.div`
+    padding: 16px;
+`;
 
-
-const EditorContainer = styled.div`
-    background-color: #eee;
-    border: solid 2px #ddd;
+const EditorModuleInnerContainer = styled.div`
+    background-color: ${styleConstants.colorInputBackground};
+    border: solid 2px ${styleConstants.colorInputBorder};
     border-radius: 3px;
     position: relative;
 `;
 
-const EditorInnerContainer = styled.div`
+const EditorTextBoxContainer = styled.div`
     min-height: 160px;
     cursor: text;
 `;
@@ -84,10 +80,9 @@ class CommentEditor extends Component {
             }
         ]);
         let initialEditorState;
-        if (this.props.optionalComment_id) {
-            console.log(this.props.comments[this.props.optionalComment_id].text);
+        if (this.props.comment_id) {
             initialEditorState = convertFromRaw(
-                this.props.comments[this.props.optionalComment_id].text
+                this.props.comments[this.props.comment_id].text
             );
         } else {
             initialEditorState = emptyContentState;
@@ -242,39 +237,47 @@ class CommentEditor extends Component {
 
     render() {
         return (
-            <EditorContainer>
-                <EditorInnerContainer onClick={this.focusEditor}>
-                    <Editor
-                        editorKey="editor"
-                        editorState={this.state.editorState} 
-                        onChange={this.onChange}
-                        placeholder="Join the discussion..."
-                        ref={this.setEditorRef}
-                        blockStyleFn={this.customBlockStyles}
-                        handleKeyCommand={this.handleKeyCommand}
-                        blockRenderMap={extendedBlockRenderMap}
-                        customStyleMap={styleMap}
+            <EditorModuleOuterContainer>
+                <EditorModuleInnerContainer>
+                    <EditorTextBoxContainer onClick={this.focusEditor}>
+                        <Editor
+                            editorKey="editor"
+                            editorState={this.state.editorState} 
+                            onChange={this.onChange}
+                            placeholder="Join the discussion..."
+                            ref={this.setEditorRef}
+                            blockStyleFn={this.customBlockStyles}
+                            handleKeyCommand={this.handleKeyCommand}
+                            blockRenderMap={extendedBlockRenderMap}
+                            customStyleMap={styleMap}
+                        />
+                    </EditorTextBoxContainer>
+                    <EditorControls 
+                        editorState={this.state.editorState}
+                        toggleInlineStyle={this.toggleInlineStyle}
+                        toggleCode={this.toggleCode}
+                        changeBlockType={this.changeBlockType}
+                        linkMenuIsOpen={this.state.linkMenuIsOpen}
+                        linkUrl={this.state.linkUrl}
+                        updateLinkUrl={this.updateLinkUrl}
+                        toggleLinkMenu={this.toggleLinkMenu}
+                        createLink={this.createLinkEntity}
+                        isCancellable={this.props.isCancellable}
+                        handleSubmit={this.handleSubmit}
+                        handleCancel={this.props.cancelCallback}
                     />
-                </EditorInnerContainer>
-                <EditorControls 
-                    editorState={this.state.editorState}
-                    toggleInlineStyle={this.toggleInlineStyle}
-                    toggleCode={this.toggleCode}
-                    changeBlockType={this.changeBlockType}
-                    linkMenuIsOpen={this.state.linkMenuIsOpen}
-                    linkUrl={this.state.linkUrl}
-                    updateLinkUrl={this.updateLinkUrl}
-                    toggleLinkMenu={this.toggleLinkMenu}
-                    createLink={this.createLinkEntity}
-                    isCancellable={this.props.isCancellable}
-                    handleSubmit={this.handleSubmit}
-                    handleCancel={this.props.cancelCallback}
-                />
-            </EditorContainer>
+                </EditorModuleInnerContainer>
+            </EditorModuleOuterContainer>
         );
     }
 }
 
+CommentEditor.propTypes = {
+    submitCallback: PropTypes.func.isRequired,
+    cancelCallback: PropTypes.func,
+    isCancellable: PropTypes.bool.isRequired,
+    comment_id: PropTypes.string
+}
 
 const mapStateToProps = state => ({
     comments: state.comments

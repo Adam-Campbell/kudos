@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import * as styleConstants from '../styleConstants';
 import Link from 'next/link';
@@ -58,12 +59,12 @@ const OwnComment = props => (
                         submitCallback={props.boundSubmitEditComment}
                         cancelCallback={props.toggleEditing}
                         isCancellable={true}
-                        optionalComment_id={props.comment_id}
+                        comment_id={props.comment_id}
                     />
                 ) : (
                     <React.Fragment>
                         <InnerContainer>
-                            <CommentDisplay optionalComment_id={props.comment_id} />
+                            <CommentDisplay comment_id={props.comment_id} />
                         </InnerContainer>
                         <InnerContainer>
                             <ControlButton onClick={props.toggleReplyForm}>Reply</ControlButton>
@@ -84,5 +85,22 @@ const OwnComment = props => (
         </CommentContainer>
     </CommentDepth>
 );
+
+OwnComment.propTypes = {
+    authorAvatar: PropTypes.string.isRequired,
+    author_id: PropTypes.string.isRequired,
+    authorUsername: PropTypes.string.isRequired,
+    comment_id: PropTypes.string.isRequired,
+    commentParentsLength: PropTypes.number.isRequired,
+    commentCreatedAt: PropTypes.string.isRequired,
+    replyFormIsVisible: PropTypes.bool.isRequired,
+    isEditing: PropTypes.bool.isRequired,
+    toggleReplyForm: PropTypes.func.isRequired,
+    toggleEditing: PropTypes.func.isRequired,
+    handleDelete: PropTypes.func.isRequired,
+    handleCommentEditorUpdate: PropTypes.func.isRequired,
+    boundReplyToComment: PropTypes.func.isRequired,
+    boundSubmitEditComment: PropTypes.func.isRequired,
+};
 
 export default OwnComment;

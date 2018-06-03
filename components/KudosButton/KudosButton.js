@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import * as styleConstants from '../styleConstants';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
@@ -26,5 +27,11 @@ const KudosButton = props => {
         </ButtonOuter>
     )
 }
+
+KudosButton.propTypes = {
+    hasGivenKudos: PropTypes.bool.isRequired,
+    giveKudos: PropTypes.func.isRequired,
+    removeKudos: PropTypes.func.isRequired
+};
 
 export default KudosButton;

@@ -11,7 +11,7 @@ const category = props => (
         <Header />
         <Wrapper flex regular>   
             {props.categories[props.category].postIds.map((post_id, index) => (
-                <InlineArticleCard _id={post_id} key={index} />
+                <InlineArticleCard article_id={post_id} key={index} />
             ))}
         </Wrapper>
     </React.Fragment>

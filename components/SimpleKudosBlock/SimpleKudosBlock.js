@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import * as styleConstants from '../styleConstants';
 import Link from 'next/link';
@@ -32,5 +33,11 @@ const SimpleKudosBlock = props => (
         </Link>
     </BlockContainer>
 );
+
+SimpleKudosBlock.propTypes = {
+    articleTitle: PropTypes.string.isRequired,
+    articleDescription: PropTypes.string.isRequired,
+    article_id: PropTypes.string.isRequired
+};
 
 export default SimpleKudosBlock;

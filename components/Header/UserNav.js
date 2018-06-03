@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import * as styleConstants from '../styleConstants';
 import Link from 'next/link';
@@ -75,6 +76,10 @@ const UserNav = props => {
         </UserNavWrapper>
     );
 };
+
+UserNav.propTypes = {
+    isOpen: PropTypes.bool.isRequired
+}
 
 const mapStateToProps = state => ({
     currentUser_id: state.currentUser._id

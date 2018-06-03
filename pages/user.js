@@ -11,8 +11,8 @@ const user = props => (
     <React.Fragment>
         <Header />
         <Wrapper tight>
-            <UserProfileHeader _id={props._id} />
-            <UserProfileFeed filter={props.filter} user_id={props._id} />
+            <UserProfileHeader user_id={props.user_id} />
+            <UserProfileFeed filter={props.filter} user_id={props.user_id} />
         </Wrapper>
     </React.Fragment>
 );
@@ -24,8 +24,8 @@ user.getInitialProps = async ({store, isServer, req, pathname, query}) => {
     const user = fetchUserIfNeeded(currentState, store, query.user);
     await Promise.all([currentUser, user]);
     return {
-        _id: query.user,
-        filter: query.filter
+        user_id: query.user,
+        filter: query.filter || 'posts'
     };
 }
 

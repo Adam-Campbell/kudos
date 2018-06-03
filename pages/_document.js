@@ -1,5 +1,6 @@
 import Document, { Head, Main, NextScript } from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
+import * as styleConstants from '../components/styleConstants'; 
 import { injectGlobal } from 'styled-components';
 
 injectGlobal`
@@ -14,54 +15,54 @@ injectGlobal`
     }
     .public-DraftEditorPlaceholder-root {
         color: #aaa;
-        font-family: 'Open Sans', sans-serif;
+        font-family: ${styleConstants.fontSecondary};
         font-size: 16px;
         font-weight: 400;
         margin-bottom: -16px;
     }
     .comment-editor__h1 {
-        font-family: 'Open Sans', sans-serif;
+        font-family: ${styleConstants.fontSecondary};
         font-weight: 700;
         font-size: 48px;
-        color: #333
+        color: ${styleConstants.colorBodyText};
     }
     .comment-editor__h2 {
-        font-family: 'Open Sans', sans-serif;
+        font-family: ${styleConstants.fontSecondary};
         font-weight: 700;
         font-size: 32px;
-        color: #333;
+        color: ${styleConstants.colorBodyText};
     }
     .comment-editor__h3 {
-        font-family: 'Open Sans', sans-serif;
+        font-family: ${styleConstants.fontSecondary};
         font-weight: 700;
         font-size: 24px;
-        color: #333;
+        color: ${styleConstants.colorBodyText};
     }
     .comment-editor__paragraph,
     .comment-editor__unstyled,
     .comment-editor__ul-item,
     .comment-editor__ol-item {
-        font-family: 'Open Sans', sans-serif;
+        font-family: ${styleConstants.fontSecondary};
         font-weight: 300;
         font-size: 16px;
-        color: #333;
+        color: ${styleConstants.colorBodyText};
         line-height: 1.4;
     }
     .comment-editor__paragraph {
         color: blue;
     }
     .comment-editor__block-quote {
-        font-family: 'Playfair Display', serif;
+        font-family: ${styleConstants.fontPrimary};
         font-style: italic;
         font-size: 20px;
-        color: #333;
+        color: ${styleConstants.colorBodyText};
         font-weight: bold;
-        border-left: solid 3px #333;
+        border-left: solid 3px ${styleConstants.colorBodyText};
         padding-left: 16px; 
         margin: 32px 16px;
     }
     .comment-editor__code-block {
-        font-family: 'Roboto Mono', monospace;
+        font-family: ${styleConstants.fontCode};
         color: snow;
         background-color: transparent;
         padding: 0;
