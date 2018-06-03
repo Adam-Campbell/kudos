@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
@@ -19,8 +20,11 @@ export const Wrapper = styled.div`
     }};
 `;
 
-//display: flex;
-//flex-wrap: wrap;
+Wrapper.propTypes = {
+    flex: PropTypes.any,
+    tight: PropTypes.any,
+    wide: PropTypes.any
+};
 
 export const Column = styled.div`
     width: 100%;

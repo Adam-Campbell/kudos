@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import * as styleConstants from '../styleConstants';
 import Logo from './Logo';
@@ -7,7 +8,7 @@ import UserNav from './UserNav';
 import CategoryNav from './CategoryNav';
 import Link from 'next/link';
 
-const Header = styled.header`
+const HeaderOuter = styled.header`
     position: sticky;
     top: 0;
     left: 0;
@@ -40,8 +41,8 @@ const CreateAccountAnchor = AnchorButton.extend`
 `;
 
 
-const ComposedHeader = props => (
-    <Header>
+const Header = props => (
+    <HeaderOuter>
         <HeaderContentWrapper>
             <Logo />
             {
@@ -63,7 +64,14 @@ const ComposedHeader = props => (
         <HeaderContentWrapper>
             <CategoryNav />
         </HeaderContentWrapper>
-    </Header>
+    </HeaderOuter>
 );
 
-export default ComposedHeader;
+Header.propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    isLoggedIn: PropTypes.bool.isRequired,
+    hasFetched: PropTypes.bool.isRequired,
+    toggleNav: PropTypes.func.isRequired
+};
+
+export default Header;

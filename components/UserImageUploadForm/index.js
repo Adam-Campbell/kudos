@@ -3,18 +3,6 @@ import { connect } from 'react-redux';
 import * as ActionCreators from '../../actions';
 import UserImageUploadForm from './UserImageUploadForm';
 
-/*
-
-Initial thoughts...
-
-I use the filereader api to read the file that the user has uploaded. 
-
-I then use FormData api/interface to take the image and send it to the backend API. 
-
-
-
-*/
-
 class UserImageUploadFormContainer extends Component {
     constructor(props) {
         super(props);
@@ -64,23 +52,3 @@ export default connect(
     mapStateToProps,
     { updateUserAvatar: ActionCreators.updateUserAvatar }
 )(UserImageUploadFormContainer);
-
-
-
-
-// return (
-//     <form method="put" id="avatarForm" onSubmit={this.handleSubmit}>
-//         <fieldset>
-//             <legend>Upload a new avatar</legend>
-//             <label htmlFor="avatar">Avatar:</label>
-//             <input 
-//                 type="file" 
-//                 id="avatar" 
-//                 name="avatar" 
-//                 ref={this.fileInput}
-//                 onChange={this.checkForFile} 
-//             />
-//             {this.state.imageLoaded && <button type="submit">Save</button>}
-//         </fieldset>
-//     </form>
-// );

@@ -1,23 +1,24 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import * as ActionCreators from '../../actions';
-import EditPostForm from './EditPostForm';
+import EditArticleForm from './EditArticleForm';
 
-class EditPostFormContainer extends Component {
+class EditArticleFormContainer extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleFieldUpdate = this.handleFieldUpdate.bind(this);
         this.checkForFile = this.checkForFile.bind(this);
         this.fileInput = React.createRef();
-        this.post = this.props.posts[this.props.post_id];
+        this.article = this.props.posts[this.props.article_id];
         this.form;
         this.image;
         this.state = {
-            postTitle: this.post.title,
-            postDescription: this.post.description,
-            postCategory: this.post.category,
-            postBody: this.post.text,
+            articleTitle: this.article.title,
+            articleDescription: this.article.description,
+            articleCategory: this.article.category,
+            articleBody: this.article.text,
             originalCategory: this.post.category
         };
     }
@@ -38,42 +39,45 @@ class EditPostFormContainer extends Component {
     handleSubmit(e) {
         e.preventDefault();
         this.form = new FormData();
-        this.form.append('title', this.state.postTitle);
-        this.form.append('text', this.state.postBody);
-        this.form.append('category', this.state.postCategory);
-        this.form.append('description', this.state.postDescription);
+        this.form.append('title', this.state.articleTitle);
+        this.form.append('text', this.state.articleBody);
+        this.form.append('category', this.state.articleCategory);
+        this.form.append('description', this.state.articleDescription);
         this.form.append('image', this.image);
-        window.form = this.form;
         this.props.editPost(
             this.form, 
-            this.props.post_id, 
+            this.props.article_id, 
             this.state.originalCategory,
-            this.state.postCategory,
+            this.state.articleCategory,
             this.props.token
         );
     }
 
     render() {
-        return <EditPostForm 
+        return <EditArticleForm 
             handleSubmit={this.handleSubmit}
-            handlePostTitleUpdate={this.handleFieldUpdate('postTitle')}
-            handlePostDescriptionUpdate={this.handleFieldUpdate('postDescription')}
-            handlePostCategoryUpdate={this.handleFieldUpdate('postCategory')}
-            handlePostBodyUpdate={this.handleFieldUpdate('postBody')}
+            handleArticleTitleUpdate={this.handleFieldUpdate('articleTitle')}
+            handleArticleDescriptionUpdate={this.handleFieldUpdate('articleDescription')}
+            handleArticleCategoryUpdate={this.handleFieldUpdate('articleCategory')}
+            handleArticleBodyUpdate={this.handleFieldUpdate('articleBody')}
             checkForFile={this.checkForFile}
-            postTitle={this.state.postTitle}
-            postDescription={this.state.postDescription}
-            postCategory={this.state.postCategory}
-            postBody={this.state.postBody}
+            articleTitle={this.state.articleTitle}
+            articleDescription={this.state.articleDescription}
+            articleCategory={this.state.articleCategory}
+            articleBody={this.state.articleBody}
             fileInputRef={this.fileInput}
         />
     }
 }
 
+EditArticleFormContainer.propTypes = {
+    article_id: PropTypes.string.isRequired
+}
+
 const mapStateToProps = state => ({
     token: state.currentUser.token,
     currentUser_id: state.currentUser._id,
-    posts: state.posts.models
+    articles: state.posts.models
 });
 
 export default connect(
@@ -81,4 +85,4 @@ export default connect(
     {
         editPost: ActionCreators.editPost
     }
-)(EditPostFormContainer);
+)(EditArticleFormContainer);

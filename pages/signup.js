@@ -1,17 +1,9 @@
 import withRedux from 'next-redux-wrapper';
 import makeStore from '../store';
-import NavBar from '../components/NavBar';
 import SignUpForm from '../components/SignUpForm';
 import { fetchCurrentUserIfNeeded, cleanseErrorsAndSuccesses } from '../utils';
 import Router from 'next/router';
 import Header from '../components/Header';
-
-// const signup = props => (
-//     <React.Fragment>
-//         <NavBar />
-//         <SignUpForm />
-//     </React.Fragment>
-// )
 
 const signup = props => {
     if (!props.isLoggedIn) {
@@ -41,4 +33,3 @@ const mapStateToProps = state => ({
 });
 
 export default withRedux(makeStore, mapStateToProps)(signup);
-

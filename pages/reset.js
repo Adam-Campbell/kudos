@@ -21,8 +21,4 @@ reset.getInitialProps = async ({store, isServer, req, pathname, query}) => {
     };
 };
 
-const mapStateToProps = state => ({
-
-});
-
-export default withRedux(makeStore, mapStateToProps)(reset);
+export default withRedux(makeStore)(reset);

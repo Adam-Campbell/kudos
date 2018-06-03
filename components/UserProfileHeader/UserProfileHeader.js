@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import * as styleConstants from '../styleConstants';
 import FollowButton from '../FollowButton'
@@ -85,5 +86,14 @@ const UserProfileHeader = props => (
         </InfoContainer>
     </OuterContainer>
 );
+
+UserProfileHeader.propTypes = {
+    userAvatar: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
+    userBio: PropTypes.string.isRequired,
+    userFollowers: PropTypes.number.isRequired,
+    userFollowing: PropTypes.number.isRequired,
+    user_id: PropTypes.string.isRequired
+};
 
 export default UserProfileHeader;

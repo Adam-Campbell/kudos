@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import * as styleConstants from '../styleConstants';
 import Link from 'next/link';
@@ -28,7 +29,6 @@ const NavAnchor = styled.a`
     }
 `;
 
-
 const UserProfileFeedNav = props => (
     <section>
         <Nav>
@@ -57,5 +57,10 @@ const UserProfileFeedNav = props => (
         </Nav>
     </section>
 );
+
+UserProfileFeedNav.propTypes = {
+    filter: PropTypes.string.isRequired,
+    user_id: PropTypes.string.isRequired
+};
 
 export default UserProfileFeedNav;

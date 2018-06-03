@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import * as ActionCreators from '../../actions';
 import FollowButton from './FollowButton';
 
@@ -28,6 +29,10 @@ class FollowButtonContainer extends Component {
             className={this.props.className}
         />
     }
+}
+
+FollowButtonContainer.propTypes = {
+    user_id: PropTypes.string.isRequired
 }
 
 const mapStateToProps = state => ({

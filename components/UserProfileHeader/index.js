@@ -1,8 +1,9 @@
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import UserProfileHeader from './UserProfileHeader';
 
 const UserProfileHeaderContainer = props => {
-    const user = props.users[props._id];
+    const user = props.users[props.user_id];
 
     return <UserProfileHeader 
         userAvatar={user.avatar}
@@ -12,6 +13,10 @@ const UserProfileHeaderContainer = props => {
         userFollowing={user.following}
         user_id={user._id}
     />
+};
+
+UserProfileHeaderContainer.propTypes = {
+    user_id: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({

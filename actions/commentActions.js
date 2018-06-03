@@ -20,8 +20,8 @@ const replyToPostFailed = () => ({
 });
 
 export const replyToPost = (commentText, post_id, token) => async (dispatch, getState) => {
-
     dispatch(replyToPostRequest());
+    const serializedCommentText = JSON.stringify(commentText);
     const settings = {
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -29,7 +29,7 @@ export const replyToPost = (commentText, post_id, token) => async (dispatch, get
         },
         method: 'post',
         body: JSON.stringify({
-            text: commentText
+            text: serializedCommentText
         })
     };
     try {
@@ -41,6 +41,7 @@ export const replyToPost = (commentText, post_id, token) => async (dispatch, get
 
         // We need to re-sort the comments before handing them back to the reducer, this ensures the commment we
         // just added appears in the right place. 
+        commentObject.text = JSON.parse(commentObject.text);
         const currentState = getState();
         const parentPost_id = commentObject.discussion;
         const existingComments = currentState.posts.models[parentPost_id].commentIds.map(comment_id => {
@@ -79,6 +80,7 @@ const replyToCommentFailed = () => ({
 
 export const replyToComment = (commentText, parentComment_id, token) => async (dispatch, getState) => {
     dispatch(replyToCommentRequest());
+    const serializedCommentText = JSON.stringify(commentText);
     const settings = {
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -86,7 +88,7 @@ export const replyToComment = (commentText, parentComment_id, token) => async (d
         },
         method: 'post',
         body: JSON.stringify({
-            text: commentText
+            text: serializedCommentText
         })
     };
     try {
@@ -95,6 +97,7 @@ export const replyToComment = (commentText, parentComment_id, token) => async (d
             return dispatch(replyToCommentFailed());
         }
         const commentObject = await commentReq.json();
+        commentObject.text = JSON.parse(commentObject.text);
         // We need to re-sort the comments before handing them back to the reducer, this ensures the commment we
         // just added appears in the right place. 
         const currentState = getState();
@@ -167,6 +170,7 @@ const editCommentFailed = () => ({
 
 export const editComment = (commentText, comment_id, token) => async dispatch => {
     dispatch(editCommentRequest());
+    const serializedCommentText = JSON.stringify(commentText);
     const settings = {
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -174,7 +178,7 @@ export const editComment = (commentText, comment_id, token) => async dispatch =>
         },
         method: 'PUT',
         body: JSON.stringify({
-            text: commentText
+            text: serializedCommentText
         })
     };
     try {
@@ -183,6 +187,7 @@ export const editComment = (commentText, comment_id, token) => async dispatch =>
             return dispatch(editCommentFailed());
         }
         const updatedComment = await editCommentReq.json();
+        updatedComment.text = JSON.parse(updatedComment.text);
         updatedComment.author = updatedComment.author._id;
         dispatch(editCommentSuccess(updatedComment, updatedComment._id));
     } catch (err) {

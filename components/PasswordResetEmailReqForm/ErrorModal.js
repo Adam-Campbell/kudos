@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import * as styleConstants from '../styleConstants';
 import { Button } from '../Button';
@@ -55,7 +56,6 @@ const ModalButton = Button.extend`
     }
 `;
 
-
 const ErrorModal = props => (
     <PageOverlay>
         <ErrorModalWrapper>
@@ -67,5 +67,9 @@ const ErrorModal = props => (
         </ErrorModalWrapper>
     </PageOverlay>
 );
+
+ErrorModal.propTypes = {
+    closeModal: PropTypes.func.isRequired
+};
 
 export default ErrorModal;

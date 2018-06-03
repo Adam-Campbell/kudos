@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import * as ActionCreators from '../../actions';
 import PasswordResetForm from './PasswordResetForm';
-import Router from 'next/router';
 
 class PasswordResetFormContainer extends Component {
     constructor(props) {
@@ -37,10 +37,6 @@ class PasswordResetFormContainer extends Component {
         }
     }
 
-    handleRedirect() {
-        Router.push('/');
-    }
-
     render() {
         return <PasswordResetForm 
             handleSubmit={this.handleSubmit}
@@ -48,10 +44,13 @@ class PasswordResetFormContainer extends Component {
             handleConfirmPasswordUpdate={this.handleFieldUpdate('confirmPassword')}
             password={this.state.password}
             confirmPassword={this.state.confirmPassword}
-            handleRedirect={this.handleRedirect}
         />
     }
 } 
+
+PasswordResetFormContainer.propTypes = {
+    resetPasswordToken: PropTypes.string.isRequired
+};
 
 
 

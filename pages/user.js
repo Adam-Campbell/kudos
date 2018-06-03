@@ -1,10 +1,7 @@
 import withRedux from 'next-redux-wrapper';
 import makeStore from '../store';
-import NavBar from '../components/NavBar';
 import { fetchUser, fetchCurrentUser } from '../actions';
 import { fetchCurrentUserIfNeeded, fetchUserIfNeeded, cleanseErrorsAndSuccesses } from '../utils';
-import UserDetails from '../components/UserDetails';
-import UserSubNav from '../components/UserSubNav';
 import { Wrapper } from '../components/Layout';
 import Header from '../components/Header';
 import UserProfileHeader from '../components/UserProfileHeader';
@@ -14,8 +11,8 @@ const user = props => (
     <React.Fragment>
         <Header />
         <Wrapper tight>
-            <UserProfileHeader _id={props._id} />
-            <UserProfileFeed filter={props.filter} user_id={props._id} />
+            <UserProfileHeader user_id={props.user_id} />
+            <UserProfileFeed filter={props.filter} user_id={props.user_id} />
         </Wrapper>
     </React.Fragment>
 );
@@ -27,8 +24,8 @@ user.getInitialProps = async ({store, isServer, req, pathname, query}) => {
     const user = fetchUserIfNeeded(currentState, store, query.user);
     await Promise.all([currentUser, user]);
     return {
-        _id: query.user,
-        filter: query.filter
+        user_id: query.user,
+        filter: query.filter || 'posts'
     };
 }
 

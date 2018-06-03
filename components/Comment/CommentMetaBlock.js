@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import * as styleConstants from '../styleConstants';
 import Link from 'next/link';
@@ -52,5 +53,12 @@ const CommentMetaBlock = ({authorAvatar, author_id, authorUsername, commentCreat
         </div>
     </MetaBlockContainer>
 );
+
+CommentMetaBlock.propTypes = {
+    authorAvatar: PropTypes.string.isRequired,
+    author_id: PropTypes.string.isRequired,
+    authorUsername: PropTypes.string.isRequired,
+    commentCreatedAt: PropTypes.string.isRequired
+};
 
 export default CommentMetaBlock;

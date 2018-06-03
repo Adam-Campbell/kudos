@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Wrapper } from '../Layout';
 import { Button } from '../Button';
 import {
@@ -38,5 +39,13 @@ const PasswordResetForm = props => (
         </FormContainer>
     </Wrapper>
 );
+
+PasswordResetForm.propTypes = {
+    handleSubmit: PropTypes.func.isRequired,
+    handlePasswordUpdate: PropTypes.func.isRequired,
+    handleConfirmPasswordUpdate: PropTypes.func.isRequired,
+    password: PropTypes.string.isRequired,
+    confirmPassword: PropTypes.string.isRequired
+};
 
 export default PasswordResetForm;

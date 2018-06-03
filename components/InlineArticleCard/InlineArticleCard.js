@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import * as styleConstants from '../styleConstants';
 import Link from 'next/link';
@@ -85,11 +86,19 @@ const InlineArticleCard = props => (
             <Link passHref as={`/user/${props.author_id}`} href={`/user?user=${props.author_id}`}>
                 <AuthorAnchor>{props.authorUsername}</AuthorAnchor>
             </Link>
-            <Link passHref as={`/post/${props._id}`} href={`/post?post=${props._id}`}>
+            <Link passHref as={`/post/${props.article_id}`} href={`/post?post=${props.article_id}`}>
                 <ArticleAnchor>Read More</ArticleAnchor>
             </Link>
         </ArticleInfo>
     </CardOuter>
 );
+
+InlineArticleCard.propTypes = {
+    article_id: PropTypes.string.isRequired,
+    articleImage: PropTypes.string.isRequired,
+    articleTitle: PropTypes.string.isRequired,
+    authorUsername: PropTypes.string.isRequired,
+    author_id: PropTypes.string.isRequired
+};
 
 export default InlineArticleCard;

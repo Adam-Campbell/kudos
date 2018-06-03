@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import * as ActionCreators from '../../actions';
 import KudosButton from './KudosButton';
 
@@ -38,6 +39,10 @@ class KudosButtonContainer extends Component {
     }
 }
 
+KudosButtonContainer.propTypes = {
+    article_id: PropTypes.string.isRequired
+};
+
 const mapStateToProps = state => ({
     users: state.users.models,
     currentUser_id: state.currentUser._id,
@@ -45,7 +50,6 @@ const mapStateToProps = state => ({
     isLoggedIn: state.currentUser.isLoggedIn
 });
 
-// actions require post_id, currentUser_id, token as arguments in that order.
 export default connect(
     mapStateToProps,
     {

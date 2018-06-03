@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import * as styleConstants from '../styleConstants';
 import { Wrapper } from '../Layout';
@@ -14,7 +15,7 @@ import {
     Option
 } from '../Forms';
 
-const EditPostForm = props => (
+const EditArticleForm = props => (
     <Wrapper tight>
         <FormContainer>
             <form onSubmit={props.handleSubmit}>
@@ -25,23 +26,23 @@ const EditPostForm = props => (
                         type="text"
                         id="title"
                         name="title"
-                        value={props.postTitle}
-                        onChange={props.handlePostTitleUpdate}
+                        value={props.articleTitle}
+                        onChange={props.handleArticleTitleUpdate}
                     />
                     <Label htmlFor="description">Description:</Label>
                     <Input 
                         type="text"
                         id="description"
                         name="description"
-                        value={props.postDescription}
-                        onChange={props.handlePostDescriptionUpdate}
+                        value={props.articleDescription}
+                        onChange={props.handleArticleDescriptionUpdate}
                     />
                     <Label htmlFor="category">Category:</Label>
                     <Select
                         id="category"
                         name="category"
-                        value={props.postCategory}
-                        onChange={props.handlePostCategoryUpdate}
+                        value={props.articleCategory}
+                        onChange={props.handleArticleCategoryUpdate}
                     >
                         <Option value="javascript">JavaScript</Option>
                         <Option value="fantasy">Fantasy</Option>
@@ -68,8 +69,8 @@ const EditPostForm = props => (
                     <Textarea 
                         id="body"
                         name="body"
-                        value={props.postBody}
-                        onChange={props.handlePostBodyUpdate}
+                        value={props.articleBody}
+                        onChange={props.handleArticleBodyUpdate}
                     />
                 </Fieldset>
                 <Button type="submit">Save your article</Button>
@@ -78,4 +79,18 @@ const EditPostForm = props => (
     </Wrapper>
 );
 
-export default EditPostForm;
+EditArticleForm.propTypes = {
+    handleSubmit: PropTypes.func.isRequired,
+    handleArticleTitleUpdate: PropTypes.func.isRequired,
+    handleArticleDescriptionUpdate: PropTypes.func.isRequired,
+    handleArticleCategoryUpdate: PropTypes.func.isRequired,
+    handleArticleBodyUpdate: PropTypes.func.isRequired,
+    checkForFile: PropTypes.func.isRequired,
+    articleTitle: PropTypes.string.isRequired,
+    articleDescription: PropTypes.string.isRequired,
+    articleCategory: PropTypes.string.isRequired,
+    articleBody: PropTypes.string.isRequired,
+    fileInputRef: PropTypes.any,
+};
+
+export default EditArticleForm;

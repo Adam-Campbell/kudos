@@ -1,9 +1,11 @@
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import * as styleConstants from '../styleConstants';
 import Link from 'next/link';
 import { Button } from '../Button';
-import CommentReplyForm from './CommentReplyForm';
 import CommentMetaBlock from './CommentMetaBlock';
+import CommentDisplay from '../CommentDisplay';
+import CommentEditor from '../CommentEditor';
 
 const CommentDepth = styled.div`
     width: 100%;
@@ -36,7 +38,7 @@ const Comment = props => (
                 commentCreatedAt={props.commentCreatedAt}
             />
             <InnerContainer>
-                <CommentText>{props.commentText}</CommentText>
+                <CommentDisplay comment_id={props.comment_id} />
             </InnerContainer>
             <InnerContainer>
                 {props.isLoggedIn && <Button onClick={props.toggleReplyForm}>Reply</Button>}
@@ -44,13 +46,27 @@ const Comment = props => (
             {
                 props.isLoggedIn && 
                 props.replyFormIsVisible &&
-                <CommentReplyForm 
-                    _id={props.comment_id}
-                    toggleReplyForm={props.toggleReplyForm}
+                <CommentEditor 
+                    submitCallback={props.boundReplyToComment}
+                    cancelCallback={props.toggleReplyForm}
+                    isCancellable={true}
                 />
             }
         </CommentContainer>
     </CommentDepth>
 );
+
+Comment.propTypes = {
+    authorAvatar: PropTypes.string.isRequired,
+    author_id: PropTypes.string.isRequired,
+    authorUsername: PropTypes.string.isRequired,
+    commentParentsLength: PropTypes.number.isRequired,
+    commentCreatedAt: PropTypes.number.isRequired,
+    comment_id: PropTypes.string.isRequired,
+    isLoggedIn: PropTypes.bool.isRequired,
+    toggleReplyForm: PropTypes.func.isRequired,
+    replyFormIsVisible: PropTypes.bool.isRequired,
+    boundReplyToComment: PropTypes.func.isRequired,
+};
 
 export default Comment;

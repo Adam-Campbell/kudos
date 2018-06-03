@@ -53,8 +53,6 @@ const CategoryNavAnchor = styled.a`
     }
 `;
 
-
-
 class CategoryNavContainer extends Component {
     constructor(props) {
         super(props);

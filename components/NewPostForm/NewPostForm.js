@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import * as styleConstants from '../styleConstants';
 import { Wrapper } from '../Layout';
@@ -77,5 +78,19 @@ const NewPostForm = props => (
         </FormContainer>
     </Wrapper>
 );
+
+NewPostForm.propTypes = {
+    handleSubmit: PropTypes.func.isRequired,
+    handlePostTitleUpdate: PropTypes.func.isRequired,
+    handlePostDescriptionUpdate: PropTypes.func.isRequired,
+    handlePostCategoryUpdate: PropTypes.func.isRequired,
+    handlePostBodyUpdate: PropTypes.func.isRequired,
+    checkForFile: ProPTypes.func.isRequired,
+    postTitle: PropTypes.string.isRequired,
+    postDescription: Proptypes.string.isRequired,
+    postCategory: PropTypes.string.isRequired,
+    postBody: PropTypes.string.isRequired,
+    fileInputRef: PropTypes.any.isRequired
+};
 
 export default NewPostForm;

@@ -1,7 +1,7 @@
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import * as styleConstants from '../styleConstants';
 import Link from 'next/link';
-//import { Button } from '../Button';
 import FollowButton from '../FollowButton';
 
 const AuthorBlockOuter = styled.div`
@@ -50,11 +50,6 @@ const AuthorBio = styled.p`
     margin-bottom: 4px;
 `;
 
-// const FollowButton = Button.extend`
-//     margin-left: 16px;
-//     align-self: center;
-// `;
-
 const StyledFollowButton = styled(FollowButton)`
     margin-left: 16px;
 `;
@@ -73,5 +68,12 @@ const AuthorBlock = props => (
         </AuthorInfo>
     </AuthorBlockOuter>
 );
+
+AuthorBlock.propTypes = {
+    author_id: PropTypes.string.isRequired,
+    authorAvatar: PropTypes.string.isRequired,
+    authorUsername: PropTypes.string.isRequired,
+    authorBio: PropTypes.string.isRequired
+};
 
 export default AuthorBlock;

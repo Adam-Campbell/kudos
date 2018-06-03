@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import * as ActionCreators from '../../actions';
 import OwnComment from './OwnComment';
 
@@ -8,14 +9,13 @@ class OwnCommentContainer extends Component {
         super(props);
         this.toggleReplyForm = this.toggleReplyForm.bind(this);
         this.toggleEditing = this.toggleEditing.bind(this);
-        this.cancelEdit = this.cancelEdit.bind(this);
         this.handleFieldUpdate = this.handleFieldUpdate.bind(this);
-        this.handleEditSubmit = this.handleEditSubmit.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
+        this.boundReplyToComment = this.boundReplyToComment.bind(this);
+        this.boundSubmitEditComment = this.boundSubmitEditComment.bind(this);
         this.state = {
             replyFormIsVisible: false,
             isEditing: false,
-            commentEditorText: this.props.comments[this.props._id].text
         };
     }
 
@@ -27,24 +27,16 @@ class OwnCommentContainer extends Component {
         this.setState({ isEditing: !this.state.isEditing });
     }
 
-    cancelEdit() {
-        this.setState({
-            isEditing: false,
-            commentEditorText: this.props.comments[this.props._id].text
-        });
-    }
-
     handleFieldUpdate(fieldname) {
         return (e) => {
             this.setState({ [fieldname]: e.target.value });
         }
     }
 
-
     handleEditSubmit(e) {
         e.preventDefault();
         const { commentEditorText } = this.state;
-        this.props.editComment(commentEditorText, this.props._id, this.props.token);
+        this.props.editComment(commentEditorText, this.props.comment_id, this.props.token);
         this.setState({ isEditing: false });
     }
 
@@ -57,8 +49,18 @@ class OwnCommentContainer extends Component {
         );
     }
 
+    boundReplyToComment(commentText) {
+        this.props.replyToComment(commentText, this.props.comment_id, this.props.token)
+        .then(() => this.toggleReplyForm());
+    }
+
+    boundSubmitEditComment(commentText) {
+        this.props.editComment(commentText, this.props.comment_id, this.props.token)
+        .then(() => this.toggleEditing());
+    }
+
     render() {
-        const comment = this.props.comments[this.props._id];
+        const comment = this.props.comments[this.props.comment_id];
         const author = this.props.users[comment.author];
         return <OwnComment 
             authorAvatar={author.avatar}
@@ -67,19 +69,21 @@ class OwnCommentContainer extends Component {
             comment_id={comment._id}
             commentParentsLength={comment.parents.length}
             commentCreatedAt={comment.createdAt}
-            commentText={comment.text}
             replyFormIsVisible={this.state.replyFormIsVisible}
             isEditing={this.state.isEditing}
-            commentEditorText={this.state.commentEditorText}
             toggleReplyForm={this.toggleReplyForm}
             toggleEditing={this.toggleEditing}
             handleDelete={this.handleDelete}
             handleCommentEditorUpdate={this.handleFieldUpdate('commentEditorText')}
-            cancelEdit={this.cancelEdit}
-            handleEditSubmit={this.handleEditSubmit}
+            boundReplyToComment={this.boundReplyToComment}
+            boundSubmitEditComment={this.boundSubmitEditComment}
         />
     }
 }
+
+OwnCommentContainer.propTypes = {
+    comment_id: PropTypes.string.isRequired
+};
 
 const mapStateToProps = state => ({
     comments: state.comments,
@@ -92,6 +96,7 @@ export default connect(
     mapStateToProps,
     {
         deleteComment: ActionCreators.deleteComment,
-        editComment: ActionCreators.editComment
+        editComment: ActionCreators.editComment,
+        replyToComment: ActionCreators.replyToComment
     }
 )(OwnCommentContainer);

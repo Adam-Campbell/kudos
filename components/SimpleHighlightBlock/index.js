@@ -1,12 +1,17 @@
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import SimpleHighlightBlock from './SimpleHighlightBlock';
 
 const SimpleHighlightBlockContainer = props => {
-    const highlight = props.highlights[props._id];
+    const highlight = props.highlights[props.highlight_id];
     return <SimpleHighlightBlock 
         excerpt={highlight.excerpt}
         article_id={highlight.post}
     />
+};
+
+SimpleHighlightBlockContainer.propTypes = {
+    highlight_id: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({

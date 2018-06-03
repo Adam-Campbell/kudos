@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import * as styleConstants from '../styleConstants';
 import Link from 'next/link';
@@ -74,5 +75,17 @@ const SignUpForm = props => (
         </FormContainer>
     </Wrapper>
 );
+
+SignUpForm.propTypes = {
+    handleSubmit: PropTypes.func.isRequired,
+    handleUsernameUpdate: PropTypes.func.isRequired,
+    handleEmailUpdate: PropTypes.func.isRequired,
+    handlePasswordUpdate: PropTypes.func.isRequired,
+    handleConfirmPasswordUpdate: PropTypes.func.isRequired,
+    username: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
+    password: PropTypes.string.isRequired,
+    confirmPassword: PropTypes.string.isRequired
+};
 
 export default SignUpForm;
