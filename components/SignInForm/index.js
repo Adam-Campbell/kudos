@@ -4,7 +4,7 @@ import * as ActionCreators from '../../actions';
 import Link from 'next/link';
 import SignInForm from './SignInForm';
 
-class SignInFormContainer extends Component {
+export class SignInFormContainer extends Component {
     constructor(props) {
         super(props);
         this.handleFieldUpdate = this.handleFieldUpdate.bind(this);

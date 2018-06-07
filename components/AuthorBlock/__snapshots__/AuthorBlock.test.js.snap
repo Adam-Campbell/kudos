@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<AuthorBlockContainer /> renders correctly 1`] = `
+<AuthorBlock
+  authorAvatar="https://example.com/user_a.jpg"
+  authorBio="The bio for User A."
+  authorUsername="Joe Bloggs"
+  author_id="user_A"
+/>
+`;
+
+exports[`<AuthorBlockContainer /> renders correctly 2`] = `
+<AuthorBlockOuter>
+  <AuthorImage
+    imageUrl="https://example.com/user_a.jpg"
+  />
+  <AuthorInfo>
+    <div>
+      <Link
+        as="/user/user_A"
+        href="/user?user=user_A"
+        passHref={true}
+      >
+        <AuthorAnchor>
+          Joe Bloggs
+        </AuthorAnchor>
+      </Link>
+      <StyledFollowButton
+        user_id="user_A"
+      />
+    </div>
+    <AuthorBio>
+      The bio for User A.
+    </AuthorBio>
+  </AuthorInfo>
+</AuthorBlockOuter>
+`;

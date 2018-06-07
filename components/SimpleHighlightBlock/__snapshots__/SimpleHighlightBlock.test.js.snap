@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SimpleHighlightBlockContainer/> renders correctly 1`] = `
+<SimpleHighlightBlock
+  article_id="article_A"
+  excerpt="An excerpt from Article A."
+/>
+`;
+
+exports[`<SimpleHighlightBlockContainer/> renders correctly 2`] = `
+<BlockContainer>
+  <HighlightedText>
+    An excerpt from Article A.
+  </HighlightedText>
+  <Link
+    as="/post/article_A"
+    href="/post?post=article_A"
+    passHref={true}
+  >
+    <AnchorButton>
+      View Article
+    </AnchorButton>
+  </Link>
+</BlockContainer>
+`;

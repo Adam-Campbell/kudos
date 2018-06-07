@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import UserProfileHeader from './UserProfileHeader';
 
-const UserProfileHeaderContainer = props => {
+export const UserProfileHeaderContainer = props => {
     const user = props.users[props.user_id];
 
     return <UserProfileHeader 
@@ -21,7 +21,6 @@ UserProfileHeaderContainer.propTypes = {
 
 const mapStateToProps = state => ({
     users: state.users.models,
-    isLoggedIn: state.currentUser.isLoggedIn
 });
 
 export default connect(

@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import SimpleHighlightBlock from './SimpleHighlightBlock';
 
-const SimpleHighlightBlockContainer = props => {
+export const SimpleHighlightBlockContainer = props => {
     const highlight = props.highlights[props.highlight_id];
     return <SimpleHighlightBlock 
         excerpt={highlight.excerpt}

@@ -4,7 +4,7 @@ import DeletedComment from './DeletedComment';
 import CommentContainer from './CommentContainer';
 import OwnCommentContainer from './OwnCommentContainer';
 
-const CommentSelector = props => {
+export const CommentSelector = props => {
     const comment = props.comments[props.comment_id];
     const isAuthor = (props.isLoggedIn && comment.author === props.currentUser_id);
     if (isAuthor) {

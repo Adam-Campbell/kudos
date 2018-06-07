@@ -73,7 +73,7 @@ const AuthorAnchor = styled.a`
     }
 `;
 
-const ArticleAnchor = AnchorButton.extend`
+const ArticleAnchor = styled(AnchorButton)`
     margin-top: 16px;
 `;
 

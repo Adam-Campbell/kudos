@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import * as ActionCreators from '../../actions';
 import UserPasswordForm from './UserPasswordForm';
 
-class UserPasswordFormContainer extends Component {
+export class UserPasswordFormContainer extends Component {
     constructor(props) {
         super(props);
         this.handleFieldUpdate = this.handleFieldUpdate.bind(this);

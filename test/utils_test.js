@@ -1,9 +1,15 @@
-import { expect } from 'chai'; 
-import addOrMerge from '../utils/addOrMerge';
-import normalize from '../utils/normalize';
-import objectToArray from '../utils/objectToArray';
-import sortComments from '../utils/sortComments';
-import { posts, normalizedPosts, comments, sortedComments } from './mockApiData';
+// import { expect } from 'chai'; 
+// import {
+//     addOrMerge,
+//     handleNormalize,
+//     objectToArray,
+//     sortComments
+// } from '../utils';
+// import { posts, normalizedPosts, comments, sortedComments } from './mockApiData';
+
+const expect = require('chai').expect;
+const { addOrMerge, handleNormalize, objectToArray, sortComments } = require('../utils');
+const { posts, normalizedPosts, comments, sortedComments } = require('./mockApiData');
 
 describe('objectToArray', () => {
     const objOfObj = {
@@ -104,17 +110,17 @@ describe('addOrMerge', () => {
 
 });
 
-describe('normalize', () => {
+describe('handleNormalize', () => {
     it("should throw an error if the required arguments aren't supplied", () => {
-        expect(() => normalize({})).to.throw('You have failed to supply one or more of the required arguments to the handleNormalize function.');
+        expect(() => handleNormalize({})).to.throw('You have failed to supply one or more of the required arguments to the handleNormalize function.');
     });
 
     it("should throw an error if the resourceType supplied isn't valid", () => {
-        expect(() => normalize({}, 'foobars')).to.throw('You have supplied an invalid resource type to the handleNormalize function.');
+        expect(() => handleNormalize({}, 'foobars')).to.throw('You have supplied an invalid resource type to the handleNormalize function.');
     });
 
     it('should correctly normalize data if the arguments are valid', () => {
-        expect(normalize(posts, 'posts')).to.deep.equal(normalizedPosts);
+        expect(handleNormalize(posts, 'posts')).to.deep.equal(normalizedPosts);
     });
 });
 

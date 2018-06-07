@@ -5,7 +5,7 @@ import UsersCommentsCollection from './UsersCommentsCollection';
 import UsersKudosCollection from './UsersKudosCollection';
 import UsersHighlightsCollection from './UsersHighlightsCollection';
 
-const CollectionSwitch = props => {
+export const CollectionSwitch = props => {
     const user = props.users[props.user_id];
 
     switch (props.filter) {

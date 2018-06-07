@@ -4,7 +4,7 @@ import * as ActionCreators from '../../actions';
 import Link from 'next/link';
 import SignUpForm from './SignUpForm';
 
-class SignUpFormContainer extends Component {
+export class SignUpFormContainer extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);

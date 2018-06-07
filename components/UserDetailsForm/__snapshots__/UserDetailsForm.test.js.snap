@@ -1,0 +1,70 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<UserDetailsFormContainer/> renders correctly 1`] = `
+<UserDetailsForm
+  bio="The bio for User A."
+  email="example@example.com"
+  handleBioUpdate={[Function]}
+  handleEmailUpdate={[Function]}
+  handleSubmit={[Function]}
+  handleUsernameUpdate={[Function]}
+  username="Joe Bloggs"
+/>
+`;
+
+exports[`<UserDetailsFormContainer/> renders correctly 2`] = `
+<Wrapper
+  tight={true}
+>
+  <FormContainer>
+    <form
+      onSubmit={[Function]}
+    >
+      <Fieldset>
+        <Legend>
+          Update your account details
+        </Legend>
+        <Label
+          htmlFor="username"
+        >
+          Username:
+        </Label>
+        <Input
+          id="username"
+          name="username"
+          onChange={[Function]}
+          type="text"
+          value="Joe Bloggs"
+        />
+        <Label
+          htmlFor="email"
+        >
+          Email:
+        </Label>
+        <Input
+          id="email"
+          name="email"
+          onChange={[Function]}
+          type="email"
+          value="example@example.com"
+        />
+        <Label
+          htmlFor="bio"
+        >
+          Bio
+        </Label>
+        <Textarea
+          id="bio"
+          onChange={[Function]}
+          value="The bio for User A."
+        />
+      </Fieldset>
+      <Button
+        type="submit"
+      >
+        Save
+      </Button>
+    </form>
+  </FormContainer>
+</Wrapper>
+`;

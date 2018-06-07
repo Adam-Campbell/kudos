@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<AnchorButton/> renders correctly 1`] = `
+<ButtonElement
+  isHovered={false}
+  onMouseEnter={[Function]}
+  onMouseLeave={[Function]}
+>
+  An Anchor Button
+</ButtonElement>
+`;
+
+exports[`<Button/> renders correctly 1`] = `
+<ButtonElement
+  isHovered={false}
+  onMouseEnter={[Function]}
+  onMouseLeave={[Function]}
+>
+  A Button
+</ButtonElement>
+`;

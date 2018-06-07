@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import * as ActionCreators from '../../actions';
 import PasswordResetEmailReqForm from './PasswordResetEmailReqForm';
 
-class PasswordResetEmailReqFormContainer extends Component {
+export class PasswordResetEmailReqFormContainer extends Component {
     constructor(props) {
         super(props);
         this.handleFieldUpdate = this.handleFieldUpdate.bind(this);

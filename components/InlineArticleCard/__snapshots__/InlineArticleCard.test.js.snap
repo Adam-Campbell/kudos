@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<InlineArticleCardContainer /> renders correctly 1`] = `
+<InlineArticleCard
+  articleImage="https://example.com/article_a.jpg"
+  articleTitle="The title for Article A"
+  article_id="article_A"
+  authorUsername="Joe Bloggs"
+  author_id="user_A"
+/>
+`;
+
+exports[`<InlineArticleCardContainer /> renders correctly 2`] = `
+<CardOuter>
+  <ArticleImage
+    imageUrl="https://example.com/article_a.jpg"
+  />
+  <ArticleInfo>
+    <ArticleTitle>
+      The title for Article A
+    </ArticleTitle>
+    <Link
+      as="/user/user_A"
+      href="/user?user=user_A"
+      passHref={true}
+    >
+      <AuthorAnchor>
+        Joe Bloggs
+      </AuthorAnchor>
+    </Link>
+    <Link
+      as="/post/article_A"
+      href="/post?post=article_A"
+      passHref={true}
+    >
+      <ArticleAnchor>
+        Read More
+      </ArticleAnchor>
+    </Link>
+  </ArticleInfo>
+</CardOuter>
+`;

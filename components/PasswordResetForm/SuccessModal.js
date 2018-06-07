@@ -45,7 +45,7 @@ const ModalText = styled.p`
     color: ${styleConstants.colorSecondary};
 `;
 
-const ModalButton = AnchorButton.extend`
+const ModalButton = styled(AnchorButton)`
     color: ${styleConstants.colorSuccess};
     background-color: ${styleConstants.colorSecondary};
     border-color: ${styleConstants.colorSecondary};

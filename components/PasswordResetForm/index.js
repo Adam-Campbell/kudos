@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import * as ActionCreators from '../../actions';
 import PasswordResetForm from './PasswordResetForm';
 
-class PasswordResetFormContainer extends Component {
+export class PasswordResetFormContainer extends Component {
     constructor(props) {
         super(props);
         this.handleFieldUpdate = this.handleFieldUpdate.bind(this);

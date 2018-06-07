@@ -84,7 +84,7 @@ const ArticleDescription = styled.p`
     color: ${styleConstants.colorBodyText};
 `;
 
-const ArticleAnchor = AnchorButton.extend`
+const ArticleAnchor = styled(AnchorButton)`
     margin-top: auto;
 `;
 

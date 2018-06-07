@@ -1,0 +1,196 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ArticleContainer/> renders correctly if user is author of article 1`] = `
+<Article
+  articleDescription="The description for Article A."
+  articleImage="https://example.com/article_a.jpg"
+  articleKudos={7}
+  articleText="The main body of Article A."
+  articleTitle="The title for Article A"
+  article_id="article_A"
+  commentIds={
+    Array [
+      "comment_A",
+      "comment_C",
+    ]
+  }
+  isAuthor={true}
+  isLoggedIn={true}
+/>
+`;
+
+exports[`<ArticleContainer/> renders correctly if user is author of article 2`] = `
+<ArticleOuter>
+  <ArticleIntroContainer
+    tight={true}
+  >
+    <Link
+      as="/edit-post/article_A"
+      href="/edit-post?post=article_A"
+      passHref={true}
+    >
+      <EditArticleButton>
+        Edit this article
+      </EditArticleButton>
+    </Link>
+    <Connect(AuthorBlockContainer)
+      article_id="article_A"
+    />
+    <ArticleHeader>
+      <ArticleTitle>
+        The title for Article A
+      </ArticleTitle>
+      <ArticleDescription>
+        The description for Article A.
+      </ArticleDescription>
+      <KudosStatsContainer>
+        <KudosStat>
+          <span>
+            7
+          </span>
+           Kudos
+        </KudosStat>
+        <Connect(KudosButtonContainer)
+          article_id="article_A"
+        />
+      </KudosStatsContainer>
+    </ArticleHeader>
+  </ArticleIntroContainer>
+  <section>
+    <Wrapper
+      wide={true}
+    >
+      <ArticleFigure>
+        <ArticleImage
+          imageUrl="https://example.com/article_a.jpg"
+        />
+        <ArticleImageCaption>
+          I haven't added these yet...
+        </ArticleImageCaption>
+      </ArticleFigure>
+    </Wrapper>
+    <Wrapper
+      tight={true}
+    >
+      <ArticleParagraph>
+        The main body of Article A.
+      </ArticleParagraph>
+      <ArticleQuote>
+        <ArticleQuoteText>
+          “This is where my inspirational quotes would go IF I HAD ANY”
+        </ArticleQuoteText>
+      </ArticleQuote>
+    </Wrapper>
+  </section>
+  <section>
+    <Wrapper
+      tight={true}
+    >
+      <Connect(ArticleCommentBoxContainer)
+        article_id="article_A"
+      />
+      <Connect(CommentSelector)
+        comment_id="comment_A"
+        key="comment_A"
+      />
+      <Connect(CommentSelector)
+        comment_id="comment_C"
+        key="comment_C"
+      />
+    </Wrapper>
+  </section>
+</ArticleOuter>
+`;
+
+exports[`<ArticleContainer/> renders correctly if user isn't author of article 1`] = `
+<Article
+  articleDescription="The description for Article B."
+  articleImage="https://example.com/article_b.jpg"
+  articleKudos={2}
+  articleText="The main body of Article B."
+  articleTitle="The title for Article B"
+  article_id="article_B"
+  commentIds={
+    Array [
+      "comment_B",
+      "comment_D",
+    ]
+  }
+  isAuthor={false}
+  isLoggedIn={true}
+/>
+`;
+
+exports[`<ArticleContainer/> renders correctly if user isn't author of article 2`] = `
+<ArticleOuter>
+  <ArticleIntroContainer
+    tight={true}
+  >
+    <Connect(AuthorBlockContainer)
+      article_id="article_B"
+    />
+    <ArticleHeader>
+      <ArticleTitle>
+        The title for Article B
+      </ArticleTitle>
+      <ArticleDescription>
+        The description for Article B.
+      </ArticleDescription>
+      <KudosStatsContainer>
+        <KudosStat>
+          <span>
+            2
+          </span>
+           Kudos
+        </KudosStat>
+        <Connect(KudosButtonContainer)
+          article_id="article_B"
+        />
+      </KudosStatsContainer>
+    </ArticleHeader>
+  </ArticleIntroContainer>
+  <section>
+    <Wrapper
+      wide={true}
+    >
+      <ArticleFigure>
+        <ArticleImage
+          imageUrl="https://example.com/article_b.jpg"
+        />
+        <ArticleImageCaption>
+          I haven't added these yet...
+        </ArticleImageCaption>
+      </ArticleFigure>
+    </Wrapper>
+    <Wrapper
+      tight={true}
+    >
+      <ArticleParagraph>
+        The main body of Article B.
+      </ArticleParagraph>
+      <ArticleQuote>
+        <ArticleQuoteText>
+          “This is where my inspirational quotes would go IF I HAD ANY”
+        </ArticleQuoteText>
+      </ArticleQuote>
+    </Wrapper>
+  </section>
+  <section>
+    <Wrapper
+      tight={true}
+    >
+      <Connect(ArticleCommentBoxContainer)
+        article_id="article_B"
+      />
+      <Connect(CommentSelector)
+        comment_id="comment_B"
+        key="comment_B"
+      />
+      <Connect(CommentSelector)
+        comment_id="comment_D"
+        key="comment_D"
+      />
+    </Wrapper>
+  </section>
+</ArticleOuter>
+`;
