@@ -11,7 +11,8 @@ export class SignInFormContainer extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.state = {
             username: '',
-            password: ''
+            password: '',
+            missingFieldsError: false
         };
     }
 
@@ -24,7 +25,12 @@ export class SignInFormContainer extends Component {
     handleSubmit(e) {
         e.preventDefault();
         const { username, password } = this.state;
-        this.props.signIn(username, password);
+        if (!username || !password) {
+            this.setState({ missingFieldsError: true });
+        } else {
+            this.props.signIn(username, password);
+            this.setState({ missingFieldsError: false });
+        }
     }
 
     render() {

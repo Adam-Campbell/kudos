@@ -85,9 +85,9 @@ NewPostForm.propTypes = {
     handlePostDescriptionUpdate: PropTypes.func.isRequired,
     handlePostCategoryUpdate: PropTypes.func.isRequired,
     handlePostBodyUpdate: PropTypes.func.isRequired,
-    checkForFile: ProPTypes.func.isRequired,
+    checkForFile: PropTypes.func.isRequired,
     postTitle: PropTypes.string.isRequired,
-    postDescription: Proptypes.string.isRequired,
+    postDescription: PropTypes.string.isRequired,
     postCategory: PropTypes.string.isRequired,
     postBody: PropTypes.string.isRequired,
     fileInputRef: PropTypes.any.isRequired

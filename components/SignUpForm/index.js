@@ -13,7 +13,9 @@ export class SignUpFormContainer extends Component {
             username: '',
             email: '',
             password: '',
-            confirmPassword: ''
+            confirmPassword: '',
+            missingFieldsError: false,
+            nonMatchingPasswordsError: false
         };
     }
 
@@ -27,10 +29,20 @@ export class SignUpFormContainer extends Component {
         e.preventDefault();
         const { username, email, password, confirmPassword } = this.state;
         if (!username || !email || !password || !confirmPassword) {
-            alert('Please ensure you have filled out all of the required fields');
+            this.setState({
+                missingFieldsError: true,
+                nonMatchingPasswordsError: false
+            });
         } else if (password !== confirmPassword) {
-            alert("Your password confirmation doesn't match, please re-enter your password")
+            this.setState({
+                missingFieldsError: false,
+                nonMatchingPasswordsError: true
+            });
         } else {
+            this.setState({
+                missingFieldsError: false,
+                nonMatchingPasswordsError: false
+            });
             this.props.signUp(username, email, password);
         }
     }

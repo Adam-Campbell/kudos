@@ -1,0 +1,167 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<NewPostFormContainer/> renders correctly 1`] = `
+<NewPostForm
+  checkForFile={[Function]}
+  fileInputRef={
+    Object {
+      "current": null,
+    }
+  }
+  handlePostBodyUpdate={[Function]}
+  handlePostCategoryUpdate={[Function]}
+  handlePostDescriptionUpdate={[Function]}
+  handlePostTitleUpdate={[Function]}
+  handleSubmit={[Function]}
+  postBody=""
+  postCategory=""
+  postDescription=""
+  postTitle=""
+/>
+`;
+
+exports[`<NewPostFormContainer/> renders correctly 2`] = `
+<Wrapper
+  tight={true}
+>
+  <FormContainer>
+    <form
+      onSubmit={[Function]}
+    >
+      <Fieldset>
+        <Legend>
+          Tell us about your post
+        </Legend>
+        <Label
+          htmlFor="title"
+        >
+          Title:
+        </Label>
+        <Input
+          id="title"
+          name="title"
+          onChange={[Function]}
+          type="text"
+          value=""
+        />
+        <Label
+          htmlFor="description"
+        >
+          Description:
+        </Label>
+        <Input
+          id="description"
+          name="description"
+          onChange={[Function]}
+          type="text"
+          value=""
+        />
+        <Label
+          htmlFor="category"
+        >
+          Category:
+        </Label>
+        <Select
+          id="category"
+          name="category"
+          onChange={[Function]}
+          value=""
+        >
+          <Option
+            value="javascript"
+          >
+            JavaScript
+          </Option>
+          <Option
+            value="fantasy"
+          >
+            Fantasy
+          </Option>
+          <Option
+            value="games"
+          >
+            Games
+          </Option>
+          <Option
+            value="news"
+          >
+            News
+          </Option>
+          <Option
+            value="fashion"
+          >
+            Fashion
+          </Option>
+          <Option
+            value="travel"
+          >
+            Travel
+          </Option>
+          <Option
+            value="motivation"
+          >
+            Motivation
+          </Option>
+          <Option
+            value="relationships"
+          >
+            Relationships
+          </Option>
+          <Option
+            value="design"
+          >
+            Design
+          </Option>
+          <Option
+            value="politics"
+          >
+            Politics
+          </Option>
+          <Option
+            value="mentalhealth"
+          >
+            Mental Health
+          </Option>
+          <Option
+            value="music"
+          >
+            Music
+          </Option>
+        </Select>
+        <Label
+          htmlFor="image"
+        >
+          Image:
+        </Label>
+        <FileInput
+          id="image"
+          innerRef={
+            Object {
+              "current": null,
+            }
+          }
+          name="image"
+          onChange={[Function]}
+          type="file"
+        />
+        <Label
+          htmlFor="body"
+        >
+          Body:
+        </Label>
+        <Textarea
+          id="body"
+          name="body"
+          onChange={[Function]}
+          value=""
+        />
+      </Fieldset>
+      <Button
+        type="submit"
+      >
+        Save your article
+      </Button>
+    </form>
+  </FormContainer>
+</Wrapper>
+`;

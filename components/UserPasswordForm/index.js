@@ -11,7 +11,9 @@ export class UserPasswordFormContainer extends Component {
         this.state = {
             currentPassword: '',
             newPassword: '',
-            confirmPassword: ''
+            confirmPassword: '',
+            missingFieldsError: false,
+            nonMatchingPasswordsError: false
         };
     }
 
@@ -25,10 +27,20 @@ export class UserPasswordFormContainer extends Component {
         e.preventDefault();
         const { currentPassword, newPassword, confirmPassword } = this.state;
         if (!currentPassword || !newPassword || !confirmPassword) {
-            alert("You have failed to enter one or more fields, please review the form and submit again");
+            this.setState({
+                missingFieldsError: true,
+                nonMatchingPasswordsError: false
+            });
         } else if (newPassword !== confirmPassword) {
-            alert("Your new password confirmation doesn't match your new password, please update these fields");
+            this.setState({
+                missingFieldsError: false,
+                nonMatchingPasswordsError: true
+            });
         } else {
+            this.setState({
+                missingFieldsError: false,
+                nonMatchingPasswordsError: false
+            });
             this.props.updateUserPassword(currentPassword, newPassword, this.props.token);
         }
     }
