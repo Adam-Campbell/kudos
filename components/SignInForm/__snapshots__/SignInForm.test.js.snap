@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SignInFormContainer/> renders correctly 1`] = `
+<SignInForm
+  handlePasswordUpdate={[Function]}
+  handleSubmit={[Function]}
+  handleUsernameUpdate={[Function]}
+  password=""
+  username=""
+/>
+`;
+
+exports[`<SignInFormContainer/> renders correctly 2`] = `
+<FormContainer>
+  <form
+    onSubmit={[Function]}
+  >
+    <FormTitle>
+      Sign In
+    </FormTitle>
+    <Fieldset>
+      <Legend>
+        Please enter your account details to sign in.
+      </Legend>
+      <Label
+        htmlFor="username"
+      >
+        Username:
+      </Label>
+      <Input
+        id="username"
+        name="username"
+        onChange={[Function]}
+        type="text"
+        value=""
+      />
+      <Label
+        htmlFor="password"
+      >
+        Password:
+      </Label>
+      <Input
+        id="password"
+        name="password"
+        onChange={[Function]}
+        type="password"
+        value=""
+      />
+    </Fieldset>
+    <Button
+      type="submit"
+    >
+      Sign In
+    </Button>
+  </form>
+  <Link
+    href="/forgot"
+    passHref={true}
+  >
+    <Anchor>
+      Forgotten your password?
+    </Anchor>
+  </Link>
+  <Link
+    href="/signup"
+    passHref={true}
+  >
+    <Anchor>
+      Don't have an account? Sign up!
+    </Anchor>
+  </Link>
+</FormContainer>
+`;

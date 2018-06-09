@@ -1,0 +1,141 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<CollectionSwitch/> renders correctly according the filter prop supplied to it 1`] = `
+<UsersArticlesCollection
+  article_ids={
+    Array [
+      "article_A",
+      "article_C",
+    ]
+  }
+/>
+`;
+
+exports[`<CollectionSwitch/> renders correctly according the filter prop supplied to it 2`] = `
+<UsersCommentsCollection
+  comment_ids={
+    Array [
+      "comment_A",
+      "comment_B",
+    ]
+  }
+/>
+`;
+
+exports[`<UserProfileFeed/> renders correctly 1`] = `
+<section>
+  <UserProfileFeedNav
+    filter="posts"
+    user_id="user_A"
+  />
+  <Connect(CollectionSwitch)
+    filter="posts"
+    user_id="user_A"
+  />
+</section>
+`;
+
+exports[`<UserProfileFeedNav/> renders correctly 1`] = `
+<section>
+  <Nav>
+    <NavList>
+      <NavItem>
+        <Link
+          as="/user/user_A/posts"
+          href="user?user=user_A&filter=posts"
+          passHref={true}
+        >
+          <NavAnchor
+            active={true}
+          >
+            Posts
+          </NavAnchor>
+        </Link>
+      </NavItem>
+      <NavItem>
+        <Link
+          as="/user/user_A/comments"
+          href="user?user=user_A&filter=comments"
+          passHref={true}
+        >
+          <NavAnchor
+            active={false}
+          >
+            Comments
+          </NavAnchor>
+        </Link>
+      </NavItem>
+      <NavItem>
+        <Link
+          as="/user/user_A/kudos"
+          href="user?user=user_A&filter=kudos"
+          passHref={true}
+        >
+          <NavAnchor
+            active={false}
+          >
+            Kudos
+          </NavAnchor>
+        </Link>
+      </NavItem>
+      <NavItem>
+        <Link
+          as="/user/user_A/highlights"
+          href="user?user=user_A&filter=highlights"
+          passHref={true}
+        >
+          <NavAnchor
+            active={false}
+          >
+            Highlights
+          </NavAnchor>
+        </Link>
+      </NavItem>
+    </NavList>
+  </Nav>
+</section>
+`;
+
+exports[`<UsersArticlesCollection renders correctly 1`] = `
+<div>
+  <Connect(SimpleArticleBlockContainer)
+    article_id="article_A"
+    key="0"
+  />
+  <Connect(SimpleArticleBlockContainer)
+    article_id="article_C"
+    key="1"
+  />
+</div>
+`;
+
+exports[`<UsersCommentsCollection renders correctly 1`] = `
+<div>
+  <Connect(SimpleCommentBlockContainer)
+    comment_id="comment_A"
+    key="0"
+  />
+  <Connect(SimpleCommentBlockContainer)
+    comment_id="comment_B"
+    key="1"
+  />
+</div>
+`;
+
+exports[`<UsersHighlightsCollection renders correctly 1`] = `
+<div>
+  <Connect(SimpleHighlightBlockContainer)
+    highlight_id="article_A"
+    key="0"
+  />
+</div>
+`;
+
+exports[`<UsersKudosCollection renders correctly 1`] = `
+<div>
+  <Connect(SimpleKudosBlockContainer)
+    article_id="article_A"
+    key="0"
+  />
+</div>
+`;

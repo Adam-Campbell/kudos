@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Article from './Article';
 
-const ArticleContainer = props => {
+export const ArticleContainer = props => {
     const article = props.articles[props.article_id];
     const isAuthor = props.currentUser_id === article.author;
     return <Article 

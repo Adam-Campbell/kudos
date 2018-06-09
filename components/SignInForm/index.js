@@ -4,14 +4,15 @@ import * as ActionCreators from '../../actions';
 import Link from 'next/link';
 import SignInForm from './SignInForm';
 
-class SignInFormContainer extends Component {
+export class SignInFormContainer extends Component {
     constructor(props) {
         super(props);
         this.handleFieldUpdate = this.handleFieldUpdate.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.state = {
             username: '',
-            password: ''
+            password: '',
+            missingFieldsError: false
         };
     }
 
@@ -24,7 +25,12 @@ class SignInFormContainer extends Component {
     handleSubmit(e) {
         e.preventDefault();
         const { username, password } = this.state;
-        this.props.signIn(username, password);
+        if (!username || !password) {
+            this.setState({ missingFieldsError: true });
+        } else {
+            this.props.signIn(username, password);
+            this.setState({ missingFieldsError: false });
+        }
     }
 
     render() {

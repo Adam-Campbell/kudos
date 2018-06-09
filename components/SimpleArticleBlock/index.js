@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import SimpleArticleBlock from './SimpleArticleBlock';
 
-const SimpleArticleBlockContainer = props => {
+export const SimpleArticleBlockContainer = props => {
     const article = props.articles[props.article_id];
     return <SimpleArticleBlock 
         articleTitle={article.title}

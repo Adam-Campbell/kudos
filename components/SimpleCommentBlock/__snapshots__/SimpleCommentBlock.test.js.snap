@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SimpleCommentBlockContainer/> renders correctly 1`] = `
+<SimpleCommentBlock
+  comment_id="comment_A"
+  discussion_id="article_A"
+/>
+`;
+
+exports[`<SimpleCommentBlockContainer/> renders correctly 2`] = `
+<BlockContainer>
+  <Connect(CommentDisplay)
+    comment_id="comment_A"
+  />
+  <Link
+    as="/post/article_A"
+    href="/post?post=article_A"
+    passHref={true}
+  >
+    <DiscussionAnchor>
+      View Discussion
+    </DiscussionAnchor>
+  </Link>
+</BlockContainer>
+`;

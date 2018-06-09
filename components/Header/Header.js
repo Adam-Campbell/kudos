@@ -28,11 +28,11 @@ const HeaderContentWrapper = styled.div`
     margin-right: auto;
 `;
 
-const SignInAnchor = AnchorButton.extend`
+const SignInAnchor = styled(AnchorButton)`
     margin-left: auto;
 `;
 
-const CreateAccountAnchor = AnchorButton.extend`
+const CreateAccountAnchor = styled(AnchorButton)`
     display: none;
     @media(min-width: 480px) {
         display: inline-block;

@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<FollowButtonContainer/> renders and behaves correctly when user does follow 1`] = `
+<FollowButton
+  doesFollow={true}
+  followUser={[Function]}
+  unfollowUser={[Function]}
+/>
+`;
+
+exports[`<FollowButtonContainer/> renders and behaves correctly when user does follow 2`] = `
+<Button
+  onClick={[Function]}
+>
+  Unfollow
+</Button>
+`;
+
+exports[`<FollowButtonContainer/> renders and behaves correctly when user doesn't follow 1`] = `
+<FollowButton
+  doesFollow={false}
+  followUser={[Function]}
+  unfollowUser={[Function]}
+/>
+`;
+
+exports[`<FollowButtonContainer/> renders and behaves correctly when user doesn't follow 2`] = `
+<Button
+  onClick={[Function]}
+>
+  Follow
+</Button>
+`;

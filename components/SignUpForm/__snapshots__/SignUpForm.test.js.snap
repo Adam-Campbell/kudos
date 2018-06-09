@@ -1,0 +1,95 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SignUpFormContainer/> renders correctly 1`] = `
+<SignUpForm
+  confirmPassword=""
+  email=""
+  handleConfirmPasswordUpdate={[Function]}
+  handleEmailUpdate={[Function]}
+  handlePasswordUpdate={[Function]}
+  handleSubmit={[Function]}
+  handleUsernameUpdate={[Function]}
+  password=""
+  username=""
+/>
+`;
+
+exports[`<SignUpFormContainer/> renders correctly 2`] = `
+<Wrapper
+  tight={true}
+>
+  <FormContainer>
+    <form
+      onSubmit={[Function]}
+    >
+      <FormTitle>
+        Sign Up
+      </FormTitle>
+      <Fieldset>
+        <Legend>
+          Please provide your details to create an account.
+        </Legend>
+        <Label
+          htmlFor="username"
+        >
+          Username:
+        </Label>
+        <Input
+          id="username"
+          name="username"
+          onChange={[Function]}
+          type="text"
+          value=""
+        />
+        <Label
+          htmlFor="email"
+        >
+          Email:
+        </Label>
+        <Input
+          id="email"
+          name="email"
+          onChange={[Function]}
+          type="email"
+          value=""
+        />
+        <Label
+          htmlFor="password"
+        >
+          Password:
+        </Label>
+        <Input
+          id="password"
+          name="password"
+          onChange={[Function]}
+          type="password"
+          value=""
+        />
+        <Label>
+          Confirm Password
+        </Label>
+        <Input
+          id="confirm-password"
+          name="confirm_password"
+          onChange={[Function]}
+          type="password"
+          value=""
+        />
+      </Fieldset>
+      <Button
+        type="submit"
+      >
+        Sign Up
+      </Button>
+    </form>
+    <Link
+      href="/signin"
+      passHref={true}
+    >
+      <Anchor>
+        Already have an account? Sign in!
+      </Anchor>
+    </Link>
+  </FormContainer>
+</Wrapper>
+`;

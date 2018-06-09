@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SimpleKudosBlockContainer/> renders correctly 1`] = `
+<SimpleKudosBlock
+  articleDescription="The description for Article A."
+  articleTitle="The title for Article A"
+  article_id="article_A"
+/>
+`;
+
+exports[`<SimpleKudosBlockContainer/> renders correctly 2`] = `
+<BlockContainer>
+  <ArticleTitle>
+    The title for Article A
+  </ArticleTitle>
+  <ArticleDescription>
+    The description for Article A.
+  </ArticleDescription>
+  <Link
+    as="/post/article_A"
+    href="/post?post=article_A"
+    passHref={true}
+  >
+    <AnchorButton>
+      View Article
+    </AnchorButton>
+  </Link>
+</BlockContainer>
+`;

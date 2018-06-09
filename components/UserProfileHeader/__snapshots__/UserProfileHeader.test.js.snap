@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<UserProfileHeaderContainer/> renders correctly 1`] = `
+<UserProfileHeader
+  userAvatar="https://example.com/user_a.jpg"
+  userBio="The bio for User A."
+  userFollowers={1}
+  userFollowing={0}
+  user_id="user_A"
+  username="Joe Bloggs"
+/>
+`;
+
+exports[`<UserProfileHeaderContainer/> renders correctly 2`] = `
+<OuterContainer>
+  <UserImage
+    imageUrl="https://example.com/user_a.jpg"
+  />
+  <InfoContainer>
+    <Username>
+      Joe Bloggs
+    </Username>
+    <UserBio>
+      The bio for User A.
+    </UserBio>
+    <FollowStatsContainer>
+      <FollowStat>
+        <span>
+          1
+        </span>
+         Followers
+      </FollowStat>
+      <FollowStat>
+        <span>
+          0
+        </span>
+         Following
+      </FollowStat>
+    </FollowStatsContainer>
+    <Connect(FollowButtonContainer)
+      user_id="user_A"
+    />
+  </InfoContainer>
+</OuterContainer>
+`;

@@ -38,7 +38,7 @@ const CommentEditorInput = styled.textarea`
     border-radius: 3px;
 `;
 
-const ControlButton = Button.extend`
+const ControlButton = styled(Button)`
     & + & {
         margin-left: 8px;
     }

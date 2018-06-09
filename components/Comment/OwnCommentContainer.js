@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import * as ActionCreators from '../../actions';
 import OwnComment from './OwnComment';
 
-class OwnCommentContainer extends Component {
+export class OwnCommentContainer extends Component {
     constructor(props) {
         super(props);
         this.toggleReplyForm = this.toggleReplyForm.bind(this);

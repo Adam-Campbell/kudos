@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import JumboArticleCard from './JumboArticleCard';
 
-const JumboArticleCardContainer = props => {
+export const JumboArticleCardContainer = props => {
     const article = props.articles[props.article_id];
     const author = props.users[article.author];
 

@@ -19,7 +19,7 @@ const CommentText = styled.p`
     line-height: 1.4;
 `;
 
-const DiscussionAnchor = AnchorButton.extend`
+const DiscussionAnchor = styled(AnchorButton)`
     display: inline-block;
     margin-top: 16px;
 `;

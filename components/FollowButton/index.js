@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import * as ActionCreators from '../../actions';
 import FollowButton from './FollowButton';
 
-class FollowButtonContainer extends Component {
+export class FollowButtonContainer extends Component {
     constructor(props) {
         super(props);
         this.handleFollow = this.handleFollow.bind(this);

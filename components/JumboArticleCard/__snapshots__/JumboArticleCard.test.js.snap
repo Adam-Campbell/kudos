@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<JumboArticleCardContainer /> renders correctly 1`] = `
+<JumboArticleCard
+  articleCategory="category_A"
+  articleDescription="The description for Article A."
+  articleImage="https://example.com/article_a.jpg"
+  articleTitle="The title for Article A"
+  article_id="article_A"
+  authorAvatar="https://example.com/user_a.jpg"
+  authorUsername="Joe Bloggs"
+  author_id="user_A"
+/>
+`;
+
+exports[`<JumboArticleCardContainer /> renders correctly 2`] = `
+<CardOuter>
+  <ArticleImage
+    imageUrl="https://example.com/article_a.jpg"
+  />
+  <ArticleCategory>
+    category_A
+  </ArticleCategory>
+  <AuthorInfo>
+    <AuthorImage
+      imageUrl="https://example.com/user_a.jpg"
+    />
+    <Link
+      as="/user/user_A"
+      href="/user?user=user_A"
+      passHref={true}
+    >
+      <AuthorAnchor>
+        Joe Bloggs
+      </AuthorAnchor>
+    </Link>
+  </AuthorInfo>
+  <ArticleInfo>
+    <ArticleTitle>
+      The title for Article A
+    </ArticleTitle>
+    <ArticleDescription>
+      The description for Article A.
+    </ArticleDescription>
+    <Link
+      as="/post/article_A"
+      href="post?post=article_A"
+      passHref={true}
+    >
+      <ArticleAnchor>
+        Read More
+      </ArticleAnchor>
+    </Link>
+  </ArticleInfo>
+</CardOuter>
+`;

@@ -1,7 +1,7 @@
 import * as actionTypes from '../actionTypes';
 import { mergeAndDedupArrays } from '../utils';
 
-const initialState = {
+export const initialState = {
     all: { postIds: [], fetchedAt: null },
     javascript: { postIds: [], fetchedAt: null },
     fantasy: { postIds: [], fetchedAt: null },

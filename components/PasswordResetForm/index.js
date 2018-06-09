@@ -4,14 +4,16 @@ import PropTypes from 'prop-types';
 import * as ActionCreators from '../../actions';
 import PasswordResetForm from './PasswordResetForm';
 
-class PasswordResetFormContainer extends Component {
+export class PasswordResetFormContainer extends Component {
     constructor(props) {
         super(props);
         this.handleFieldUpdate = this.handleFieldUpdate.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.state = {
             password: '',
-            confirmPassword: ''
+            confirmPassword: '',
+            missingFieldsError: false,
+            nonMatchingPasswordsError: false
         };
     }
 
@@ -25,14 +27,22 @@ class PasswordResetFormContainer extends Component {
         e.preventDefault();
         const { password, confirmPassword } = this.state;
         if (!password || !confirmPassword) {
-            alert('Please ensure you have filled out all of the required fields');
+            this.setState({
+                missingFieldsError: true,
+                nonMatchingPasswordsError: false
+            });
         } else if (password !== confirmPassword) {
-            alert("Your password confirmation doesn't match, please re-enter your password");
+            this.setState({
+                missingFieldsError: false,
+                nonMatchingPasswordsError: true
+            });
         } else {
             this.props.setNewPassword(password, this.props.resetPasswordToken);
             this.setState({ 
                 password: '',
-                confirmPassword: '' 
+                confirmPassword: '',
+                missingFieldsError: false,
+                nonMatchingPasswordsError: false
             });
         }
     }

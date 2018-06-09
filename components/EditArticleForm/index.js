@@ -11,7 +11,7 @@ class EditArticleFormContainer extends Component {
         this.handleFieldUpdate = this.handleFieldUpdate.bind(this);
         this.checkForFile = this.checkForFile.bind(this);
         this.fileInput = React.createRef();
-        this.article = this.props.posts[this.props.article_id];
+        this.article = this.props.articles[this.props.article_id];
         this.form;
         this.image;
         this.state = {
@@ -19,7 +19,7 @@ class EditArticleFormContainer extends Component {
             articleDescription: this.article.description,
             articleCategory: this.article.category,
             articleBody: this.article.text,
-            originalCategory: this.post.category
+            originalCategory: this.article.category
         };
     }
 

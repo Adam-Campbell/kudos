@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import AuthorBlock from './AuthorBlock';
 
-const AuthorBlockContainer = props => {
+export const AuthorBlockContainer = props => {
     const article = props.articles[props.article_id];
     const author = props.users[article.author];
     return <AuthorBlock 

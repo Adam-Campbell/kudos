@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<UserImageUploadeFormContainer/> renders correctly 1`] = `
+<UserImageUploadForm
+  checkForFile={[Function]}
+  fileInputRef={
+    Object {
+      "current": null,
+    }
+  }
+  handleSubmit={[Function]}
+/>
+`;
+
+exports[`<UserImageUploadeFormContainer/> renders correctly 2`] = `
+<Wrapper
+  tight={true}
+>
+  <FormContainer>
+    <form
+      onSubmit={[Function]}
+    >
+      <FormDescription>
+        Update your avatar
+      </FormDescription>
+      <Label
+        htmlFor="avatar"
+      >
+        Avatar:
+      </Label>
+      <FileInput
+        id="avatar"
+        innerRef={
+          Object {
+            "current": null,
+          }
+        }
+        name="avatar"
+        onChange={[Function]}
+        type="file"
+      />
+      <Button
+        type="submit"
+      >
+        Update
+      </Button>
+    </form>
+  </FormContainer>
+</Wrapper>
+`;

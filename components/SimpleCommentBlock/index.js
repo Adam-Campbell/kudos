@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import SimpleCommentBlock from './SimpleCommentBlock';
 
-const SimpleCommentBlockContainer = props => {
+export const SimpleCommentBlockContainer = props => {
     const comment = props.comments[props.comment_id]
     return <SimpleCommentBlock 
         comment_id={props.comment_id}

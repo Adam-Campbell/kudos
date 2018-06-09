@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import * as ActionCreators from '../../actions';
 import KudosButton from './KudosButton';
 
-class KudosButtonContainer extends Component {
+export class KudosButtonContainer extends Component {
     constructor(props) {
         super(props);
         this.handleGiveKudos = this.handleGiveKudos.bind(this);

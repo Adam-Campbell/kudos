@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import * as ActionCreators from '../../actions';
 import UserImageUploadForm from './UserImageUploadForm';
 
-class UserImageUploadFormContainer extends Component {
+export class UserImageUploadFormContainer extends Component {
     constructor(props) {
         super(props);
         this.fileInput = React.createRef();

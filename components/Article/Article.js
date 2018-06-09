@@ -88,7 +88,7 @@ const ArticleQuoteText = styled.p`
     line-height: 1.6;
 `;
 
-const EditArticleButton = AnchorButton.extend`
+const EditArticleButton = styled(AnchorButton)`
     margin-bottom: 16px;
 `;
 

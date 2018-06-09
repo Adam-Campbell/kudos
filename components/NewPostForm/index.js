@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import * as ActionCreators from '../../actions';
 import NewPostForm from './NewPostForm';
 
-class NewPostFormContainer extends Component {
+export class NewPostFormContainer extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);

@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import InlineArticleCard from './InlineArticleCard';
 
-const InlineArticleCardContainer = props => {
+export const InlineArticleCardContainer = props => {
     const article = props.articles[props.article_id];
     const author = props.users[article.author];
     return <InlineArticleCard 
