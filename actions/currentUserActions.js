@@ -1,5 +1,6 @@
 import * as actionTypes from '../actionTypes';
 import fetch from 'isomorphic-fetch';
+import { rootApiUrl } from '../globalConstants';
 import { handleNormalize } from '../utils';
 
 const fetchCurrentUserRequest = () => ({
@@ -26,7 +27,7 @@ const fetchCurrentUserFailed = err => ({
 
 const fetchCurrentUsersProfile = async (settings) => {
     try {
-        const currentUsersProfile = await fetch(`http://localhost:5000/api/me`, settings);
+        const currentUsersProfile = await fetch(`${rootApiUrl}/api/me`, settings);
         if (!currentUsersProfile.ok) {
             return Promise.reject();
         }
@@ -39,7 +40,7 @@ const fetchCurrentUsersProfile = async (settings) => {
 
 const fetchCurrentUsersFollows = async (settings) => {
     try {
-        const currentUsersFollows = await fetch(`http://localhost:5000/api/me/follows/`, settings);
+        const currentUsersFollows = await fetch(`${rootApiUrl}/api/me/follows/`, settings);
         if (!currentUsersFollows.ok) {
             return Promise.reject();
         }
@@ -52,7 +53,7 @@ const fetchCurrentUsersFollows = async (settings) => {
 
 const fetchCurrentUsersKudos = async (settings) => {
     try {
-        const currentUsersKudos = await fetch('http://localhost:5000/api/me/kudos', settings);
+        const currentUsersKudos = await fetch(`${rootApiUrl}/api/me/kudos`, settings);
         if (!currentUsersKudos.ok) {
             return Promise.reject();
         }
@@ -69,7 +70,7 @@ const fetchCurrentUsersKudos = async (settings) => {
 
 const fetchCurrentUsersHighlights = async (settings) => {
     try {
-        const currentUsersHighlights = await fetch('http://localhost:5000/api/me/highlights', settings);
+        const currentUsersHighlights = await fetch(`${rootApiUrl}/api/me/highlights`, settings);
         if (!currentUsersHighlights.ok) {
             return Promise.reject();
         }
@@ -158,7 +159,7 @@ export const followUser = (user_id, token) => async dispatch => {
         method: 'PUT'
     };
     try {
-        const followUserReq = await fetch(`http://localhost:5000/api/me/follows/${user_id}`, settings);
+        const followUserReq = await fetch(`${rootApiUrl}/api/me/follows/${user_id}`, settings);
         if (!followUserReq.ok) { 
             return dispatch(followUserFailed(user_id));
         }
@@ -194,7 +195,7 @@ export const unfollowUser = (user_id, token) => async dispatch => {
         method: 'DELETE'
     };
     try {
-        const unfollowUserReq = await fetch(`http://localhost:5000/api/me/follows/${user_id}`, settings);
+        const unfollowUserReq = await fetch(`${rootApiUrl}/api/me/follows/${user_id}`, settings);
         if (!unfollowUserReq.ok) { 
             return dispatch(unfollowUserFailed(user_id));
         }
@@ -231,7 +232,7 @@ export const giveKudos = (post_id, currentUser_id, token) => async dispatch => {
         method: 'PUT'
     };
     try {
-        const giveKudos = await fetch(`http://localhost:5000/api/me/kudos/${post_id}`, settings);
+        const giveKudos = await fetch(`${rootApiUrl}/api/me/kudos/${post_id}`, settings);
         if (!giveKudos.ok) {
             return dispatch(giveKudosFailed(post_id));
         }
@@ -267,7 +268,7 @@ export const removeKudos = (post_id, currentUser_id, token) => async dispatch =>
         method: 'DELETE'
     };
     try {
-        const removeKudos = await fetch(`http://localhost:5000/api/me/kudos/${post_id}`, settings);
+        const removeKudos = await fetch(`${rootApiUrl}/api/me/kudos/${post_id}`, settings);
         if (!removeKudos.ok) {
             return dispatch(removeKudosFailed(post_id));
         }
@@ -309,7 +310,7 @@ export const updateUserDetails = (newDetails, _id, token) => async dispatch => {
         })
     };
     try {
-        const updateUserDetailsReq = await fetch('http://localhost:5000/api/me', settings);
+        const updateUserDetailsReq = await fetch(`${rootApiUrl}/api/me`, settings);
         if (!updateUserDetailsReq.ok) {
             return dispatch(updateUserDetailsFailed());
         }
@@ -347,7 +348,7 @@ export const updateUserAvatar = (formData, token) => async dispatch => {
         body: formData
     }
     try {
-        const updateAvatarRequest = await fetch('http://localhost:5000/api/me/images', settings);
+        const updateAvatarRequest = await fetch(`${rootApiUrl}/api/me/images`, settings);
         if (!updateAvatarRequest.ok) {
             return dispatch(updateUserAvatarFailed());
         }
@@ -385,7 +386,7 @@ export const updateUserPassword = (currentPw, newPw, token,) => async dispatch =
         })
     }
     try {
-        const updatePasswordReq = await fetch('http://localhost:5000/api/me/password', settings);
+        const updatePasswordReq = await fetch(`${rootApiUrl}/api/me/password`, settings);
         if (!updatePasswordReq.ok) {
             return dispatch(updateUserPasswordFailed());
         }

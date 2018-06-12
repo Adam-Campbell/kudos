@@ -1,10 +1,11 @@
 import * as actionTypes from '../actionTypes';
 import fetch from 'isomorphic-fetch';
+import { rootApiUrl } from '../globalConstants'; 
 import { handleNormalize } from '../utils';
 
 const fetchUsersInfo = async _id => {
     try {
-        const usersInfo = await fetch(`http://localhost:5000/api/users/${_id}`);
+        const usersInfo = await fetch(`${rootApiUrl}/api/users/${_id}`);
         if (!usersInfo.ok) {
             return Promise.reject();
         }
@@ -17,7 +18,7 @@ const fetchUsersInfo = async _id => {
 
 const fetchUsersFollowers = async _id => {
     try {
-        const usersFollowers = await fetch(`http://localhost:5000/api/users/${_id}/followers`);
+        const usersFollowers = await fetch(`${rootApiUrl}/api/users/${_id}/followers`);
         if (!usersFollowers.ok) {
             return Promise.reject();
         }
@@ -30,7 +31,7 @@ const fetchUsersFollowers = async _id => {
 
 const fetchUsersPosts = async _id => {
     try {
-        const usersPosts = await fetch(`http://localhost:5000/api/users/${_id}/posts`);
+        const usersPosts = await fetch(`${rootApiUrl}/api/users/${_id}/posts`);
         if (!usersPosts.ok) {
             return Promise.reject();
         }
@@ -43,7 +44,7 @@ const fetchUsersPosts = async _id => {
 
 const fetchUsersComments = async _id => {
     try {
-        const usersComments = await fetch(`http://localhost:5000/api/users/${_id}/comments`);
+        const usersComments = await fetch(`${rootApiUrl}/api/users/${_id}/comments`);
         if (!usersComments.ok) {
             return Promise.reject();
         }
@@ -56,7 +57,7 @@ const fetchUsersComments = async _id => {
 
 const fetchUsersKudos = async _id => {
     try {
-        const usersKudos = await fetch(`http://localhost:5000/api/users/${_id}/kudos`);
+        const usersKudos = await fetch(`${rootApiUrl}/api/users/${_id}/kudos`);
         if (!usersKudos.ok) {
             return Promise.reject();
         }
@@ -73,7 +74,7 @@ const fetchUsersKudos = async _id => {
 
 const fetchUsersHighlights = async _id => {
     try {
-        const usersHighlights = await fetch(`http://localhost:5000/api/users/${_id}/highlights`);
+        const usersHighlights = await fetch(`${rootApiUrl}/api/users/${_id}/highlights`);
         if (!usersHighlights.ok) {
             return Promise.reject();
         }
@@ -92,7 +93,7 @@ const checkIfFollowing = async (_id, token) => {
         }
     };
     try {
-        const isFollowing = await fetch(`http://localhost:5000/api/me/follows/${_id}`, settings);
+        const isFollowing = await fetch(`${rootApiUrl}/api/me/follows/${_id}`, settings);
         if (!isFollowing.ok) {
             return Promise.reject();
         }

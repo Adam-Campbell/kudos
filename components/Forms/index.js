@@ -60,15 +60,58 @@ export const Input = styled.input`
     width: 100%;
 `;
 
+/*
+    FileInput and FileInput Label must be used alongside each other, with the htmlFor 
+    attribute used to link them together. See this link for more details:
+    https://tympanus.net/codrops/2015/09/15/styling-customizing-file-inputs-smart-way/
+*/
+
 export const FileInput = styled.input`
-    background-color: ${styleConstants.colorInputBackground};
-    border: solid 2px ${styleConstants.colorInputBorder};
+    width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;    
+`;
+
+export const FileInputLabel = styled.label`
+    background-color: ${styleConstants.colorPrimary};
+    border: solid 2px ${styleConstants.colorPrimary};
     border-radius: 3px;
     padding: 8px 16px;
     font-family: ${styleConstants.fontSecondary};
     font-size: 16px;
-    font-weight: 300;
+    font-weight: 400;
+    color: ${styleConstants.colorSecondary};
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    text-align: center;
+    ${FileInput}:focus + & {
+        outline: 1px dotted #000;
+	    outline: -webkit-focus-ring-color auto 5px;
+    } 
+`;
+
+export const ArticleTitleTextarea = styled.textarea`
     color: ${styleConstants.colorBodyText};
+    font-family: ${styleConstants.fontPrimary};
+    font-size: 32px;
+    border: none;
+    display: block;
+    width: 100%;
+    overflow-y: hidden;
+    resize: none;
+    height: ${props => `${props.height}px`};
+`;
+
+export const ArticleDescriptionTextarea = styled.textarea`
+    color: ${styleConstants.colorBodyText};
+    font-family: ${styleConstants.fontSecondary};
+    font-weight: 400;
+    font-size: 20px;
+    border: none;
     display: block;
     width: 100%;
 `;

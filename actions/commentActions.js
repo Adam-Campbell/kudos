@@ -1,5 +1,6 @@
 import * as actionTypes from '../actionTypes';
 import fetch from 'isomorphic-fetch';
+import { rootApiUrl } from '../globalConstants';  
 import { sortComments } from '../utils';
 
 const replyToPostRequest = () => ({
@@ -33,7 +34,7 @@ export const replyToPost = (commentText, post_id, token) => async (dispatch, get
         })
     };
     try {
-        const commentReq = await fetch(`http://localhost:5000/api/posts/${post_id}/comments`, settings);
+        const commentReq = await fetch(`${rootApiUrl}/api/posts/${post_id}/comments`, settings);
         if (!commentReq.ok) {
             return dispatch(replyToPostFailed());
         }
@@ -92,7 +93,7 @@ export const replyToComment = (commentText, parentComment_id, token) => async (d
         })
     };
     try {
-        const commentReq = await fetch(`http://localhost:5000/api/comments/${parentComment_id}`, settings);
+        const commentReq = await fetch(`${rootApiUrl}/api/comments/${parentComment_id}`, settings);
         if (!commentReq.ok) {
             return dispatch(replyToCommentFailed());
         }
@@ -143,7 +144,7 @@ export const deleteComment = (comment_id, currentUser_id, token) => async dispat
         method: 'delete',
     };
     try {
-        const deleteCommentReq = await fetch(`http://localhost:5000/api/comments/${comment_id}`, settings);
+        const deleteCommentReq = await fetch(`${rootApiUrl}/api/comments/${comment_id}`, settings);
         if (!deleteCommentReq.ok) {
             return dispatch(deleteCommentFailed());
         }
@@ -182,7 +183,7 @@ export const editComment = (commentText, comment_id, token) => async dispatch =>
         })
     };
     try {
-        const editCommentReq = await fetch(`http://localhost:5000/api/comments/${comment_id}`, settings);
+        const editCommentReq = await fetch(`${rootApiUrl}/api/comments/${comment_id}`, settings);
         if (!editCommentReq.ok) {
             return dispatch(editCommentFailed());
         }

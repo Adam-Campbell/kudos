@@ -3,30 +3,15 @@ import makeStore from '../store';
 import { fetchCurrentUser } from '../actions';
 import { fetchCurrentUserIfNeeded, cleanseErrorsAndSuccesses } from '../utils';
 import Header from '../components/Header';
-import NewPostForm from '../components/NewPostForm';
 import Router from 'next/router';
-import ArticleEditor from '../components/ArticleEditor';
+import ExperimentEditor from '../components/ExperimentEditor';
 
-// const newPost = props => {
-//     if (props.isLoggedIn) {
-//         return (
-//             <React.Fragment>
-//                 <Header />
-//                 <NewPostForm />
-//             </React.Fragment>
-//         )
-//     } else {
-//         if (typeof window !== 'undefined') { Router.push('/signin'); }
-//         return null;
-//     }
-// }
-
-const newPost = props => {
+const experiment = props => {
     if (props.isLoggedIn) {
         return (
             <React.Fragment>
                 <Header />
-                <ArticleEditor isNewArticle={true} />
+                <ExperimentEditor isNewArticle={true} />
             </React.Fragment>
         )
     } else {
@@ -35,7 +20,7 @@ const newPost = props => {
     }
 }
 
-newPost.getInitialProps = async ({store, isServer, req, pathname, query}) => {
+experiment.getInitialProps = async ({store, isServer, req, pathname, query}) => {
     const currentState = store.getState();
     cleanseErrorsAndSuccesses(store);
     await fetchCurrentUserIfNeeded(currentState, store);
@@ -46,4 +31,4 @@ const mapStateToProps = state => ({
     isLoggedIn: state.currentUser.isLoggedIn
 });
 
-export default withRedux(makeStore, mapStateToProps)(newPost);
+export default withRedux(makeStore, mapStateToProps)(experiment);
