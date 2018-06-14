@@ -4,8 +4,10 @@ import { fetchCurrentUser, fetchPost } from '../actions';
 import { fetchCurrentUserIfNeeded, cleanseErrorsAndSuccesses } from '../utils';
 import Header from '../components/Header';
 import EditArticleForm from '../components/EditArticleForm';
+import ArticleEditor from '../components/ArticleEditor';
 import Router from 'next/router';
 
+//<EditArticleForm article_id={props.article_id} />
 const editPost = props => {
     const currentArticle = props.articles[props.article_id];
     const isAuthor = currentArticle.author === props.currentUser_id;
@@ -13,7 +15,7 @@ const editPost = props => {
     if (isAuthor) {
         return <React.Fragment>
                     <Header />
-                    <EditArticleForm article_id={props.article_id} />
+                    <ArticleEditor article_id={props.article_id} isNewArticle={false} />
             </React.Fragment>
     } else {
         if (typeof window !== 'undefined') {

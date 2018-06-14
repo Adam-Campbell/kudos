@@ -11,8 +11,7 @@ import {
     OrderedListIcon,
     BlockQuoteIcon,
     CodeIcon, 
-    LinkIcon,
-    TitleIcon
+    LinkIcon 
 } from '../EditorIcons';
 import ControlButton from './ControlButton';
 
@@ -137,18 +136,6 @@ const BlockStyleControls = props => {
     return (
         <React.Fragment>
             <ControlButton
-                onMouseDown={props.changeBlockType('header-one')}
-                isActive={blockType === 'header-one'}
-            >
-                <TitleIcon />
-            </ControlButton>
-            <ControlButton
-                onMouseDown={props.changeBlockType('header-two')}
-                isActive={blockType === 'header-two'}
-            >
-                <TitleIcon />
-            </ControlButton>
-            <ControlButton
                 onMouseDown={props.changeBlockType('unordered-list-item')}
                 isActive={blockType === 'unordered-list-item'}
             >
@@ -214,18 +201,6 @@ const EditorControls = props => (
             isActive={props.linkMenuIsOpen}
         >
             <LinkIcon />
-        </ControlButton>
-        <ControlButton
-            onMouseDown={props.addImageBlock}
-            isActive={false}
-        >
-            Add Image    
-        </ControlButton>
-        <ControlButton
-            onMouseDown={props.logRaw}
-            isActive={false}
-        >
-            Log Raw
         </ControlButton>
         <div>
         <SubmitButton onMouseDown={props.handleSubmit}>Submit</SubmitButton>

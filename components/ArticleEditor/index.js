@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as ActionCreators from '../../actions'
-import styled, { injectGlobal } from 'styled-components';
 import { 
     Editor, 
     EditorState, 
@@ -10,11 +9,12 @@ import {
     convertToRaw, 
     RichUtils, 
     CompositeDecorator, 
-    DefaultDraftBlockRenderMap 
+    DefaultDraftBlockRenderMap,
+    AtomicBlockUtils
 } from 'draft-js';
 import LinkDecorator from './LinkDecorator';
 import ArticleEditor from './ArticleEditor';
-
+import ImageBlock from './ImageBlock';
 
 /*
     When rendering an empty text editor we have to create this 'placeholder' empty state and use it,
@@ -39,7 +39,6 @@ export class ArticleEditorContainer extends Component {
     constructor(props) {
         super(props);
         this.setEditorRef = ref => this.domEditor = ref;
-        this.imageFileInput = React.createRef();
         this.decorator = new CompositeDecorator([
             {
                 strategy: this.findLinkEntities,
@@ -49,13 +48,11 @@ export class ArticleEditorContainer extends Component {
         let initialEditorState;
         let initialTitleState = '';
         let initialDescriptionState = '';
-        let initialCategoryState = '';
+        let initialCategoryState = 'javascript';
         let initialImageState = null;
         if (this.props.article_id) {
             const thisArticle = this.props.articles[this.props.article_id];
             initialEditorState = convertFromRaw(thisArticle.text);
-            initialTitleState = thisArticle.title;
-            initialDescription = thisArticle.description;
             initialCategoryState = thisArticle.category;
         } else {
             initialEditorState = emptyContentState;
@@ -64,12 +61,9 @@ export class ArticleEditorContainer extends Component {
             editorState: EditorState.createWithContent(initialEditorState, this.decorator),
             linkUrl: '',
             linkMenuIsOpen: false,
-            articleTitle: initialTitleState,
-            articleDescription: initialDescriptionState,
-            articleCategory: initialCategoryState,
-            articleImage: initialImageState,
-            imageUploadStatus: 'Please select an image'
+            articleCategory: initialCategoryState
         };
+        this.getEditorState = () => this.state.editorState;
         this.createLinkEntity = this.createLinkEntity.bind(this);
         this.findLinkEntities = this.findLinkEntities.bind(this);
         this.updateLinkUrl = this.updateLinkUrl.bind(this);
@@ -83,8 +77,11 @@ export class ArticleEditorContainer extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.clearEditor = this.clearEditor.bind(this);
         this.handleFieldUpdate = this.handleFieldUpdate.bind(this);
-        this.checkForFile = this.checkForFile.bind(this);
-        this.handleTitleUpdate = this.handleTitleUpdate.bind(this);
+        //this.checkForFile = this.checkForFile.bind(this);
+        //this.handleTitleUpdate = this.handleTitleUpdate.bind(this);
+        this.addImageBlock = this.addImageBlock.bind(this);
+        this.logRaw = this.logRaw.bind(this);
+        this.blockRendererFn = this.blockRendererFn.bind(this);
     }
 
     componentDidMount() {
@@ -95,21 +92,28 @@ export class ArticleEditorContainer extends Component {
         this.domEditor.focus();
     }
 
+    blockRendererFn(block) {
+        if (block.getType() === 'atomic') {
+            return {
+                component: ImageBlock,
+                editable: true,
+                props: {
+                    getEditorState: this.getEditorState,
+                    setEditorState: this.onChange
+                }
+            };
+        }
+        return null;
+    }
+
     handleFieldUpdate(fieldName) {
         return (e) => {
             this.setState({ [fieldName] : e.target.value });    
         }
     }
 
-    checkForFile() {
-        const imageFile = this.imageFileInput.current.files[0];
-        if (imageFile) {
-            //console.log(imageFile);
-            this.image = imageFile;
-            this.setState({
-                imageUploadStatus: imageFile.name
-            });
-        }
+    updateLinkUrl(e) {
+        this.setState({ linkUrl: e.target.value });
     }
 
     clearEditor() {
@@ -149,6 +153,25 @@ export class ArticleEditorContainer extends Component {
             e.preventDefault();
             this.onChange(RichUtils.toggleCode(this.state.editorState));
         }
+    }
+
+    addImageBlock() {
+        const { editorState } = this.state;
+        const contentState = editorState.getCurrentContent();
+        const contentStateWithEntity = contentState.createEntity(
+            'IMAGE',
+            'IMMUTABLE',
+            { src: '', fullWidth: true }
+        );
+        const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+        const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
+        this.setState({
+            editorState: AtomicBlockUtils.insertAtomicBlock(
+                newEditorState,
+                entityKey,
+                ' '
+            )
+        })
     }
 
     createLinkEntity() {
@@ -198,11 +221,11 @@ export class ArticleEditorContainer extends Component {
                 return 'comment-editor__ol-item';
             case 'block-quote':
                 return 'comment-editor__block-quote';
+            case 'header-one':
+                return 'comment-editor__h1';
+            case 'header-two':
+                return 'comment-editor__h2';
         }
-    }
-
-    updateLinkUrl(e) {
-        this.setState({ linkUrl: e.target.value });
     }
 
     changeBlockType(blockType) {
@@ -216,32 +239,66 @@ export class ArticleEditorContainer extends Component {
         }
     }
 
-    handleSubmit() {
-        const { 
-            editorState, 
-            articleTitle, 
-            articleDescription, 
-            articleCategory,
-            articleImage    
-        } = this.state;
-        if (!articleTitle || !articleDescription || !articleCategory || !this.image) {
-            console.log('Please fill out all fields');
-            return;
-        }
+    logRaw() {
+        const { editorState } = this.state;
         const currentContent = editorState.getCurrentContent();
         const raw = convertToRaw(currentContent);
+        const title = raw.blocks.find(block => block.type === 'header-one');
+        const description = raw.blocks.find(block => block.type === 'header-two');
+        let image;
+        for (const key in raw.entityMap) {
+            if (raw.entityMap[key].type === 'IMAGE') {
+                image = raw.entityMap[key].data.src;
+            }
+        }
+        if (!title || !description || !image) {
+            console.log("Either a title, description or image were not provided. This doesn't pass validation.");
+            return;
+        }
+        console.log(title);
+        console.log(description);
+        console.log(image);
+        console.log(raw);
+        //console.log(raw);
+    }
+
+    handleSubmit() {
+        const { editorState, articleCategory } = this.state;
+        const currentContent = editorState.getCurrentContent();
+        const raw = convertToRaw(currentContent);
+        const title = raw.blocks.find(block => block.type === 'header-one');
+        const description = raw.blocks.find(block => block.type === 'header-two');
+        let image;
+        for (const key in raw.entityMap) {
+            if (raw.entityMap[key].type === 'IMAGE') {
+                image = raw.entityMap[key].data.src;
+            }
+        }
+        if (!title || !description || !articleCategory || !image) {
+            console.log("this did not pass validation");
+            return;
+        }
         const stringifiedRaw = JSON.stringify(raw);
+        const stringifiedTitle = JSON.stringify(title);
+        const stringifiedDescription = JSON.stringify(description);
         const form = new FormData();
-        form.append('title', articleTitle);
-        form.append('description', articleDescription);
+        form.append('title', stringifiedTitle);
+        form.append('description', stringifiedDescription);
         form.append('category', articleCategory);
         form.append('text', stringifiedRaw);
-        form.append('image', this.image);
+        form.append('image', image);
+        const articleObject = {
+            title: stringifiedTitle,
+            description: stringifiedDescription,
+            category: articleCategory,
+            text: stringifiedRaw,
+            image: image
+        }
         if (this.props.isNewArticle) {
-            this.props.createPost(form, this.props.currentUser_id, this.props.token);
+            this.props.createPost(articleObject, this.props.currentUser_id, this.props.token);
         } else {
             this.props.editPost(
-                form, 
+                articleObject, 
                 this.props.article_id,
                 this.props.articles[this.props.article_id].category,
                 articleCategory,
@@ -250,9 +307,39 @@ export class ArticleEditorContainer extends Component {
         }
     }
 
-    handleTitleUpdate(e) {
-        this.setState({ articleTitle: e.target.value });
-    }
+    // handleSubmit() {
+    //     const { 
+    //         editorState, 
+    //         articleTitle, 
+    //         articleDescription, 
+    //         articleCategory,
+    //         articleImage    
+    //     } = this.state;
+    //     if (!articleTitle || !articleDescription || !articleCategory || !this.image) {
+    //         console.log('Please fill out all fields');
+    //         return;
+    //     }
+    //     const currentContent = editorState.getCurrentContent();
+    //     const raw = convertToRaw(currentContent);
+    //     const stringifiedRaw = JSON.stringify(raw);
+    //     const form = new FormData();
+    //     form.append('title', articleTitle);
+    //     form.append('description', articleDescription);
+    //     form.append('category', articleCategory);
+    //     form.append('text', stringifiedRaw);
+    //     form.append('image', this.image);
+    //     if (this.props.isNewArticle) {
+    //         this.props.createPost(form, this.props.currentUser_id, this.props.token);
+    //     } else {
+    //         this.props.editPost(
+    //             form, 
+    //             this.props.article_id,
+    //             this.props.articles[this.props.article_id].category,
+    //             articleCategory,
+    //             this.props.token
+    //         );
+    //     }
+    // }
 
     render() {
         return (
@@ -271,17 +358,12 @@ export class ArticleEditorContainer extends Component {
                 toggleLinkMenu={this.toggleLinkMenu}
                 createLinkEntity={this.createLinkEntity}
                 handleSubmit={this.handleSubmit}
-                articleTitle={this.state.articleTitle}
-                articleDescription={this.state.articleDescription}
                 articleCategory={this.state.articleCategory}
-                articleImage={this.state.articleImage}
-                handleTitleUpdate={this.handleTitleUpdate}
-                handleDescriptionUpdate={this.handleFieldUpdate('articleDescription')}
                 handleCategoryUpdate={this.handleFieldUpdate('articleCategory')}
-                imageFileInputRef={this.imageFileInput}
-                checkForFile={this.checkForFile}
                 focusEditor={this.focusEditor}
-                imageUploadStatus={this.state.imageUploadStatus}
+                addImageBlock={this.addImageBlock}
+                blockRendererFn={this.blockRendererFn}
+                logRaw={this.logRaw}
             />
         );
     }

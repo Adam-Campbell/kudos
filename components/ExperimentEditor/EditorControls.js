@@ -11,7 +11,8 @@ import {
     OrderedListIcon,
     BlockQuoteIcon,
     CodeIcon, 
-    LinkIcon 
+    LinkIcon,
+    TitleIcon
 } from '../EditorIcons';
 import ControlButton from './ControlButton';
 
@@ -135,6 +136,18 @@ const BlockStyleControls = props => {
 
     return (
         <React.Fragment>
+            <ControlButton
+                onMouseDown={props.changeBlockType('header-one')}
+                isActive={blockType === 'header-one'}
+            >
+                <TitleIcon />
+            </ControlButton>
+            <ControlButton
+                onMouseDown={props.changeBlockType('header-two')}
+                isActive={blockType === 'header-two'}
+            >
+                <TitleIcon />
+            </ControlButton>
             <ControlButton
                 onMouseDown={props.changeBlockType('unordered-list-item')}
                 isActive={blockType === 'unordered-list-item'}

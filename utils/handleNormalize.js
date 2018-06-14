@@ -20,10 +20,18 @@ const deserializeComment = comment => ({
     text: JSON.parse(comment.text)
 });
 
+const deserializePost = post => ({
+    ...post,
+    title: JSON.parse(post.title),
+    description: JSON.parse(post.description),
+    text: JSON.parse(post.text),
+
+});
+
 
 //const user = new schema.Entity('users', {}, {idAttribute: '_id', processStrategy: decorateUser});
 const user = new schema.Entity('users', {}, {idAttribute: '_id'});
-const post = new schema.Entity('posts', {author: user}, {idAttribute: '_id'});
+const post = new schema.Entity('posts', {author: user}, {idAttribute: '_id', processStrategy: deserializePost});
 const comment = new schema.Entity('comments', {author: user}, {idAttribute: '_id', processStrategy: deserializeComment});
 const aKudos = new schema.Entity('kudos', {post: post}, {idAttribute: '_id'});
 const highlight = new schema.Entity('highlights', {post: post, user: user}, {idAttribute: '_id'});

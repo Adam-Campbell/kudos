@@ -7,6 +7,7 @@ import Comment from '../Comment';
 import { AnchorButton } from '../Button';
 import Link from 'next/link';
 import KudosButton from '../KudosButton';
+import ArticleDisplay from '../ArticleDisplay';
 import ArticleCommentBoxContainer from './ArticleCommentBoxContainer';
 
 const ArticleOuter = styled.article`
@@ -124,28 +125,9 @@ const Article = props => (
                 </Link>
             }
             <AuthorBlock article_id={props.article_id} />
-            <ArticleHeader>
-                <ArticleTitle>{props.articleTitle}</ArticleTitle>
-                <ArticleDescription>{props.articleDescription}</ArticleDescription>
-                <KudosStatsContainer>
-                    <KudosStat><span>{props.articleKudos}</span> Kudos</KudosStat>
-                    <KudosButton article_id={props.article_id} />
-                </KudosStatsContainer>
-            </ArticleHeader>
         </ArticleIntroContainer>
         <section>
-            <Wrapper wide>
-                <ArticleFigure>
-                    <ArticleImage imageUrl={props.articleImage}/>
-                    <ArticleImageCaption>I haven't added these yet...</ArticleImageCaption>
-                </ArticleFigure>
-            </Wrapper>
-            <Wrapper tight>
-                <ArticleParagraph>{props.articleText}</ArticleParagraph>
-                <ArticleQuote>
-                    <ArticleQuoteText>“This is where my inspirational quotes would go IF I HAD ANY”</ArticleQuoteText>
-                </ArticleQuote>
-            </Wrapper>
+            <ArticleDisplay article_id={props.article_id} isNewArticle={false}/>
         </section>
         <section>
             <Wrapper tight>
@@ -160,10 +142,6 @@ const Article = props => (
 
 Article.propTypes = {
     article_id: PropTypes.string.isRequired,
-    articleTitle: PropTypes.string.isRequired,
-    articleDescription: PropTypes.string.isRequired,
-    articleImage: PropTypes.string.isRequired,
-    articleText: PropTypes.string.isRequired,
     articleKudos: PropTypes.number.isRequired,
     commentIds: PropTypes.arrayOf(PropTypes.string),
     isLoggedIn: PropTypes.bool.isRequired,
@@ -171,3 +149,68 @@ Article.propTypes = {
 }
 
 export default Article;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const Article = props => (
+//     <ArticleOuter>
+//         <ArticleIntroContainer tight>
+//             {props.isAuthor && <Link 
+//                         passHref 
+//                         as={`/edit-post/${props.article_id}`} 
+//                         href={`/edit-post?post=${props.article_id}`}
+//                     >
+//                     <EditArticleButton>Edit this article</EditArticleButton>
+//                 </Link>
+//             }
+//             <AuthorBlock article_id={props.article_id} />
+//             <ArticleHeader>
+//                 <ArticleTitle>{props.articleTitle}</ArticleTitle>
+//                 <ArticleDescription>{props.articleDescription}</ArticleDescription>
+//                 <KudosStatsContainer>
+//                     <KudosStat><span>{props.articleKudos}</span> Kudos</KudosStat>
+//                     <KudosButton article_id={props.article_id} />
+//                 </KudosStatsContainer>
+//             </ArticleHeader>
+//         </ArticleIntroContainer>
+//         <section>
+//             <Wrapper wide>
+//                 <ArticleFigure>
+//                     <ArticleImage imageUrl={props.articleImage}/>
+//                     <ArticleImageCaption>I haven't added these yet...</ArticleImageCaption>
+//                 </ArticleFigure>
+//             </Wrapper>
+//             <Wrapper tight>
+//                 <ArticleParagraph>{props.articleText}</ArticleParagraph>
+//                 <ArticleQuote>
+//                     <ArticleQuoteText>“This is where my inspirational quotes would go IF I HAD ANY”</ArticleQuoteText>
+//                 </ArticleQuote>
+//             </Wrapper>
+//         </section>
+//         <section>
+//             <Wrapper tight>
+//                 {props.isLoggedIn && <ArticleCommentBoxContainer article_id={props.article_id}/>}
+//                 {props.commentIds.map(comment_id => (
+//                     <Comment comment_id={comment_id} key={comment_id} />
+//                 ))}
+//             </Wrapper>
+//         </section>
+//     </ArticleOuter>
+// );

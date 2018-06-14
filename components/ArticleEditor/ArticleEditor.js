@@ -6,6 +6,7 @@ import {
     DefaultDraftBlockRenderMap
 } from 'draft-js';
 import CustomCodeBlockWrapper from './CustomCodeBlockWrapper';
+import CenteredBlockWrapper from './CenteredBlockWrapper';
 import EditorControls from './EditorControls';
 import { Wrapper } from '../Layout';
 import { 
@@ -25,8 +26,8 @@ const EditorModuleOuterContainer = styled.div`
 `;
 
 const EditorModuleInnerContainer = styled.div`
-    background-color: ${styleConstants.colorInputBackground};
-    border: solid 2px ${styleConstants.colorInputBorder};
+    background-color: ${styleConstants.colorSecondary};
+    border: solid 2px ${styleConstants.colorBodyText};
     border-radius: 3px;
     position: relative;
 `;
@@ -43,7 +44,10 @@ const EditorTextBoxContainer = styled.div`
     default mappings (except the ones we purposefully want to override).
 */
 const blockRenderMap = Immutable.Map({
-    'code-block': { element: 'pre', wrapper: <CustomCodeBlockWrapper />}
+    'code-block': { element: 'pre', wrapper: <CustomCodeBlockWrapper />},
+    'unstyled': { element: 'div', wrapper: <CenteredBlockWrapper /> },
+    'header-one': { element: 'div', wrapper: <CenteredBlockWrapper /> },
+    'header-two': { element: 'div', wrapper: <CenteredBlockWrapper /> }
 });
 const extendedBlockRenderMap = DefaultDraftBlockRenderMap.merge(blockRenderMap);
 
@@ -58,27 +62,8 @@ const styleMap = {
 };
 
 const ArticleEditor = props => (
-    <Wrapper tight>
+    <React.Fragment>
         <div>
-            <ArticleTitleTextarea
-                value={props.articleTitle}
-                onChange={props.handleTitleUpdate}
-                placeholder="Add a title..."
-                id="title-textarea"
-                height={500}
-            ></ArticleTitleTextarea>
-            <ArticleDescriptionTextarea
-                value={props.articleDescription}
-                onChange={props.handleDescriptionUpdate}
-                placeholder="Add a description..."
-            ></ArticleDescriptionTextarea>
-            <FileInput 
-                id="image-file-input"
-                type="file"
-                innerRef={props.imageFileInputRef}
-                onChange={props.checkForFile}
-            />
-            <FileInputLabel htmlFor="image-file-input">{props.imageUploadStatus}</FileInputLabel>
             <Label htmlFor="category">Choose a Category:</Label>
             <Select
                 id="category"
@@ -113,6 +98,7 @@ const ArticleEditor = props => (
                     handleKeyCommand={props.handleKeyCommand}
                     blockRenderMap={extendedBlockRenderMap}
                     customStyleMap={styleMap}
+                    blockRendererFn={props.blockRendererFn}
                 />
             </EditorTextBoxContainer>
             <EditorControls 
@@ -126,9 +112,11 @@ const ArticleEditor = props => (
                 toggleLinkMenu={props.toggleLinkMenu}
                 createLink={props.createLinkEntity}
                 handleSubmit={props.handleSubmit}
+                addImageBlock={props.addImageBlock}
+                logRaw={props.logRaw}
             />
         </EditorModuleInnerContainer>
-    </Wrapper>
+    </React.Fragment>
 );
 
 ArticleEditor.propTypes = {
@@ -146,15 +134,8 @@ ArticleEditor.propTypes = {
     toggleLinkMenu: PropTypes.func.isRequired,
     createLinkEntity: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
-    articleTitle: PropTypes.string.isRequired,
-    articleDescription: PropTypes.string.isRequired,
     articleCategory: PropTypes.string.isRequired,
-    articleImage: PropTypes.any,
-    handleTitleUpdate: PropTypes.func.isRequired,
-    handleDescriptionUpdate: PropTypes.func.isRequired,
     handleCategoryUpdate: PropTypes.func.isRequired,
-    imageFileInputRef: PropTypes.any,
-    checkForFile: PropTypes.func.isRequired,
     focusEditor: PropTypes.func.isRequired
 };
 

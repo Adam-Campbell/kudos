@@ -168,14 +168,15 @@ const createPostFailed = () => ({
 });
 
 
-export const createPost = (formData, currentUser_id, token) => async dispatch => {
+export const createPost = (articleObject, currentUser_id, token) => async dispatch => {
     dispatch(createPostRequest());
     const settings = {
         headers: {
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
         },
         method: 'post',
-        body: formData
+        body: JSON.stringify(articleObject)
     }
     try {
         const createPostReq = await fetch(`${rootApiUrl}/api/posts`, settings);
@@ -185,6 +186,8 @@ export const createPost = (formData, currentUser_id, token) => async dispatch =>
         const postJSON = await createPostReq.json();
         const newPost_id = postJSON._id;
         postJSON.text = JSON.parse(postJSON.text);
+        postJSON.title = JSON.parse(postJSON.title);
+        postJSON.description = JSON.parse(postJSON.description);
         const newPostCategory = postJSON.category;
         dispatch(createPostSuccess(postJSON, currentUser_id, newPostCategory, newPost_id));
         Router.push(`/post?post=${newPost_id}`, `/post/${newPost_id}`);
@@ -217,14 +220,15 @@ const editPostFailed = () => ({
 
 
 
-export const editPost = (formData, post_id, oldCategory, newCategory, token) => async dispatch => {
+export const editPost = (articleObject, post_id, oldCategory, newCategory, token) => async dispatch => {
     dispatch(editPostRequest());
     const settings = {
         headers: {
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
         },
         method: 'PUT',
-        body: formData
+        body: JSON.stringify(articleObject)
     }
     try {
         const editPostReq = await fetch(`${rootApiUrl}/api/posts/${post_id}`, settings);
@@ -233,6 +237,9 @@ export const editPost = (formData, post_id, oldCategory, newCategory, token) => 
         }
         const editedPostJSON = await editPostReq.json();
         editedPostJSON.author = editedPostJSON.author._id;
+        editedPostJSON.title = JSON.parse(editedPostJSON.title);
+        editedPostJSON.description = JSON.parse(editedPostJSON.description);
+        editedPostJSON.text = JSON.parse(editedPostJSON.text);
         const editedPost_id = editedPostJSON._id;
         dispatch(editPostSuccess(editedPostJSON, post_id));
         if (oldCategory !== newCategory) {

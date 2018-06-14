@@ -10,12 +10,11 @@ import {
     convertToRaw, 
     RichUtils, 
     CompositeDecorator, 
-    DefaultDraftBlockRenderMap,
-    AtomicBlockUtils
+    DefaultDraftBlockRenderMap 
 } from 'draft-js';
 import LinkDecorator from './LinkDecorator';
-import ExperimentEditor from './ExperimentEditor';
-import ImageBlock from './ImageBlock';
+import ArticleEditor from './ArticleEditor';
+
 
 /*
     When rendering an empty text editor we have to create this 'placeholder' empty state and use it,
@@ -35,17 +34,8 @@ const emptyContentState = convertFromRaw({
     ],
 });
 
-function blockRendererFn(block) {
-    if (block.getType() === 'atomic') {
-        return {
-            component: ImageBlock,
-            editable: true
-        };
-    }
-    return null;
-}
 
-export class ExperimentEditorContainer extends Component {
+export class ArticleEditorContainer extends Component {
     constructor(props) {
         super(props);
         this.setEditorRef = ref => this.domEditor = ref;
@@ -80,7 +70,6 @@ export class ExperimentEditorContainer extends Component {
             articleImage: initialImageState,
             imageUploadStatus: 'Please select an image'
         };
-        this.getEditorState = () => this.state.editorState;
         this.createLinkEntity = this.createLinkEntity.bind(this);
         this.findLinkEntities = this.findLinkEntities.bind(this);
         this.updateLinkUrl = this.updateLinkUrl.bind(this);
@@ -96,9 +85,6 @@ export class ExperimentEditorContainer extends Component {
         this.handleFieldUpdate = this.handleFieldUpdate.bind(this);
         this.checkForFile = this.checkForFile.bind(this);
         this.handleTitleUpdate = this.handleTitleUpdate.bind(this);
-        this.addImageBlock = this.addImageBlock.bind(this);
-        this.logRaw = this.logRaw.bind(this);
-        this.blockRendererFn = this.blockRendererFn.bind(this);
     }
 
     componentDidMount() {
@@ -107,20 +93,6 @@ export class ExperimentEditorContainer extends Component {
 
     focusEditor() {
         this.domEditor.focus();
-    }
-
-    blockRendererFn(block) {
-        if (block.getType() === 'atomic') {
-            return {
-                component: ImageBlock,
-                editable: true,
-                props: {
-                    getEditorState: this.getEditorState,
-                    setEditorState: this.onChange
-                }
-            };
-        }
-        return null;
     }
 
     handleFieldUpdate(fieldName) {
@@ -179,25 +151,6 @@ export class ExperimentEditorContainer extends Component {
         }
     }
 
-    addImageBlock() {
-        const { editorState } = this.state;
-        const contentState = editorState.getCurrentContent();
-        const contentStateWithEntity = contentState.createEntity(
-            'IMAGE',
-            'IMMUTABLE',
-            { src: '', fullWidth: true }
-        );
-        const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-        const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
-        this.setState({
-            editorState: AtomicBlockUtils.insertAtomicBlock(
-                newEditorState,
-                entityKey,
-                ' '
-            )
-        })
-    }
-
     createLinkEntity() {
         const { editorState, linkUrl } = this.state;
         const contentState = editorState.getCurrentContent();
@@ -245,10 +198,6 @@ export class ExperimentEditorContainer extends Component {
                 return 'comment-editor__ol-item';
             case 'block-quote':
                 return 'comment-editor__block-quote';
-            case 'header-one':
-                return 'comment-editor__h1';
-            case 'header-two':
-                return 'comment-editor__h2';
         }
     }
 
@@ -265,29 +214,6 @@ export class ExperimentEditorContainer extends Component {
                 });
             } 
         }
-    }
-
-    logRaw() {
-        const { editorState } = this.state;
-        const currentContent = editorState.getCurrentContent();
-        const raw = convertToRaw(currentContent);
-        const title = raw.blocks.find(block => block.type === 'header-one');
-        const description = raw.blocks.find(block => block.type === 'header-two');
-        let image;
-        for (const key in raw.entityMap) {
-            if (raw.entityMap[key].type === 'IMAGE') {
-                image = raw.entityMap[key].data.src;
-            }
-        }
-        if (!title || !description || !image) {
-            console.log("Either a title, description or image were not provided. This doesn't pass validation.");
-            return;
-        }
-        console.log(title);
-        console.log(description);
-        console.log(image);
-        console.log(raw);
-        //console.log(raw);
     }
 
     handleSubmit() {
@@ -330,7 +256,7 @@ export class ExperimentEditorContainer extends Component {
 
     render() {
         return (
-            <ExperimentEditor 
+            <ArticleEditor 
                 editorState={this.state.editorState}
                 onChange={this.onChange}
                 setEditorRef={this.setEditorRef}
@@ -356,15 +282,12 @@ export class ExperimentEditorContainer extends Component {
                 checkForFile={this.checkForFile}
                 focusEditor={this.focusEditor}
                 imageUploadStatus={this.state.imageUploadStatus}
-                addImageBlock={this.addImageBlock}
-                blockRendererFn={this.blockRendererFn}
-                logRaw={this.logRaw}
             />
         );
     }
 }
 
-ExperimentEditorContainer.propTypes = {
+ArticleEditorContainer.propTypes = {
     article_id: PropTypes.string,
     isNewArticle: PropTypes.bool.isRequired
 }
@@ -381,4 +304,4 @@ export default connect(
         createPost: ActionCreators.createPost,
         editPost: ActionCreators.editPost
     }
-)(ExperimentEditorContainer);
+)(ArticleEditorContainer);

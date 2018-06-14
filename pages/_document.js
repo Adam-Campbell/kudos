@@ -11,7 +11,11 @@ injectGlobal`
         background-color: snow;
     }
     .DraftEditor-root {
-        padding: 16px;
+        padding: 0;
+        figure {
+            margin-left: auto;
+            margin-right: auto;
+        }
     }
     .public-DraftEditorPlaceholder-root {
         color: #aaa;
@@ -21,15 +25,15 @@ injectGlobal`
         margin-bottom: -16px;
     }
     .comment-editor__h1 {
-        font-family: ${styleConstants.fontSecondary};
+        font-family: ${styleConstants.fontPrimary};
         font-weight: 700;
-        font-size: 48px;
+        font-size: 36px;
         color: ${styleConstants.colorBodyText};
     }
     .comment-editor__h2 {
         font-family: ${styleConstants.fontSecondary};
-        font-weight: 700;
-        font-size: 32px;
+        font-weight: 400;
+        font-size: 24px;
         color: ${styleConstants.colorBodyText};
     }
     .comment-editor__h3 {

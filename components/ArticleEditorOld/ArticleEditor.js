@@ -6,9 +6,6 @@ import {
     DefaultDraftBlockRenderMap
 } from 'draft-js';
 import CustomCodeBlockWrapper from './CustomCodeBlockWrapper';
-import CustomUnstyledBlockWrapper from './CustomUnstyledBlockWrapper';
-import CustomTitleBlockWrapper from './CustomTitleBlockWrapper';
-import CustomDescriptionBlockWrapper from './CustomDescriptionBlockWrapper';
 import EditorControls from './EditorControls';
 import { Wrapper } from '../Layout';
 import { 
@@ -28,8 +25,8 @@ const EditorModuleOuterContainer = styled.div`
 `;
 
 const EditorModuleInnerContainer = styled.div`
-    background-color: ${styleConstants.colorSecondary};
-    border: solid 2px ${styleConstants.colorBodyText};
+    background-color: ${styleConstants.colorInputBackground};
+    border: solid 2px ${styleConstants.colorInputBorder};
     border-radius: 3px;
     position: relative;
 `;
@@ -46,10 +43,7 @@ const EditorTextBoxContainer = styled.div`
     default mappings (except the ones we purposefully want to override).
 */
 const blockRenderMap = Immutable.Map({
-    'code-block': { element: 'pre', wrapper: <CustomCodeBlockWrapper />},
-    'unstyled': { element: 'div', wrapper: <CustomUnstyledBlockWrapper /> },
-    'header-one': { element: 'div', wrapper: <CustomTitleBlockWrapper /> },
-    'header-two': { element: 'div', wrapper: <CustomDescriptionBlockWrapper /> }
+    'code-block': { element: 'pre', wrapper: <CustomCodeBlockWrapper />}
 });
 const extendedBlockRenderMap = DefaultDraftBlockRenderMap.merge(blockRenderMap);
 
@@ -63,9 +57,28 @@ const styleMap = {
     }
 };
 
-const ExperimentEditor = props => (
-    <React.Fragment>
+const ArticleEditor = props => (
+    <Wrapper tight>
         <div>
+            <ArticleTitleTextarea
+                value={props.articleTitle}
+                onChange={props.handleTitleUpdate}
+                placeholder="Add a title..."
+                id="title-textarea"
+                height={500}
+            ></ArticleTitleTextarea>
+            <ArticleDescriptionTextarea
+                value={props.articleDescription}
+                onChange={props.handleDescriptionUpdate}
+                placeholder="Add a description..."
+            ></ArticleDescriptionTextarea>
+            <FileInput 
+                id="image-file-input"
+                type="file"
+                innerRef={props.imageFileInputRef}
+                onChange={props.checkForFile}
+            />
+            <FileInputLabel htmlFor="image-file-input">{props.imageUploadStatus}</FileInputLabel>
             <Label htmlFor="category">Choose a Category:</Label>
             <Select
                 id="category"
@@ -100,7 +113,6 @@ const ExperimentEditor = props => (
                     handleKeyCommand={props.handleKeyCommand}
                     blockRenderMap={extendedBlockRenderMap}
                     customStyleMap={styleMap}
-                    blockRendererFn={props.blockRendererFn}
                 />
             </EditorTextBoxContainer>
             <EditorControls 
@@ -114,14 +126,12 @@ const ExperimentEditor = props => (
                 toggleLinkMenu={props.toggleLinkMenu}
                 createLink={props.createLinkEntity}
                 handleSubmit={props.handleSubmit}
-                addImageBlock={props.addImageBlock}
-                logRaw={props.logRaw}
             />
         </EditorModuleInnerContainer>
-    </React.Fragment>
+    </Wrapper>
 );
 
-ExperimentEditor.propTypes = {
+ArticleEditor.propTypes = {
     editorState: PropTypes.any.isRequired,
     onChange: PropTypes.func.isRequired,
     setEditorRef: PropTypes.func.isRequired,
@@ -148,4 +158,4 @@ ExperimentEditor.propTypes = {
     focusEditor: PropTypes.func.isRequired
 };
 
-export default ExperimentEditor;
+export default ArticleEditor;

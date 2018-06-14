@@ -7,10 +7,6 @@ export const ArticleContainer = props => {
     const isAuthor = props.currentUser_id === article.author;
     return <Article 
         article_id={article._id}
-        articleTitle={article.title}
-        articleDescription={article.description}
-        articleImage={article.image}
-        articleText={article.text}
         articleKudos={article.kudos}
         commentIds={article.commentIds}
         isLoggedIn={props.isLoggedIn}
