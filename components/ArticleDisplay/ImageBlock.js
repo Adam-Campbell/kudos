@@ -39,19 +39,6 @@ const Image = styled.img`
     transition: opacity ease 0.5s;
 `;
 
-// const ImageBlock = props => {
-//     const currentEntity = props.contentState.getEntity(
-//         props.block.getEntityAt(0)
-//     );
-//     const { images, fullWidth } = currentEntity.getData();
-//     const src = images.original.imageUrl
-//     return (
-//         <Figure fullWidth={fullWidth}>
-//             <Image src={src} />
-//         </Figure>
-//     );
-// }
-
 class ImageBlock extends Component {
     constructor(props) {
         super(props);
