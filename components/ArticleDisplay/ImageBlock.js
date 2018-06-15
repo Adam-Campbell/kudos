@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import * as styleConstants from '../styleConstants';
 
 const Figure = styled.figure`
+    text-align: center;
     margin-left: auto;
     margin-right: auto;
     margin-top: 16px;
@@ -21,7 +22,8 @@ const ImageBlock = props => {
     const currentEntity = props.contentState.getEntity(
         props.block.getEntityAt(0)
     );
-    const { src, fullWidth } = currentEntity.getData();
+    const { images, fullWidth } = currentEntity.getData();
+    const src = images.original.imageUrl
     return (
         <Figure fullWidth={fullWidth}>
             <Image src={src} />

@@ -101,7 +101,7 @@ class ImageBlock extends Component {
         //console.log(this.props.contentState);
         this.blockKey = this.props.block.getKey();
         this.imageFileInput = React.createRef();
-        this.updateSrc = this.updateSrc.bind(this);
+        this.updateImages = this.updateImages.bind(this);
         this.checkForFile = this.checkForFile.bind(this);
         this.uploadImage = this.uploadImage.bind(this);
         this.makeFullWidth = this.makeFullWidth.bind(this);
@@ -109,10 +109,10 @@ class ImageBlock extends Component {
         this.focusBlock = this.focusBlock.bind(this);
     }
 
-    updateSrc(imageUrl) {
+    updateImages(imagesObject) {
         this.props.contentState.mergeEntityData(
             this.props.block.getEntityAt(0),
-            {src: imageUrl}
+            {images: imagesObject}
         );
         setTimeout(() => {
             this.forceUpdate();
@@ -159,8 +159,8 @@ class ImageBlock extends Component {
         };
         const imageUploadRequest = await fetch(`http://localhost:5000/api/upload`, settings);
         const imageUploadResponse = await imageUploadRequest.json();
-        const imageUrl = imageUploadResponse.imageUrl;
-        this.updateSrc(imageUrl)
+        const imagesObject = imageUploadResponse.images;
+        this.updateImages(imagesObject)
     }
 
     focusBlock() {
@@ -189,11 +189,14 @@ class ImageBlock extends Component {
     }
 
     render() {
-        console.log(this.props.children);
         const currentEntity = this.props.contentState.getEntity(
             this.props.block.getEntityAt(0)
         );
-        const { src, fullWidth } = currentEntity.getData();
+        const { images, fullWidth } = currentEntity.getData();
+        let src = '';
+        if (images.hasOwnProperty('original')) {
+            src = images.original.imageUrl;
+        }
         return (
             <Figure fullWidth={fullWidth} onClick={this.focusBlock}>
                 <Image src={src} />

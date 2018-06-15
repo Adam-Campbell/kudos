@@ -72,6 +72,20 @@ injectGlobal`
         padding: 0;
         white-space: normal;
     }
+    .article__isolated-title {
+        font-family: ${styleConstants.fontPrimary};
+        color: ${styleConstants.colorBodyText};
+        margin-top: 8px;
+        margin-bottom: 8px;
+    }
+    .article__isolated-description {
+        font-family: ${styleConstants.fontSecondary};
+        font-weight: 300;
+        font-size: 16px;
+        color: ${styleConstants.colorBodyText};
+        margin-top: 0;
+        margin-bottom: 16px;
+    }
 `;
 
 export default class MyCustomDocument extends Document {

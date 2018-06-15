@@ -161,7 +161,7 @@ export class ArticleEditorContainer extends Component {
         const contentStateWithEntity = contentState.createEntity(
             'IMAGE',
             'IMMUTABLE',
-            { src: '', fullWidth: true }
+            { images: {}, fullWidth: true }
         );
         const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
         const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
@@ -266,12 +266,12 @@ export class ArticleEditorContainer extends Component {
         const { editorState, articleCategory } = this.state;
         const currentContent = editorState.getCurrentContent();
         const raw = convertToRaw(currentContent);
-        const title = raw.blocks.find(block => block.type === 'header-one');
-        const description = raw.blocks.find(block => block.type === 'header-two');
+        const title = raw.blocks.find(block => block.type === 'header-one').text;
+        const description = raw.blocks.find(block => block.type === 'header-two').text;
         let image;
         for (const key in raw.entityMap) {
             if (raw.entityMap[key].type === 'IMAGE') {
-                image = raw.entityMap[key].data.src;
+                image = raw.entityMap[key].data.images.card.imageUrl;
             }
         }
         if (!title || !description || !articleCategory || !image) {
@@ -279,17 +279,9 @@ export class ArticleEditorContainer extends Component {
             return;
         }
         const stringifiedRaw = JSON.stringify(raw);
-        const stringifiedTitle = JSON.stringify(title);
-        const stringifiedDescription = JSON.stringify(description);
-        const form = new FormData();
-        form.append('title', stringifiedTitle);
-        form.append('description', stringifiedDescription);
-        form.append('category', articleCategory);
-        form.append('text', stringifiedRaw);
-        form.append('image', image);
         const articleObject = {
-            title: stringifiedTitle,
-            description: stringifiedDescription,
+            title: title,
+            description: description,
             category: articleCategory,
             text: stringifiedRaw,
             image: image

@@ -22,9 +22,7 @@ const deserializeComment = comment => ({
 
 const deserializePost = post => ({
     ...post,
-    title: JSON.parse(post.title),
-    description: JSON.parse(post.description),
-    text: JSON.parse(post.text),
+    text: JSON.parse(post.text)
 
 });
 
