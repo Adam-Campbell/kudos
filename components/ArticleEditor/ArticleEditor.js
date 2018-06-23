@@ -7,7 +7,11 @@ import {
 } from 'draft-js';
 import CustomCodeBlockWrapper from './CustomCodeBlockWrapper';
 import CenteredBlockWrapper from './CenteredBlockWrapper';
+import CustomBlockQuoteWrapper from './CustomBlockQuoteWrapper';
+import CustomUnorderedListBlockWrapper from './CustomUnorderedListBlockWrapper';
+import CustomOrderedListBlockWrapper from './CustomOrderedListBlockWrapper';
 import EditorControls from './EditorControls';
+import BlockStyleControls from './BlockStyleControls';
 import { Wrapper } from '../Layout';
 import { 
     Label, 
@@ -18,7 +22,7 @@ import {
     ArticleTitleTextarea,
     ArticleDescriptionTextarea
 } from '../Forms';
-
+import InlineStyleControls from './InlineStyleControls';
 const Immutable = require('immutable');
 
 const EditorModuleOuterContainer = styled.div`
@@ -27,7 +31,6 @@ const EditorModuleOuterContainer = styled.div`
 
 const EditorModuleInnerContainer = styled.div`
     background-color: ${styleConstants.colorSecondary};
-    border: solid 2px ${styleConstants.colorBodyText};
     border-radius: 3px;
     position: relative;
 `;
@@ -47,7 +50,10 @@ const blockRenderMap = Immutable.Map({
     'code-block': { element: 'pre', wrapper: <CustomCodeBlockWrapper />},
     'unstyled': { element: 'div', wrapper: <CenteredBlockWrapper /> },
     'header-one': { element: 'div', wrapper: <CenteredBlockWrapper /> },
-    'header-two': { element: 'div', wrapper: <CenteredBlockWrapper /> }
+    'header-two': { element: 'div', wrapper: <CenteredBlockWrapper /> },
+    'block-quote': { element: 'div', wrapper: <CustomBlockQuoteWrapper/> },
+    'unordered-list-item': { element: 'li', wrapper: <CustomUnorderedListBlockWrapper/> },
+    'ordered-list-item': { element: 'li', wrapper: <CustomOrderedListBlockWrapper/> }
 });
 const extendedBlockRenderMap = DefaultDraftBlockRenderMap.merge(blockRenderMap);
 
@@ -87,7 +93,7 @@ const ArticleEditor = props => (
             </Select>
         </div>
         <EditorModuleInnerContainer>
-            <EditorTextBoxContainer onClick={props.focusEditor}>
+            <EditorTextBoxContainer >
                 <Editor
                     editorKey="articleEditor"
                     editorState={props.editorState} 
@@ -99,23 +105,28 @@ const ArticleEditor = props => (
                     blockRenderMap={extendedBlockRenderMap}
                     customStyleMap={styleMap}
                     blockRendererFn={props.blockRendererFn}
+                    handleReturn={props.handleReturn}
+                   
                 />
             </EditorTextBoxContainer>
-            <EditorControls 
+            <BlockStyleControls
                 editorState={props.editorState}
-                toggleInlineStyle={props.toggleInlineStyle}
                 toggleCode={props.toggleCode}
                 changeBlockType={props.changeBlockType}
-                linkMenuIsOpen={props.linkMenuIsOpen}
-                linkUrl={props.linkUrl}
-                updateLinkUrl={props.updateLinkUrl}
-                toggleLinkMenu={props.toggleLinkMenu}
-                createLink={props.createLinkEntity}
                 handleSubmit={props.handleSubmit}
                 addImageBlock={props.addImageBlock}
                 logRaw={props.logRaw}
             />
         </EditorModuleInnerContainer>
+        
+        <InlineStyleControls 
+            getEditorState={props.getEditorState}
+            editorState={props.editorState}
+            toggleInlineStyle={props.toggleInlineStyle}
+            toggleCode={props.toggleCode}
+            createLinkEntity={props.createLinkEntity}
+            focusEditor={props.focusEditor}
+        />
     </React.Fragment>
 );
 
@@ -128,10 +139,6 @@ ArticleEditor.propTypes = {
     toggleInlineStyle: PropTypes.func.isRequired,
     toggleCode: PropTypes.func.isRequired,
     changeBlockType: PropTypes.func.isRequired,
-    linkMenuIsOpen: PropTypes.bool.isRequired,
-    linkUrl: PropTypes.string.isRequired,
-    updateLinkUrl: PropTypes.func.isRequired,
-    toggleLinkMenu: PropTypes.func.isRequired,
     createLinkEntity: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     articleCategory: PropTypes.string.isRequired,
@@ -140,3 +147,20 @@ ArticleEditor.propTypes = {
 };
 
 export default ArticleEditor;
+
+
+
+{/* <EditorControls 
+                editorState={props.editorState}
+                toggleInlineStyle={props.toggleInlineStyle}
+                toggleCode={props.toggleCode}
+                changeBlockType={props.changeBlockType}
+                linkMenuIsOpen={props.linkMenuIsOpen}
+                linkUrl={props.linkUrl}
+                updateLinkUrl={props.updateLinkUrl}
+                toggleLinkMenu={props.toggleLinkMenu}
+                createLink={props.createLinkEntity}
+                handleSubmit={props.handleSubmit}
+                addImageBlock={props.addImageBlock}
+                logRaw={props.logRaw}
+            /> */}

@@ -52,6 +52,10 @@ injectGlobal`
         color: ${styleConstants.colorBodyText};
         line-height: 1.4;
     }
+    .comment-editor__unstyled {
+        margin-top: 16px;
+        margin-bottom: 16px;
+    }
     .comment-editor__paragraph {
         color: blue;
     }
@@ -64,6 +68,13 @@ injectGlobal`
         border-left: solid 3px ${styleConstants.colorBodyText};
         padding-left: 16px; 
         margin: 32px 16px;
+    }
+    .article-editor__block-quote {
+        font-family: ${styleConstants.fontPrimary};
+        font-style: italic;
+        font-size: 20px;
+        color: ${styleConstants.colorBodyText};
+        font-weight: bold; 
     }
     .comment-editor__code-block {
         font-family: ${styleConstants.fontCode};

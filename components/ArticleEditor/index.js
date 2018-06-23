@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as ActionCreators from '../../actions'
@@ -10,11 +11,15 @@ import {
     RichUtils, 
     CompositeDecorator, 
     DefaultDraftBlockRenderMap,
-    AtomicBlockUtils
+    AtomicBlockUtils,
+    Modifier,
+    EditorBlock
 } from 'draft-js';
 import LinkDecorator from './LinkDecorator';
 import ArticleEditor from './ArticleEditor';
 import ImageBlock from './ImageBlock';
+import NewImageBlock from './NewImageBlock';
+
 
 /*
     When rendering an empty text editor we have to create this 'placeholder' empty state and use it,
@@ -33,6 +38,17 @@ const emptyContentState = convertFromRaw({
         },
     ],
 });
+
+const TestBlockDiv = styled.div`
+    background-color: palevioletred;
+    border: solid lime 3px;
+`;
+
+const TestBlock = props => (
+    <TestBlockDiv>
+        <EditorBlock {...props} />
+    </TestBlockDiv>
+);
 
 
 export class ArticleEditorContainer extends Component {
@@ -59,29 +75,30 @@ export class ArticleEditorContainer extends Component {
         }
         this.state = {
             editorState: EditorState.createWithContent(initialEditorState, this.decorator),
-            linkUrl: '',
-            linkMenuIsOpen: false,
             articleCategory: initialCategoryState
         };
         this.getEditorState = () => this.state.editorState;
         this.createLinkEntity = this.createLinkEntity.bind(this);
         this.findLinkEntities = this.findLinkEntities.bind(this);
-        this.updateLinkUrl = this.updateLinkUrl.bind(this);
-        this.onChange = editorState => this.setState({editorState});
+        this.onChange = (editorState, optionalCallback=null) => {
+            this.setState({ editorState }, () => {
+                if (optionalCallback) {
+                    optionalCallback();
+                }
+            });
+        }
         this.toggleCode = this.toggleCode.bind(this);
         this.changeBlockType = this.changeBlockType.bind(this);
         this.focusEditor = this.focusEditor.bind(this);
         this.handleKeyCommand = this.handleKeyCommand.bind(this);
         this.toggleInlineStyle = this.toggleInlineStyle.bind(this);
-        this.toggleLinkMenu = this.toggleLinkMenu.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.clearEditor = this.clearEditor.bind(this);
         this.handleFieldUpdate = this.handleFieldUpdate.bind(this);
-        //this.checkForFile = this.checkForFile.bind(this);
-        //this.handleTitleUpdate = this.handleTitleUpdate.bind(this);
         this.addImageBlock = this.addImageBlock.bind(this);
         this.logRaw = this.logRaw.bind(this);
         this.blockRendererFn = this.blockRendererFn.bind(this);
+        this.handleReturn = this.handleReturn.bind(this);
     }
 
     componentDidMount() {
@@ -92,11 +109,31 @@ export class ArticleEditorContainer extends Component {
         this.domEditor.focus();
     }
 
+    handleReturn(e) {
+        const { editorState } = this.state;
+        //console.log(e.shiftKey);
+        //console.log(RichUtils.getCurrentBlockType(editorState));
+        const currentContent = editorState.getCurrentContent();
+        const blockMap = currentContent.getBlockMap();
+        const currentSelection = editorState.getSelection();
+        const currentBlockKey = currentSelection.getAnchorKey();
+        const currentBlock = currentContent.getBlockForKey(currentBlockKey);
+
+        console.log(currentBlock);
+        if (e.shiftKey) {
+            this.onChange(
+                RichUtils.insertSoftNewline(editorState)
+            );
+            return 'handled';
+        }
+        return 'not-handled';
+    }
+
     blockRendererFn(block) {
         if (block.getType() === 'atomic') {
             return {
                 component: ImageBlock,
-                editable: true,
+                editable: false,
                 props: {
                     getEditorState: this.getEditorState,
                     setEditorState: this.onChange
@@ -112,21 +149,8 @@ export class ArticleEditorContainer extends Component {
         }
     }
 
-    updateLinkUrl(e) {
-        this.setState({ linkUrl: e.target.value });
-    }
-
     clearEditor() {
         this.onChange(EditorState.createWithContent(emptyContentState, this.decorator));
-    }
-
-    toggleLinkMenu(e) {
-        if (e.button === 0) {
-            e.preventDefault();
-            this.setState({ 
-                linkMenuIsOpen: !this.state.linkMenuIsOpen
-            });
-        }
     }
 
     handleKeyCommand(command) {
@@ -161,7 +185,7 @@ export class ArticleEditorContainer extends Component {
         const contentStateWithEntity = contentState.createEntity(
             'IMAGE',
             'IMMUTABLE',
-            { images: {}, fullWidth: true }
+            { images: {original: {imageUrl: 'http://localhost:5000/model.jpg'}}, fullWidth: true }
         );
         const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
         const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
@@ -174,8 +198,37 @@ export class ArticleEditorContainer extends Component {
         })
     }
 
-    createLinkEntity() {
-        const { editorState, linkUrl } = this.state;
+    // addImageBlock() {
+    //     const { editorState } = this.state;
+    //     const contentState = editorState.getCurrentContent();
+    //     const currentSelection = editorState.getSelection();
+    //     const currentKey = currentSelection.getStartKey();
+    //     const currentBlock = contentState.getBlockForKey(currentKey);
+    //     const contentStateWithUpdatedBlockType = Modifier.setBlockType(
+    //         contentState,
+    //         currentSelection,
+    //         'atomic'
+    //     );
+    //     const contentStateWithUpdatedBlockData = Modifier.setBlockData(
+    //         contentStateWithUpdatedBlockType,
+    //         currentSelection, 
+    //         {
+    //             images: {
+    //                 //original: { imageUrl: 'https://imaginaryurl.com' }
+    //             },
+    //             fullWidth: true
+    //         }
+    //     );
+    //     const newEditorState = EditorState.push(
+    //         editorState,
+    //         contentStateWithUpdatedBlockData,
+    //         'change-block-type'
+    //     );
+    //     this.onChange(newEditorState);
+    // }
+
+    createLinkEntity(linkUrl) {
+        const { editorState } = this.state;
         const contentState = editorState.getCurrentContent();
         const contentStateWithEntity = contentState.createEntity(
             'LINK',
@@ -184,15 +237,13 @@ export class ArticleEditorContainer extends Component {
         );
         const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
         const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
-        this.setState({
-            editorState: RichUtils.toggleLink(
+        this.onChange(
+            RichUtils.toggleLink(
                 newEditorState,
                 newEditorState.getSelection(),
                 entityKey
-            ),
-            linkUrl: '',
-            linkMenuIsOpen: false
-        });
+            ), this.focusEditor
+        );
     }
 
     findLinkEntities(contentBlock, callback, contentState) {
@@ -220,7 +271,7 @@ export class ArticleEditorContainer extends Component {
             case 'ordered-list-item':
                 return 'comment-editor__ol-item';
             case 'block-quote':
-                return 'comment-editor__block-quote';
+                return 'article-editor__block-quote';
             case 'header-one':
                 return 'comment-editor__h1';
             case 'header-two':
@@ -251,13 +302,14 @@ export class ArticleEditorContainer extends Component {
                 image = raw.entityMap[key].data.src;
             }
         }
-        if (!title || !description || !image) {
-            console.log("Either a title, description or image were not provided. This doesn't pass validation.");
-            return;
-        }
-        console.log(title);
-        console.log(description);
-        console.log(image);
+        // if (!title || !description || !image) {
+        //     console.log("Either a title, description or image were not provided. This doesn't pass validation.");
+        //     return;
+        // }
+        // console.log(title);
+        // console.log(description);
+        // console.log(image);
+        console.log(currentContent);
         console.log(raw);
         //console.log(raw);
     }
@@ -344,10 +396,6 @@ export class ArticleEditorContainer extends Component {
                 toggleInlineStyle={this.toggleInlineStyle}
                 toggleCode={this.toggleCode}
                 changeBlockType={this.changeBlockType}
-                linkMenuIsOpen={this.state.linkMenuIsOpen}
-                linkUrl={this.state.linkUrl}
-                updateLinkUrl={this.updateLinkUrl}
-                toggleLinkMenu={this.toggleLinkMenu}
                 createLinkEntity={this.createLinkEntity}
                 handleSubmit={this.handleSubmit}
                 articleCategory={this.state.articleCategory}
@@ -356,6 +404,9 @@ export class ArticleEditorContainer extends Component {
                 addImageBlock={this.addImageBlock}
                 blockRendererFn={this.blockRendererFn}
                 logRaw={this.logRaw}
+                handleReturn={this.handleReturn}
+                getEditorState={this.getEditorState}
+                createLinkEntity={this.createLinkEntity}
             />
         );
     }

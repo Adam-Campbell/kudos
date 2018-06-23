@@ -10,8 +10,9 @@ import {
     EditorState, 
     SelectionState 
 } from 'draft-js';
+import { rootApiUrl } from '../../globalConstants';
 
-console.log(EditorBlock);
+//console.log(EditorBlock);
 
 const FileInput = styled.input`
     width: 0.1px;
@@ -109,11 +110,20 @@ class ImageBlock extends Component {
         this.focusBlock = this.focusBlock.bind(this);
     }
 
+    componentDidMount() {
+        if (typeof window !== null) {
+            window.focusBlock = this.focusBlock;
+        }
+    }
+
     updateImages(imagesObject) {
+        this.focusBlock();
+        //console.log(window.getSelection());
         this.props.contentState.mergeEntityData(
             this.props.block.getEntityAt(0),
             {images: imagesObject}
         );
+        //console.log(window.getSelection());
         setTimeout(() => {
             this.forceUpdate();
         }, 0);
@@ -139,7 +149,8 @@ class ImageBlock extends Component {
         }, 0);
     }
 
-    checkForFile() {
+    checkForFile(e) {
+        e.preventDefault();
         const imageFile = this.imageFileInput.current.files[0];
         if (imageFile) {
             //this.image = imageFile;
@@ -157,7 +168,7 @@ class ImageBlock extends Component {
             method: 'post',
             body: form
         };
-        const imageUploadRequest = await fetch(`http://localhost:5000/api/upload`, settings);
+        const imageUploadRequest = await fetch(`${rootApiUrl}/api/upload`, settings);
         const imageUploadResponse = await imageUploadRequest.json();
         const imagesObject = imageUploadResponse.images;
         this.updateImages(imagesObject)
@@ -176,6 +187,7 @@ class ImageBlock extends Component {
         const selectionState = editorState.getSelection();
         const contentState = editorState.getCurrentContent();
         const currentBlock = contentState.getBlockForKey(selectionState.getStartKey());
+        console.log(selectionState);
         if (currentBlock.getKey() === key) {
            return;
         }
@@ -184,6 +196,7 @@ class ImageBlock extends Component {
             focusKey: key,
             anchorOffset: 0,
             focusOffset: 0,
+            hasFocus: true
         });
         setEditorState(EditorState.forceSelection(editorState, newSelection));
     }
