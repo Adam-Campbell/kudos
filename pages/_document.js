@@ -22,7 +22,35 @@ injectGlobal`
         font-family: ${styleConstants.fontSecondary};
         font-size: 16px;
         font-weight: 400;
-        margin-bottom: -16px;
+        position: absolute;
+        width: 100%;
+    }
+    #placeholder-articleTitleEditor {
+        font-family: ${styleConstants.fontPrimary};
+        font-weight: 700;
+        font-size: 36px;
+        color: #aaa;
+        margin: 0; 
+    }
+    #placeholder-articleEditor {
+        padding: 16px;
+        max-width: 832px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 16px;
+    }
+    .article-editor__h1 {
+        font-family: ${styleConstants.fontPrimary};
+        font-weight: 700;
+        font-size: 36px;
+        color: ${styleConstants.colorBodyText};
+        margin: 0;
+    }
+    .article-editor__h2 {
+        font-family: ${styleConstants.fontSecondary};
+        font-weight: 400;
+        font-size: 24px;
+        color: ${styleConstants.colorBodyText};
     }
     .comment-editor__h1 {
         font-family: ${styleConstants.fontPrimary};

@@ -15,6 +15,7 @@ import {
     TitleIcon
 } from '../EditorIcons';
 import ControlButton from './ControlButton';
+import AddImageButton from './AddImageButton';
 
 const ControlsContainer = styled.div`
     padding: 8px;
@@ -86,12 +87,11 @@ const BlockStyleControls = props => {
             >
                 <CodeIcon />
             </BlockControlButton>
-            <BlockControlButton
-                onMouseDown={props.addImageBlock}
-                isActive={false}
+            <AddImageButton
+                addImageBlock={props.addImageBlock}
             >
                 Add Image
-            </BlockControlButton>
+            </AddImageButton>
             <BlockControlButton
                 onMouseDown={props.logRaw}
                 isActive={false}

@@ -23,6 +23,7 @@ import {
     ArticleDescriptionTextarea
 } from '../Forms';
 import InlineStyleControls from './InlineStyleControls';
+import ArticleTitleEditor from './ArticleTitleEditor';
 const Immutable = require('immutable');
 
 const EditorModuleOuterContainer = styled.div`
@@ -93,7 +94,7 @@ const ArticleEditor = props => (
             </Select>
         </div>
         <EditorModuleInnerContainer>
-            <EditorTextBoxContainer >
+            <EditorTextBoxContainer onClick={props.focusEditor}>
                 <Editor
                     editorKey="articleEditor"
                     editorState={props.editorState} 

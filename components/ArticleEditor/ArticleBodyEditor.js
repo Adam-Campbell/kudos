@@ -38,54 +38,25 @@ const emptyContentState = convertFromRaw({
     ],
 });
 
-const TestBlockDiv = styled.div`
-    background-color: palevioletred;
-    border: solid lime 3px;
-`;
-
-const TestBlock = props => (
-    <TestBlockDiv>
-        <EditorBlock {...props} />
-    </TestBlockDiv>
-);
-
-
-export class ArticleEditorContainer extends Component {
+export class ArticleBodyEditorContainer extends Component {
     constructor(props) {
         super(props);
         this.setEditorRef = ref => this.domEditor = ref;
-        this.decorator = new CompositeDecorator([
-            {
-                strategy: this.findLinkEntities,
-                component: LinkDecorator
-            }
-        ]);
-        let initialEditorState;
-        let initialTitleState = '';
-        let initialDescriptionState = '';
-        let initialCategoryState = 'javascript';
-        let initialImageState = null;
-        if (this.props.article_id) {
-            const thisArticle = this.props.articles[this.props.article_id];
-            initialEditorState = convertFromRaw(thisArticle.text);
-            initialCategoryState = thisArticle.category;
-        } else {
-            initialEditorState = emptyContentState;
-        }
-        this.state = {
-            editorState: EditorState.createWithContent(initialEditorState, this.decorator),
-            articleCategory: initialCategoryState
-        };
-        this.getEditorState = () => this.state.editorState;
+        this.state = { articleCategory: 'javascript' };
+
+        this.getEditorState = () => this.props.editorState;
         this.createLinkEntity = this.createLinkEntity.bind(this);
         this.findLinkEntities = this.findLinkEntities.bind(this);
+        // this.onChange = (editorState, optionalCallback=null) => {
+        //     this.setState({ editorState }, () => {
+        //         if (optionalCallback) {
+        //             optionalCallback();
+        //         }
+        //     });
+        // }
         this.onChange = (editorState, optionalCallback=null) => {
-            this.setState({ editorState }, () => {
-                if (optionalCallback) {
-                    optionalCallback();
-                }
-            });
-        }
+            this.props.updateEditorState(editorState, optionalCallback)
+        };
         this.toggleCode = this.toggleCode.bind(this);
         this.changeBlockType = this.changeBlockType.bind(this);
         this.focusEditor = this.focusEditor.bind(this);
@@ -109,7 +80,8 @@ export class ArticleEditorContainer extends Component {
     }
 
     handleReturn(e) {
-        const { editorState } = this.state;
+        //const { editorState } = this.state;
+        const { editorState } = this.props;
         //console.log(e.shiftKey);
         //console.log(RichUtils.getCurrentBlockType(editorState));
         const currentContent = editorState.getCurrentContent();
@@ -149,14 +121,16 @@ export class ArticleEditorContainer extends Component {
     }
 
     clearEditor() {
-        this.onChange(EditorState.createWithContent(emptyContentState, this.decorator));
+        //this.onChange(EditorState.createWithContent(emptyContentState, this.decorator));
     }
 
     handleKeyCommand(command) {
-        const { editorState } = this.state;
+        //const { editorState } = this.state;
+        const { editorState } = this.props;
         const newState = RichUtils.handleKeyCommand(editorState, command);
         if (newState) {
-            this.setState({ editorState: newState });
+            //this.setState({ editorState: newState });
+            this.onChange(newState);
             return true;
         }
         return false;
@@ -166,7 +140,7 @@ export class ArticleEditorContainer extends Component {
         return (e) => {
             if (e.button === 0) {
                 e.preventDefault();
-                this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, style));
+                this.onChange(RichUtils.toggleInlineStyle(this.props.editorState, style));
             }
         }
     }
@@ -174,7 +148,7 @@ export class ArticleEditorContainer extends Component {
     toggleCode(e) {
         if (e.button === 0) {
             e.preventDefault();
-            this.onChange(RichUtils.toggleCode(this.state.editorState));
+            this.onChange(RichUtils.toggleCode(this.props.editorState));
         }
     }
 
@@ -198,7 +172,8 @@ export class ArticleEditorContainer extends Component {
     // }
 
     addImageBlock(imagesObject) {
-        const { editorState } = this.state;
+        //const { editorState } = this.state;
+        const { editorState } = this.props;
         const contentState = editorState.getCurrentContent();
         const contentStateWithEntity = contentState.createEntity(
             'IMAGE',
@@ -207,13 +182,20 @@ export class ArticleEditorContainer extends Component {
         );
         const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
         const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
-        this.setState({
-            editorState: AtomicBlockUtils.insertAtomicBlock(
+        // this.setState({
+        //     editorState: AtomicBlockUtils.insertAtomicBlock(
+        //         newEditorState,
+        //         entityKey,
+        //         ' '
+        //     )
+        // })
+        this.onChange(
+            AtomicBlockUtils.insertAtomicBlock(
                 newEditorState,
                 entityKey,
                 ' '
             )
-        })
+        );
     }
 
     // addImageBlock() {
@@ -246,7 +228,8 @@ export class ArticleEditorContainer extends Component {
     // }
 
     createLinkEntity(linkUrl) {
-        const { editorState } = this.state;
+        //const { editorState } = this.state;
+        const { editorState } = this.props;
         const contentState = editorState.getCurrentContent();
         const contentStateWithEntity = contentState.createEntity(
             'LINK',
@@ -301,9 +284,12 @@ export class ArticleEditorContainer extends Component {
         return (e) => {
             if (e.button === 0) {
                 e.preventDefault();
-                this.setState({
-                    editorState: RichUtils.toggleBlockType(this.state.editorState, blockType)
-                });
+                // this.setState({
+                //     editorState: RichUtils.toggleBlockType(this.props.editorState, blockType)
+                // });
+                this.onChange(
+                    RichUtils.toggleBlockType(this.props.editorState, blockType)
+                );
             } 
         }
     }
@@ -406,7 +392,7 @@ export class ArticleEditorContainer extends Component {
     render() {
         return (
             <ArticleEditor 
-                editorState={this.state.editorState}
+                editorState={this.props.editorState}
                 onChange={this.onChange}
                 setEditorRef={this.setEditorRef}
                 customBlockStyles={this.customBlockStyles}
@@ -430,7 +416,7 @@ export class ArticleEditorContainer extends Component {
     }
 }
 
-ArticleEditorContainer.propTypes = {
+ArticleBodyEditorContainer.propTypes = {
     article_id: PropTypes.string,
     isNewArticle: PropTypes.bool.isRequired
 }
@@ -447,4 +433,4 @@ export default connect(
         createPost: ActionCreators.createPost,
         editPost: ActionCreators.editPost
     }
-)(ArticleEditorContainer);
+)(ArticleBodyEditorContainer);
