@@ -401,7 +401,7 @@ export class ArticleBodyEditorContainer extends Component {
                 toggleCode={this.toggleCode}
                 changeBlockType={this.changeBlockType}
                 createLinkEntity={this.createLinkEntity}
-                handleSubmit={this.handleSubmit}
+                handleSubmit={this.props.handleSubmit}
                 articleCategory={this.state.articleCategory}
                 handleCategoryUpdate={this.handleFieldUpdate('articleCategory')}
                 focusEditor={this.focusEditor}

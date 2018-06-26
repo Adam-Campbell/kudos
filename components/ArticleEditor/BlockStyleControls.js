@@ -52,6 +52,47 @@ const BlockStyleControls = props => {
     return (
         <ControlsContainer>
             <BlockControlButton
+                onMouseDown={props.changeBlockType('unordered-list-item')}
+                isActive={blockType === 'unordered-list-item'}
+            >
+                <UnorderedListIcon />
+            </BlockControlButton>
+            <BlockControlButton
+                onMouseDown={props.changeBlockType('ordered-list-item')}
+                isActive={blockType === 'ordered-list-item'}
+            >
+                <OrderedListIcon />
+            </BlockControlButton>
+            <BlockControlButton
+                onMouseDown={props.changeBlockType('block-quote')}
+                isActive={blockType === 'block-quote'}
+            >
+                <BlockQuoteIcon />
+            </BlockControlButton>
+            <BlockControlButton
+                onMouseDown={props.toggleCode}
+                isActive={blockType === 'code-block'}
+            >
+                <CodeIcon />
+            </BlockControlButton>
+            <AddImageButton
+                addImageBlock={props.addImageBlock}
+            >
+                Add Image
+            </AddImageButton>
+            <SubmitButton onMouseDown={props.handleSubmit}>Submit</SubmitButton>
+        </ControlsContainer>
+    );
+}
+
+export default BlockStyleControls;
+
+
+
+
+
+{/* <ControlsContainer>
+            <BlockControlButton
                 onMouseDown={props.changeBlockType('header-one')}
                 isActive={blockType === 'header-one'}
             >
@@ -99,8 +140,4 @@ const BlockStyleControls = props => {
                 Log Raw
             </BlockControlButton>
             <SubmitButton onMouseDown={props.handleSubmit}>Submit</SubmitButton>
-        </ControlsContainer>
-    );
-}
-
-export default BlockStyleControls;
+        </ControlsContainer> */}

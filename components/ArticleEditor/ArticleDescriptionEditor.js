@@ -19,8 +19,9 @@ import {
 
 
 const BorderedContainer = styled.div`
-    border: solid 2px ${styleConstants.colorBodyText};
     padding: 16px;
+    border: solid 2px #eee;
+    position: relative;
 `;
 
 const ArticleDescriptionEditor = props => (

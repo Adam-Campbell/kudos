@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import AuthorBlock from './AuthorBlock';
 
 export const AuthorBlockContainer = props => {
-    const article = props.articles[props.article_id];
-    const author = props.users[article.author];
+    const author = props.users[props.user_id];
     return <AuthorBlock 
         author_id={author._id}
         authorAvatar={author.avatar}
@@ -14,11 +13,10 @@ export const AuthorBlockContainer = props => {
 };
 
 AuthorBlockContainer.propTypes = {
-    article_id: PropTypes.string.isRequired
+    user_id: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({
-    articles: state.posts.models,
     users: state.users.models
 });
 

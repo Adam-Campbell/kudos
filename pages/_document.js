@@ -23,7 +23,7 @@ injectGlobal`
         font-size: 16px;
         font-weight: 400;
         position: absolute;
-        width: 100%;
+        max-width: 100%; 
     }
     #placeholder-articleTitleEditor {
         font-family: ${styleConstants.fontPrimary};
@@ -31,6 +31,15 @@ injectGlobal`
         font-size: 36px;
         color: #aaa;
         margin: 0; 
+        max-width: 100%;
+    }
+    #placeholder-articleDescriptionEditor {
+        font-family: ${styleConstants.fontSecondary};
+        font-weight: 400;
+        font-size: 24px;
+        color: #aaa;
+        margin: 0;
+        max-width: 100%;
     }
     #placeholder-articleEditor {
         padding: 16px;

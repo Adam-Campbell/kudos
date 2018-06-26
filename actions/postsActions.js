@@ -185,7 +185,11 @@ export const createPost = (articleObject, currentUser_id, token) => async dispat
         }
         const postJSON = await createPostReq.json();
         const newPost_id = postJSON._id;
-        postJSON.text = JSON.parse(postJSON.text);
+        //postJSON.text = JSON.parse(postJSON.text);
+        postJSON.titleRaw = JSON.parse(postJSON.titleRaw);
+        postJSON.descriptionRaw = JSON.parse(postJSON.descriptionRaw);
+        postJSON.bodyRaw = JSON.parse(postJSON.bodyRaw);
+        postJSON.image = JSON.parse(postJSON.image);
         const newPostCategory = postJSON.category;
         dispatch(createPostSuccess(postJSON, currentUser_id, newPostCategory, newPost_id));
         Router.push(`/post?post=${newPost_id}`, `/post/${newPost_id}`);
