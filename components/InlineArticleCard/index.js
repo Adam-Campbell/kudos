@@ -5,9 +5,10 @@ import InlineArticleCard from './InlineArticleCard';
 export const InlineArticleCardContainer = props => {
     const article = props.articles[props.article_id];
     const author = props.users[article.author];
+    const articleImage = article.image.original.imageUrl;
     return <InlineArticleCard 
         article_id={article._id}
-        articleImage={article.image}
+        articleImage={articleImage}
         articleTitle={article.title}
         authorUsername={author.username}
         author_id={author._id}

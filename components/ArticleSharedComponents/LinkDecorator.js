@@ -8,9 +8,7 @@ const StyledLink = styled.a`
     }
 `;
 
-const LinkDecorator = props => {
+export const LinkDecorator = props => {
     const { url } = props.contentState.getEntity(props.entityKey).getData();
     return <StyledLink href={url}>{props.children}</StyledLink>
 };
-
-export default LinkDecorator;

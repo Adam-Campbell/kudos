@@ -13,7 +13,7 @@ const post = props => {
     return (
         <React.Fragment>
             <Header />
-            <Article article_id={props._id} />
+            <Article article_id={props._id} isAuthor={isAuthor} />
         </React.Fragment>  
     );
 };

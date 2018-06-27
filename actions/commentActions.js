@@ -107,7 +107,6 @@ export const replyToComment = (commentText, parentComment_id, token) => async (d
             return currentState.comments[comment_id]
         });
         const sortedComments = sortComments([...existingComments, {...commentObject}]);
-        
         dispatch(replyToCommentSuccess(
             commentObject, 
             commentObject._id,

@@ -17,7 +17,6 @@ import {
     EditorBlock
 } from 'draft-js';
 
-
 const BorderedContainer = styled.div`
     padding: 16px;
     border: solid 2px #eee;
@@ -75,37 +74,11 @@ export class ArticleTitleEditorContainer extends Component {
     constructor(props) {
         super(props);
         this.setEditorRef = ref => this.domEditor = ref;
-        // let initialEditorState;
-        // if (this.props.article_id) {
-        //     const thisArticle = this.props.articles[this.props.article_id];
-        //     initialEditorState = convertFromRaw(thisArticle.text);
-        // } else {
-        //     initialEditorState = emptyContentState;
-        // }
-        // this.state = {
-        //     editorState: EditorState.createWithContent(initialEditorState)
-        // };
-        // this.onChange = (editorState) => {
-        //     //console.log('onChange event fired');
-        //     //console.log(editorState);
-        //     const currentContent = editorState.getCurrentContent();
-        //     const block = currentContent.getBlockForKey('articleTitleBlock');
-        //     if (!block) {
-        //         return;
-        //     }
-        //     const blockType = block.getType();
-        //     //console.log(block);
-        //     if (blockType !== 'header-one') {
-        //         return;
-        //     }
-        //     this.setState({ editorState });
-        // }
         this.onChange = (editorState) => {
             this.props.updateEditorState(editorState);
         }
         this.focusEditor = this.focusEditor.bind(this);
         this.handleKeyCommand = this.handleKeyCommand.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
         this.clearEditor = this.clearEditor.bind(this);
         this.handleReturn = this.handleReturn.bind(this);
     }
@@ -130,7 +103,6 @@ export class ArticleTitleEditorContainer extends Component {
     }
 
     handleKeyCommand(command) {
-        //const { editorState } = this.state;
         const { editorState } = this.props;
         if (command === 'backspace') {
             const currentContent = editorState.getCurrentContent();
@@ -142,7 +114,6 @@ export class ArticleTitleEditorContainer extends Component {
         }
         const newState = RichUtils.handleKeyCommand(editorState, command);
         if (newState) {
-            //this.setState({ editorState: newState });
             this.onChange(newState);
             return true;
         }
@@ -154,43 +125,6 @@ export class ArticleTitleEditorContainer extends Component {
         switch (type) {
             case 'header-one':
                 return 'article-editor__h1';
-        }
-    }
-
-    handleSubmit() {
-        const { editorState, articleCategory } = this.state;
-        const currentContent = editorState.getCurrentContent();
-        const raw = convertToRaw(currentContent);
-        const title = raw.blocks.find(block => block.type === 'header-one').text;
-        const description = raw.blocks.find(block => block.type === 'header-two').text;
-        let image;
-        for (const key in raw.entityMap) {
-            if (raw.entityMap[key].type === 'IMAGE') {
-                image = raw.entityMap[key].data.images.card.imageUrl;
-            }
-        }
-        if (!title || !description || !articleCategory || !image) {
-            console.log("this did not pass validation");
-            return;
-        }
-        const stringifiedRaw = JSON.stringify(raw);
-        const articleObject = {
-            title: title,
-            description: description,
-            category: articleCategory,
-            text: stringifiedRaw,
-            image: image
-        }
-        if (this.props.isNewArticle) {
-            this.props.createPost(articleObject, this.props.currentUser_id, this.props.token);
-        } else {
-            this.props.editPost(
-                articleObject, 
-                this.props.article_id,
-                this.props.articles[this.props.article_id].category,
-                articleCategory,
-                this.props.token
-            );
         }
     }
 

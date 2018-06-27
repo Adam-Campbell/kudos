@@ -12,12 +12,10 @@ const StyledInner = styled.div`
     padding-left: 16px;
 `;
 
-const CustomBlockQuoteWrapper = props => (
+export const CustomBlockQuoteWrapper = props => (
     <StyledDiv>
         <StyledInner>
             {props.children}
         </StyledInner>
     </StyledDiv>
 );
-
-export default CustomBlockQuoteWrapper;

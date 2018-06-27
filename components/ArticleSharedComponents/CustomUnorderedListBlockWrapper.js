@@ -7,17 +7,15 @@ const StyledWrapper = styled.div`
     padding: 16px; 
 `;
 
-const StyledOL = styled.ol`
+const StyledUL = styled.ul`
     padding-left: 16px;
     margin: 0;
 `;
 
-const CustomOrderedListBlockWrapper = props => (
+export const CustomUnorderedListBlockWrapper = props => (
     <StyledWrapper>
-        <StyledOL>
+        <StyledUL>
             {props.children}
-        </StyledOL>
+        </StyledUL>
     </StyledWrapper>
 );
-
-export default CustomOrderedListBlockWrapper;

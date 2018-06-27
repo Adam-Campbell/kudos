@@ -7,8 +7,6 @@ const StyledDiv = styled.div`
     padding: 16px;
 `;
 
-const CenteredBlockWrapper = props => (
+export const CenteredBlockWrapper = props => (
     <StyledDiv>{props.children}</StyledDiv>
 );
-
-export default CenteredBlockWrapper;

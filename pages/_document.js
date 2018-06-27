@@ -24,6 +24,7 @@ injectGlobal`
         font-weight: 400;
         position: absolute;
         max-width: 100%; 
+        width: 100%;
     }
     #placeholder-articleTitleEditor {
         font-family: ${styleConstants.fontPrimary};
@@ -60,6 +61,8 @@ injectGlobal`
         font-weight: 400;
         font-size: 24px;
         color: ${styleConstants.colorBodyText};
+        margin-top: 8px;
+        margin-bottom: 8px;
     }
     .comment-editor__h1 {
         font-family: ${styleConstants.fontPrimary};

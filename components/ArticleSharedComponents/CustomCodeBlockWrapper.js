@@ -8,8 +8,7 @@ const StyledPre = styled.pre`
     margin: 32px 16px;
 `;
 
-const CustomCodeBlockWrapper = props => (
+export const CustomCodeBlockWrapper = props => (
     <StyledPre>{props.children}</StyledPre>
 );
 
-export default CustomCodeBlockWrapper;

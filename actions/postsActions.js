@@ -239,7 +239,11 @@ export const editPost = (articleObject, post_id, oldCategory, newCategory, token
         }
         const editedPostJSON = await editPostReq.json();
         editedPostJSON.author = editedPostJSON.author._id;
-        editedPostJSON.text = JSON.parse(editedPostJSON.text);
+        //editedPostJSON.text = JSON.parse(editedPostJSON.text);
+        editedPostJSON.titleRaw = JSON.parse(editedPostJSON.titleRaw);
+        editedPostJSON.descriptionRaw = JSON.parse(editedPostJSON.descriptionRaw);
+        editedPostJSON.bodyRaw = JSON.parse(editedPostJSON.bodyRaw);
+        editedPostJSON.image = JSON.parse(editedPostJSON.image);
         const editedPost_id = editedPostJSON._id;
         dispatch(editPostSuccess(editedPostJSON, post_id));
         if (oldCategory !== newCategory) {

@@ -6,10 +6,6 @@ import Header from '../components/Header';
 import NewPostForm from '../components/NewPostForm';
 import Router from 'next/router';
 import ArticleEditor from '../components/ArticleEditor';
-import ArticleTitleEditor from '../components/ArticleEditor/ArticleTitleEditor';
-import ArticleDescriptionEditor from '../components/ArticleEditor/ArticleDescriptionEditor';
-import ArticleEditorStateContainer from '../components/ArticleEditor/ArticleEditorStateContainer';
-import TitleAndDescription from '../components/ArticleEditor/TitleAndDescription';
 
 // const newPost = props => {
 //     if (props.isLoggedIn) {
@@ -30,7 +26,7 @@ const newPost = props => {
         return (
             <React.Fragment>
                 <Header />
-                <ArticleEditorStateContainer isNewArticle={true} />
+                <ArticleEditor isNewArticle={true} />
             </React.Fragment>
         )
     } else {

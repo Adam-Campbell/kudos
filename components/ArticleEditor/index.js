@@ -1,8 +1,17 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as ActionCreators from '../../actions'
+import PropTypes from 'prop-types';
+import * as ActionCreators from '../../actions';
+import styled from 'styled-components';
+import * as styleConstants from '../styleConstants';
+import ArticleTitleEditor from './ArticleTitleEditor';
+import ArticleDescriptionEditor from './ArticleDescriptionEditor';
+import ArticleBodyEditor from './ArticleBodyEditor';
+import ArticleImageEditor from './ArticleImageEditor';
+import AuthorBlock from '../AuthorBlock';
+import ArticleCategoryEditor from './ArticleCategoryEditor';
+import { LinkDecorator } from '../ArticleSharedComponents';
+import KudosButton from '../KudosButton';
 import { 
     Editor, 
     EditorState, 
@@ -15,253 +24,189 @@ import {
     Modifier,
     EditorBlock
 } from 'draft-js';
-import LinkDecorator from './LinkDecorator';
-import ArticleEditor from './ArticleEditor';
-import ImageBlock from './ImageBlock';
-import NewImageBlock from './NewImageBlock';
 
-/*
-    When rendering an empty text editor we have to create this 'placeholder' empty state and use it,
-    rather than just using createFromEmpty. This is because using createFromEmpty causes an issue with
-    SSR - where the keys for content blocks are created (pseudo)randomly, so when they are created on the
-    server and again on the client you get a mismatch. 
-*/
-const emptyContentState = convertFromRaw({
+const emptyTitleContentState = convertFromRaw({
     entityMap: {},
     blocks: [
         {
             text: '',
-            key: 'foo',
+            key: 'articleTitleBlock',
+            type: 'header-one',
+            entityRanges: [],
+        },
+    ],
+});
+
+const emptyDescriptionContentState = convertFromRaw({
+    entityMap: {},
+    blocks: [
+        {
+            text: '',
+            key: 'articleDescriptionBlock',
+            type: 'header-two',
+            entityRanges: [],
+        },
+    ],
+});
+
+const emptyBodyContentState = convertFromRaw({
+    entityMap: {},
+    blocks: [
+        {
+            text: '',
+            key: 'articleBodyEditor',
             type: 'unstyled',
             entityRanges: [],
         },
     ],
 });
 
-const TestBlockDiv = styled.div`
-    background-color: palevioletred;
-    border: solid lime 3px;
+const TitleAndDescriptionContainer = styled.div`
+    width: 100%;
+    max-width: 832px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 16px;
 `;
 
-const TestBlock = props => (
-    <TestBlockDiv>
-        <EditorBlock {...props} />
-    </TestBlockDiv>
-);
+const ArticleLayoutContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+    @media(min-width: 768px) {
+        flex-direction: ${props => props.isInlineLayout ? 'row' : 'column'};
+        padding-right: ${props => props.isInlineLayout ? '16px' : '0'};
+        align-items: ${props => props.isInlineLayout ? 'center' : 'stretch'};
+        max-width: ${props => props.isInlineLayout ? '1400px' : '100%'};
+    }
+`;
+
+const LayoutButtonsContainer = styled.div`
+    text-align: center;
+    padding: 16px;
+`;
+
+const LayoutButton = styled.button`
+    font-family: ${styleConstants.fontSecondary};
+    font-size: 14px;
+    font-weight: 400;
+    color: ${props => props.isActive ? styleConstants.colorSecondary : styleConstants.colorPrimary};
+    background-color: ${props => props.isActive ? styleConstants.colorPrimary : styleConstants.colorSecondary};
+    padding: 8px 16px;
+    border-radius: 3px;
+    border: solid 2px;
+    border-color: ${styleConstants.colorPrimary};
+    cursor: pointer;
+    && {
+        margin-right: 8px;
+    }
+`;
+
+const KudosStatsContainer = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+const KudosStat = styled.p`
+    font-family: ${styleConstants.fontSecondary};
+    font-weight: 300;
+    font-size: 14px;
+    color: ${styleConstants.colorBodyText};
+    display: inline-block;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-right: 16px;
+    span {
+        font-weight: 400;
+        color: ${styleConstants.colorPrimary};
+    }
+`;
 
 
-export class ArticleEditorContainer extends Component {
+class ArticleEditorContainer extends Component {
+    
+    static propTypes = {
+        isNewArticle: PropTypes.bool.isRequired,
+        article_id: PropTypes.string,
+        articles: PropTypes.object.isRequired,
+        token: PropTypes.string.isRequired,
+        currentUser_id: PropTypes.string.isRequired
+    }
+    
     constructor(props) {
         super(props);
-        this.setEditorRef = ref => this.domEditor = ref;
+        this.updateTitle = this.updateTitle.bind(this);
+        this.updateDescription = this.updateDescription.bind(this);
+        this.updateBody = this.updateBody.bind(this);
+        this.updateImage = this.updateImage.bind(this);
+        this.updateCategory = this.updateCategory.bind(this);
+        this.makeSingleColumn = this.makeSingleColumn.bind(this);
+        this.makeInline = this.makeInline.bind(this);
+        this.findLinkEntities = this.findLinkEntities.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.getRaw = this.getRaw.bind(this);
         this.decorator = new CompositeDecorator([
             {
                 strategy: this.findLinkEntities,
                 component: LinkDecorator
             }
         ]);
-        let initialEditorState;
-        let initialTitleState = '';
-        let initialDescriptionState = '';
-        let initialCategoryState = 'javascript';
-        let initialImageState = null;
-        if (this.props.article_id) {
-            const thisArticle = this.props.articles[this.props.article_id];
-            initialEditorState = convertFromRaw(thisArticle.text);
-            initialCategoryState = thisArticle.category;
-        } else {
-            initialEditorState = emptyContentState;
+        let initialTitleEditorState = emptyTitleContentState;
+        let initialDescriptionEditorState = emptyDescriptionContentState;
+        let initialBodyEditorState = emptyBodyContentState;
+        let initialImageEditorState = {};
+        let initialIsInline = false;
+        let initialArticleCategory = 'javascript';
+        if (!this.props.isNewArticle) {
+            this.article = this.props.articles[this.props.article_id];
+            initialTitleEditorState = convertFromRaw(this.article.titleRaw);
+            initialDescriptionEditorState = convertFromRaw(this.article.descriptionRaw);
+            initialBodyEditorState = convertFromRaw(this.article.bodyRaw);
+            initialImageEditorState = this.article.image;
+            initialIsInline = this.article.isInline;
+            initialArticleCategory = this.article.category;
         }
         this.state = {
-            editorState: EditorState.createWithContent(initialEditorState, this.decorator),
-            articleCategory: initialCategoryState
+            titleEditorState: EditorState.createWithContent(initialTitleEditorState),
+            descriptionEditorState: EditorState.createWithContent(initialDescriptionEditorState),
+            bodyEditorState: EditorState.createWithContent(initialBodyEditorState, this.decorator),
+            imageEditorState: initialImageEditorState,
+            isInline: initialIsInline,
+            articleCategory: initialArticleCategory
         };
-        this.getEditorState = () => this.state.editorState;
-        this.createLinkEntity = this.createLinkEntity.bind(this);
-        this.findLinkEntities = this.findLinkEntities.bind(this);
-        this.onChange = (editorState, optionalCallback=null) => {
-            this.setState({ editorState }, () => {
-                if (optionalCallback) {
-                    optionalCallback();
-                }
-            });
-        }
-        this.toggleCode = this.toggleCode.bind(this);
-        this.changeBlockType = this.changeBlockType.bind(this);
-        this.focusEditor = this.focusEditor.bind(this);
-        this.handleKeyCommand = this.handleKeyCommand.bind(this);
-        this.toggleInlineStyle = this.toggleInlineStyle.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.clearEditor = this.clearEditor.bind(this);
-        this.handleFieldUpdate = this.handleFieldUpdate.bind(this);
-        this.addImageBlock = this.addImageBlock.bind(this);
-        this.logRaw = this.logRaw.bind(this);
-        this.blockRendererFn = this.blockRendererFn.bind(this);
-        this.handleReturn = this.handleReturn.bind(this);
     }
 
-    componentDidMount() {
-        this.focusEditor();
+    updateTitle(newEditorState) {
+        this.setState({ titleEditorState: newEditorState });
     }
 
-    focusEditor() {
-        this.domEditor.focus();
+    updateDescription(newEditorState) {
+        this.setState({ descriptionEditorState: newEditorState });
     }
 
-    handleReturn(e) {
-        const { editorState } = this.state;
-        //console.log(e.shiftKey);
-        //console.log(RichUtils.getCurrentBlockType(editorState));
-        const currentContent = editorState.getCurrentContent();
-        const blockMap = currentContent.getBlockMap();
-        const currentSelection = editorState.getSelection();
-        const currentBlockKey = currentSelection.getAnchorKey();
-        const currentBlock = currentContent.getBlockForKey(currentBlockKey);
-
-        console.log(currentBlock);
-        if (e.shiftKey) {
-            this.onChange(
-                RichUtils.insertSoftNewline(editorState)
-            );
-            return 'handled';
-        }
-        return 'not-handled';
-    }
-
-    blockRendererFn(block) {
-        if (block.getType() === 'atomic') {
-            return {
-                component: ImageBlock,
-                editable: false,
-                props: {
-                    getEditorState: this.getEditorState,
-                    setEditorState: this.onChange
-                }
-            };
-        }
-        return null;
-    }
-
-    handleFieldUpdate(fieldName) {
-        return (e) => {
-            this.setState({ [fieldName] : e.target.value });    
-        }
-    }
-
-    clearEditor() {
-        this.onChange(EditorState.createWithContent(emptyContentState, this.decorator));
-    }
-
-    handleKeyCommand(command) {
-        const { editorState } = this.state;
-        const newState = RichUtils.handleKeyCommand(editorState, command);
-        if (newState) {
-            this.setState({ editorState: newState });
-            return true;
-        }
-        return false;
-    }
-
-    toggleInlineStyle(style) {
-        return (e) => {
-            if (e.button === 0) {
-                e.preventDefault();
-                this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, style));
+    updateBody(newEditorState, optionalCallback=null) {
+        this.setState({ bodyEditorState: newEditorState }, () => {
+            if (optionalCallback) {
+                optionalCallback();
             }
-        }
+        });
     }
 
-    toggleCode(e) {
-        if (e.button === 0) {
-            e.preventDefault();
-            this.onChange(RichUtils.toggleCode(this.state.editorState));
-        }
+    updateImage(newImageObject) {
+        this.setState({ imageEditorState: newImageObject });
     }
 
-    // addImageBlock() {
-    //     const { editorState } = this.state;
-    //     const contentState = editorState.getCurrentContent();
-    //     const contentStateWithEntity = contentState.createEntity(
-    //         'IMAGE',
-    //         'IMMUTABLE',
-    //         { images: {original: {imageUrl: 'http://localhost:5000/model.jpg'}}, fullWidth: true }
-    //     );
-    //     const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-    //     const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
-    //     this.setState({
-    //         editorState: AtomicBlockUtils.insertAtomicBlock(
-    //             newEditorState,
-    //             entityKey,
-    //             ' '
-    //         )
-    //     })
-    // }
-
-    addImageBlock(imagesObject) {
-        const { editorState } = this.state;
-        const contentState = editorState.getCurrentContent();
-        const contentStateWithEntity = contentState.createEntity(
-            'IMAGE',
-            'IMMUTABLE',
-            { images: imagesObject, fullWidth: true }
-        );
-        const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-        const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
-        this.setState({
-            editorState: AtomicBlockUtils.insertAtomicBlock(
-                newEditorState,
-                entityKey,
-                ' '
-            )
-        })
+    updateCategory(newCategory) {
+        this.setState({ articleCategory: newCategory });
     }
 
-    // addImageBlock() {
-    //     const { editorState } = this.state;
-    //     const contentState = editorState.getCurrentContent();
-    //     const currentSelection = editorState.getSelection();
-    //     const currentKey = currentSelection.getStartKey();
-    //     const currentBlock = contentState.getBlockForKey(currentKey);
-    //     const contentStateWithUpdatedBlockType = Modifier.setBlockType(
-    //         contentState,
-    //         currentSelection,
-    //         'atomic'
-    //     );
-    //     const contentStateWithUpdatedBlockData = Modifier.setBlockData(
-    //         contentStateWithUpdatedBlockType,
-    //         currentSelection, 
-    //         {
-    //             images: {
-    //                 //original: { imageUrl: 'https://imaginaryurl.com' }
-    //             },
-    //             fullWidth: true
-    //         }
-    //     );
-    //     const newEditorState = EditorState.push(
-    //         editorState,
-    //         contentStateWithUpdatedBlockData,
-    //         'change-block-type'
-    //     );
-    //     this.onChange(newEditorState);
-    // }
+    makeSingleColumn() {
+        this.setState({ isInline: false });
+    }
 
-    createLinkEntity(linkUrl) {
-        const { editorState } = this.state;
-        const contentState = editorState.getCurrentContent();
-        const contentStateWithEntity = contentState.createEntity(
-            'LINK',
-            'MUTABLE',
-            {url: linkUrl}
-        );
-        const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-        const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
-        this.onChange(
-            RichUtils.toggleLink(
-                newEditorState,
-                newEditorState.getSelection(),
-                entityKey
-            ), this.focusEditor
-        );
+    makeInline() {
+        this.setState({ isInline: true });
     }
 
     findLinkEntities(contentBlock, callback, contentState) {
@@ -277,172 +222,117 @@ export class ArticleEditorContainer extends Component {
         );
     }
 
-    customBlockStyles(contentBlock) {
-        const type = contentBlock.getType();
-        switch (type) {
-            case 'unstyled':
-                return 'comment-editor__unstyled';
-            case 'code-block':
-                return 'comment-editor__code-block';
-            case 'unordered-list-item':
-                return 'comment-editor__ul-item';
-            case 'ordered-list-item':
-                return 'comment-editor__ol-item';
-            case 'block-quote':
-                return 'article-editor__block-quote';
-            case 'header-one':
-                return 'comment-editor__h1';
-            case 'header-two':
-                return 'comment-editor__h2';
-        }
-    }
-
-    changeBlockType(blockType) {
-        return (e) => {
-            if (e.button === 0) {
-                e.preventDefault();
-                this.setState({
-                    editorState: RichUtils.toggleBlockType(this.state.editorState, blockType)
-                });
-            } 
-        }
-    }
-
-    logRaw() {
-        const { editorState } = this.state;
+    getRaw(editorState) {
         const currentContent = editorState.getCurrentContent();
         const raw = convertToRaw(currentContent);
-        const title = raw.blocks.find(block => block.type === 'header-one');
-        const description = raw.blocks.find(block => block.type === 'header-two');
-        let image;
-        for (const key in raw.entityMap) {
-            if (raw.entityMap[key].type === 'IMAGE') {
-                image = raw.entityMap[key].data.src;
-            }
-        }
-        // if (!title || !description || !image) {
-        //     console.log("Either a title, description or image were not provided. This doesn't pass validation.");
-        //     return;
-        // }
-        // console.log(title);
-        // console.log(description);
-        // console.log(image);
-        console.log(currentContent);
-        console.log(raw);
-        //console.log(raw);
+        return raw;
     }
 
     handleSubmit() {
-        const { editorState, articleCategory } = this.state;
-        const currentContent = editorState.getCurrentContent();
-        const raw = convertToRaw(currentContent);
-        const title = raw.blocks.find(block => block.type === 'header-one').text;
-        const description = raw.blocks.find(block => block.type === 'header-two').text;
-        let image;
-        for (const key in raw.entityMap) {
-            if (raw.entityMap[key].type === 'IMAGE') {
-                image = raw.entityMap[key].data.images.card.imageUrl;
-            }
-        }
-        if (!title || !description || !articleCategory || !image) {
-            console.log("this did not pass validation");
-            return;
-        }
-        const stringifiedRaw = JSON.stringify(raw);
+        const {
+            titleEditorState,
+            descriptionEditorState,
+            bodyEditorState,
+            imageEditorState,
+            isInline,
+            articleCategory
+        } = this.state;
+        const titleRaw = this.getRaw(titleEditorState);
+        const titleText = titleRaw.blocks[0].text;
+        const descriptionRaw = this.getRaw(descriptionEditorState);
+        const descriptionText = descriptionRaw.blocks[0].text;
+        const bodyRaw = this.getRaw(bodyEditorState);
+        // there should be validation here but I am skipping this for now
         const articleObject = {
-            title: title,
-            description: description,
+            titleText: titleText,
+            titleRaw: JSON.stringify(titleRaw),
+            descriptionText: descriptionText,
+            descriptionRaw: JSON.stringify(descriptionRaw),
+            image: JSON.stringify(imageEditorState),
+            bodyRaw: JSON.stringify(bodyRaw),
             category: articleCategory,
-            text: stringifiedRaw,
-            image: image
-        }
+            isInline: isInline
+        };
+        // articleObject, post_id, oldCategory, newCategory, token
         if (this.props.isNewArticle) {
             this.props.createPost(articleObject, this.props.currentUser_id, this.props.token);
         } else {
             this.props.editPost(
                 articleObject, 
-                this.props.article_id,
-                this.props.articles[this.props.article_id].category,
+                this.props.article_id, 
+                this.article.category, 
                 articleCategory,
                 this.props.token
             );
         }
     }
 
-    // handleSubmit() {
-    //     const { 
-    //         editorState, 
-    //         articleTitle, 
-    //         articleDescription, 
-    //         articleCategory,
-    //         articleImage    
-    //     } = this.state;
-    //     if (!articleTitle || !articleDescription || !articleCategory || !this.image) {
-    //         console.log('Please fill out all fields');
-    //         return;
-    //     }
-    //     const currentContent = editorState.getCurrentContent();
-    //     const raw = convertToRaw(currentContent);
-    //     const stringifiedRaw = JSON.stringify(raw);
-    //     const form = new FormData();
-    //     form.append('title', articleTitle);
-    //     form.append('description', articleDescription);
-    //     form.append('category', articleCategory);
-    //     form.append('text', stringifiedRaw);
-    //     form.append('image', this.image);
-    //     if (this.props.isNewArticle) {
-    //         this.props.createPost(form, this.props.currentUser_id, this.props.token);
-    //     } else {
-    //         this.props.editPost(
-    //             form, 
-    //             this.props.article_id,
-    //             this.props.articles[this.props.article_id].category,
-    //             articleCategory,
-    //             this.props.token
-    //         );
-    //     }
-    // }
-
     render() {
         return (
-            <ArticleEditor 
-                editorState={this.state.editorState}
-                onChange={this.onChange}
-                setEditorRef={this.setEditorRef}
-                customBlockStyles={this.customBlockStyles}
-                handleKeyCommand={this.handleKeyCommand}
-                toggleInlineStyle={this.toggleInlineStyle}
-                toggleCode={this.toggleCode}
-                changeBlockType={this.changeBlockType}
-                createLinkEntity={this.createLinkEntity}
-                handleSubmit={this.handleSubmit}
-                articleCategory={this.state.articleCategory}
-                handleCategoryUpdate={this.handleFieldUpdate('articleCategory')}
-                focusEditor={this.focusEditor}
-                addImageBlock={this.addImageBlock}
-                blockRendererFn={this.blockRendererFn}
-                logRaw={this.logRaw}
-                handleReturn={this.handleReturn}
-                getEditorState={this.getEditorState}
-                createLinkEntity={this.createLinkEntity}
-            />
+            <div>
+                <LayoutButtonsContainer>
+                    <LayoutButton
+                        onClick={this.makeSingleColumn}
+                        isActive={this.state.isInline === false}
+                    >
+                        Single Column
+                    </LayoutButton>
+                    <LayoutButton
+                        onClick={this.makeInline}
+                        isActive={this.state.isInline === true}
+                    >
+                        Inline
+                    </LayoutButton>
+                </LayoutButtonsContainer>
+                <ArticleCategoryEditor 
+                    editorState={this.state.articleCategory}
+                    updateEditorState={this.updateCategory}
+                />
+                <ArticleLayoutContainer isInlineLayout={this.state.isInline}>
+                    <TitleAndDescriptionContainer>
+                        <AuthorBlock user_id={this.props.currentUser_id} />
+                        <ArticleTitleEditor 
+                            isNewArticle={this.props.isNewArticle} 
+                            updateEditorState={this.updateTitle}
+                            editorState={this.state.titleEditorState}
+                        />
+                        <ArticleDescriptionEditor 
+                            isNewArticle={this.props.isNewArticle} 
+                            updateEditorState={this.updateDescription}
+                            editorState={this.state.descriptionEditorState}
+                        />
+                        {
+                            !this.props.isNewArticle && 
+                            <KudosStatsContainer>
+                                <KudosStat><span>{this.article.kudos}</span> Kudos</KudosStat>
+                            </KudosStatsContainer>
+                        }
+                    </TitleAndDescriptionContainer>
+                    <ArticleImageEditor 
+                        isNewArticle={this.props.isNewArticle}
+                        updateEditorState={this.updateImage}
+                        editorState={this.state.imageEditorState}
+                    />
+                </ArticleLayoutContainer>
+                <ArticleBodyEditor 
+                    isNewArticle={this.props.isNewArticle}
+                    updateEditorState={this.updateBody}
+                    editorState={this.state.bodyEditorState}
+                    handleSubmit={this.handleSubmit}
+                />
+            </div>
         );
     }
 }
 
-ArticleEditorContainer.propTypes = {
-    article_id: PropTypes.string,
-    isNewArticle: PropTypes.bool.isRequired
-}
-
 const mapStateToProps = state => ({
-    articles: state.posts.models,
+    token: state.currentUser.token,
     currentUser_id: state.currentUser._id,
-    token: state.currentUser.token
+    articles: state.posts.models
 });
 
 export default connect(
-    mapStateToProps, 
+    mapStateToProps,
     {
         createPost: ActionCreators.createPost,
         editPost: ActionCreators.editPost

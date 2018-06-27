@@ -39,7 +39,7 @@ const Image = styled.img`
     transition: opacity ease 0.5s;
 `;
 
-class ImageBlock extends Component {
+class ImageDisplayBlock extends Component {
     constructor(props) {
         super(props);
         this.detectScrolled = this.detectScrolled.bind(this);
@@ -106,4 +106,4 @@ class ImageBlock extends Component {
     }
 }
 
-export default ImageBlock;
+export default ImageDisplayBlock;

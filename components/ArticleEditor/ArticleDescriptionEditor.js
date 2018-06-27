@@ -73,25 +73,11 @@ export class ArticleDescriptionEditorContainer extends Component {
     constructor(props) {
         super(props);
         this.setEditorRef = ref => this.domEditor = ref;
-        // let initialEditorState;
-        // if (this.props.article_id) {
-        //     const thisArticle = this.props.articles[this.props.article_id];
-        //     initialEditorState = convertFromRaw(thisArticle.text);
-        // } else {
-        //     initialEditorState = emptyContentState;
-        // }
-        // this.state = {
-        //     editorState: EditorState.createWithContent(initialEditorState)
-        // };
-        // this.onChange = (editorState) => {
-        //     this.setState({ editorState });
-        // }
         this.onChange = (editorState) => {
             this.props.updateEditorState(editorState);
         }
         this.focusEditor = this.focusEditor.bind(this);
         this.handleKeyCommand = this.handleKeyCommand.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
         this.clearEditor = this.clearEditor.bind(this);
         this.handleReturn = this.handleReturn.bind(this);
     }
@@ -116,7 +102,6 @@ export class ArticleDescriptionEditorContainer extends Component {
     }
 
     handleKeyCommand(command) {
-        //const { editorState } = this.state;
         const { editorState } = this.props;
         if (command === 'backspace') {
             const currentContent = editorState.getCurrentContent();
@@ -128,7 +113,6 @@ export class ArticleDescriptionEditorContainer extends Component {
         }
         const newState = RichUtils.handleKeyCommand(editorState, command);
         if (newState) {
-            //this.setState({ editorState: newState });
             this.onChange(newState);
             return true;
         }
@@ -143,43 +127,6 @@ export class ArticleDescriptionEditorContainer extends Component {
         }
     }
 
-    handleSubmit() {
-        const { editorState, articleCategory } = this.state;
-        const currentContent = editorState.getCurrentContent();
-        const raw = convertToRaw(currentContent);
-        const title = raw.blocks.find(block => block.type === 'header-one').text;
-        const description = raw.blocks.find(block => block.type === 'header-two').text;
-        let image;
-        for (const key in raw.entityMap) {
-            if (raw.entityMap[key].type === 'IMAGE') {
-                image = raw.entityMap[key].data.images.card.imageUrl;
-            }
-        }
-        if (!title || !description || !articleCategory || !image) {
-            console.log("this did not pass validation");
-            return;
-        }
-        const stringifiedRaw = JSON.stringify(raw);
-        const articleObject = {
-            title: title,
-            description: description,
-            category: articleCategory,
-            text: stringifiedRaw,
-            image: image
-        }
-        if (this.props.isNewArticle) {
-            this.props.createPost(articleObject, this.props.currentUser_id, this.props.token);
-        } else {
-            this.props.editPost(
-                articleObject, 
-                this.props.article_id,
-                this.props.articles[this.props.article_id].category,
-                articleCategory,
-                this.props.token
-            );
-        }
-    }
-
     render() {
         return (
             <ArticleDescriptionEditor 
@@ -188,9 +135,7 @@ export class ArticleDescriptionEditorContainer extends Component {
                 setEditorRef={this.setEditorRef}
                 customBlockStyles={this.customBlockStyles}
                 handleKeyCommand={this.handleKeyCommand}
-                handleSubmit={this.handleSubmit}
                 focusEditor={this.focusEditor}
-                logRaw={this.logRaw}
                 handleReturn={this.handleReturn}
             />
         );

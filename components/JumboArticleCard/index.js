@@ -5,13 +5,14 @@ import JumboArticleCard from './JumboArticleCard';
 export const JumboArticleCardContainer = props => {
     const article = props.articles[props.article_id];
     const author = props.users[article.author];
+    const articleImage = article.image.original.imageUrl;
 
     return <JumboArticleCard 
         article_id={article._id}
-        articleImage={article.image}
+        articleImage={articleImage}
         articleCategory={article.category}
-        articleTitle={article.title}
-        articleDescription={article.description}
+        articleTitle={article.titleText}
+        articleDescription={article.descriptionText}
         authorUsername={author.username}
         author_id={author._id}
         authorAvatar={author.avatar}
