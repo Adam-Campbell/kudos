@@ -11,25 +11,69 @@ injectGlobal`
         background-color: snow;
     }
     .DraftEditor-root {
-        padding: 16px;
+        padding: 0;
+        figure {
+            margin-left: auto;
+            margin-right: auto;
+        }
     }
     .public-DraftEditorPlaceholder-root {
         color: #aaa;
         font-family: ${styleConstants.fontSecondary};
         font-size: 16px;
         font-weight: 400;
-        margin-bottom: -16px;
+        position: absolute;
+        max-width: 100%; 
+        width: 100%;
+    }
+    #placeholder-articleTitleEditor {
+        font-family: ${styleConstants.fontPrimary};
+        font-weight: 700;
+        font-size: 36px;
+        color: #aaa;
+        margin: 0; 
+        max-width: 100%;
+    }
+    #placeholder-articleDescriptionEditor {
+        font-family: ${styleConstants.fontSecondary};
+        font-weight: 400;
+        font-size: 24px;
+        color: #aaa;
+        margin: 0;
+        max-width: 100%;
+    }
+    #placeholder-articleEditor {
+        padding: 16px;
+        max-width: 832px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 16px;
+    }
+    .article-editor__h1 {
+        font-family: ${styleConstants.fontPrimary};
+        font-weight: 700;
+        font-size: 36px;
+        color: ${styleConstants.colorBodyText};
+        margin: 0;
+    }
+    .article-editor__h2 {
+        font-family: ${styleConstants.fontSecondary};
+        font-weight: 400;
+        font-size: 24px;
+        color: ${styleConstants.colorBodyText};
+        margin-top: 8px;
+        margin-bottom: 8px;
     }
     .comment-editor__h1 {
-        font-family: ${styleConstants.fontSecondary};
+        font-family: ${styleConstants.fontPrimary};
         font-weight: 700;
-        font-size: 48px;
+        font-size: 36px;
         color: ${styleConstants.colorBodyText};
     }
     .comment-editor__h2 {
         font-family: ${styleConstants.fontSecondary};
-        font-weight: 700;
-        font-size: 32px;
+        font-weight: 400;
+        font-size: 24px;
         color: ${styleConstants.colorBodyText};
     }
     .comment-editor__h3 {
@@ -48,6 +92,10 @@ injectGlobal`
         color: ${styleConstants.colorBodyText};
         line-height: 1.4;
     }
+    .comment-editor__unstyled {
+        margin-top: 16px;
+        margin-bottom: 16px;
+    }
     .comment-editor__paragraph {
         color: blue;
     }
@@ -61,12 +109,33 @@ injectGlobal`
         padding-left: 16px; 
         margin: 32px 16px;
     }
+    .article-editor__block-quote {
+        font-family: ${styleConstants.fontPrimary};
+        font-style: italic;
+        font-size: 20px;
+        color: ${styleConstants.colorBodyText};
+        font-weight: bold; 
+    }
     .comment-editor__code-block {
         font-family: ${styleConstants.fontCode};
         color: snow;
         background-color: transparent;
         padding: 0;
         white-space: normal;
+    }
+    .article__isolated-title {
+        font-family: ${styleConstants.fontPrimary};
+        color: ${styleConstants.colorBodyText};
+        margin-top: 8px;
+        margin-bottom: 8px;
+    }
+    .article__isolated-description {
+        font-family: ${styleConstants.fontSecondary};
+        font-weight: 300;
+        font-size: 16px;
+        color: ${styleConstants.colorBodyText};
+        margin-top: 0;
+        margin-bottom: 16px;
     }
 `;
 

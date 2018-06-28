@@ -1,5 +1,6 @@
 import * as actionTypes from '../actionTypes';
 import fetch from 'isomorphic-fetch';
+import { rootApiUrl } from '../globalConstants';  
 import { sortComments } from '../utils';
 
 const replyToPostRequest = () => ({
@@ -21,7 +22,6 @@ const replyToPostFailed = () => ({
 
 export const replyToPost = (commentText, post_id, token) => async (dispatch, getState) => {
     dispatch(replyToPostRequest());
-    const serializedCommentText = JSON.stringify(commentText);
     const settings = {
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -29,11 +29,11 @@ export const replyToPost = (commentText, post_id, token) => async (dispatch, get
         },
         method: 'post',
         body: JSON.stringify({
-            text: serializedCommentText
+            text: commentText
         })
     };
     try {
-        const commentReq = await fetch(`http://localhost:5000/api/posts/${post_id}/comments`, settings);
+        const commentReq = await fetch(`${rootApiUrl}/api/posts/${post_id}/comments`, settings);
         if (!commentReq.ok) {
             return dispatch(replyToPostFailed());
         }
@@ -41,7 +41,6 @@ export const replyToPost = (commentText, post_id, token) => async (dispatch, get
 
         // We need to re-sort the comments before handing them back to the reducer, this ensures the commment we
         // just added appears in the right place. 
-        commentObject.text = JSON.parse(commentObject.text);
         const currentState = getState();
         const parentPost_id = commentObject.discussion;
         const existingComments = currentState.posts.models[parentPost_id].commentIds.map(comment_id => {
@@ -80,7 +79,6 @@ const replyToCommentFailed = () => ({
 
 export const replyToComment = (commentText, parentComment_id, token) => async (dispatch, getState) => {
     dispatch(replyToCommentRequest());
-    const serializedCommentText = JSON.stringify(commentText);
     const settings = {
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -88,16 +86,15 @@ export const replyToComment = (commentText, parentComment_id, token) => async (d
         },
         method: 'post',
         body: JSON.stringify({
-            text: serializedCommentText
+            text: commentText
         })
     };
     try {
-        const commentReq = await fetch(`http://localhost:5000/api/comments/${parentComment_id}`, settings);
+        const commentReq = await fetch(`${rootApiUrl}/api/comments/${parentComment_id}`, settings);
         if (!commentReq.ok) {
             return dispatch(replyToCommentFailed());
         }
         const commentObject = await commentReq.json();
-        commentObject.text = JSON.parse(commentObject.text);
         // We need to re-sort the comments before handing them back to the reducer, this ensures the commment we
         // just added appears in the right place. 
         const currentState = getState();
@@ -106,7 +103,6 @@ export const replyToComment = (commentText, parentComment_id, token) => async (d
             return currentState.comments[comment_id]
         });
         const sortedComments = sortComments([...existingComments, {...commentObject}]);
-        
         dispatch(replyToCommentSuccess(
             commentObject, 
             commentObject._id,
@@ -143,7 +139,7 @@ export const deleteComment = (comment_id, currentUser_id, token) => async dispat
         method: 'delete',
     };
     try {
-        const deleteCommentReq = await fetch(`http://localhost:5000/api/comments/${comment_id}`, settings);
+        const deleteCommentReq = await fetch(`${rootApiUrl}/api/comments/${comment_id}`, settings);
         if (!deleteCommentReq.ok) {
             return dispatch(deleteCommentFailed());
         }
@@ -170,7 +166,6 @@ const editCommentFailed = () => ({
 
 export const editComment = (commentText, comment_id, token) => async dispatch => {
     dispatch(editCommentRequest());
-    const serializedCommentText = JSON.stringify(commentText);
     const settings = {
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -178,16 +173,15 @@ export const editComment = (commentText, comment_id, token) => async dispatch =>
         },
         method: 'PUT',
         body: JSON.stringify({
-            text: serializedCommentText
+            text: commentText
         })
     };
     try {
-        const editCommentReq = await fetch(`http://localhost:5000/api/comments/${comment_id}`, settings);
+        const editCommentReq = await fetch(`${rootApiUrl}/api/comments/${comment_id}`, settings);
         if (!editCommentReq.ok) {
             return dispatch(editCommentFailed());
         }
         const updatedComment = await editCommentReq.json();
-        updatedComment.text = JSON.parse(updatedComment.text);
         updatedComment.author = updatedComment.author._id;
         dispatch(editCommentSuccess(updatedComment, updatedComment._id));
     } catch (err) {

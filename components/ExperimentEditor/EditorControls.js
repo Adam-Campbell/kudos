@@ -7,12 +7,12 @@ import {
     UnderlineIcon,
     StrikethroughIcon,
     SuperscriptIcon,
-    TitleIcon,
     UnorderedListIcon,
     OrderedListIcon,
     BlockQuoteIcon,
     CodeIcon, 
-    LinkIcon 
+    LinkIcon,
+    TitleIcon
 } from '../EditorIcons';
 import ControlButton from './ControlButton';
 
@@ -36,11 +36,6 @@ const SubmitButton = styled.button`
     margin-top: 4px;
     margin-bottom: 4px;
     cursor: pointer;
-`;
-
-const CancelButton = SubmitButton.extend`
-    background-color: ${styleConstants.colorWarning};
-    margin-right: 8px;
 `;
 
 const LinkMenuContainer = styled.div`
@@ -142,6 +137,12 @@ const BlockStyleControls = props => {
     return (
         <React.Fragment>
             <ControlButton
+                onMouseDown={props.changeBlockType('header-one')}
+                isActive={blockType === 'header-one'}
+            >
+                <TitleIcon />
+            </ControlButton>
+            <ControlButton
                 onMouseDown={props.changeBlockType('header-two')}
                 isActive={blockType === 'header-two'}
             >
@@ -214,8 +215,19 @@ const EditorControls = props => (
         >
             <LinkIcon />
         </ControlButton>
+        <ControlButton
+            onMouseDown={props.addImageBlock}
+            isActive={false}
+        >
+            Add Image    
+        </ControlButton>
+        <ControlButton
+            onMouseDown={props.logRaw}
+            isActive={false}
+        >
+            Log Raw
+        </ControlButton>
         <div>
-        {props.isCancellable && <CancelButton onMouseDown={props.handleCancel}>Cancel</CancelButton>}
         <SubmitButton onMouseDown={props.handleSubmit}>Submit</SubmitButton>
         </div>
     </ControlsContainer>
@@ -231,9 +243,7 @@ EditorControls.propTypes = {
     updateLinkUrl: PropTypes.func.isRequired,
     toggleLinkMenu: PropTypes.func.isRequired,
     createLink: PropTypes.func.isRequired,
-    isCancellable: PropTypes.bool.isRequired,
     handleSubmit: PropTypes.func.isRequired,
-    handleCancel: PropTypes.func
 };
 
 export default EditorControls;

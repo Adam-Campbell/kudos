@@ -1,96 +1,17 @@
-import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import * as styleConstants from '../styleConstants';
+import ArticleTitleDisplay from './ArticleTitleDisplay';
+import ArticleDescriptionDisplay from './ArticleDescriptionDisplay';
+import ArticleFeatureImageDisplay from './ArticleFeatureImageDisplay';
+import ArticleBodyDisplay from './ArticleBodyDisplay';
 import AuthorBlock from '../AuthorBlock';
-import { Wrapper } from '../Layout';
-import Comment from '../Comment';
+import KudosButton from '../KudosButton';
 import { AnchorButton } from '../Button';
 import Link from 'next/link';
-import KudosButton from '../KudosButton';
 import ArticleCommentBoxContainer from './ArticleCommentBoxContainer';
-
-const ArticleOuter = styled.article`
-
-`;
-
-const ArticleIntroContainer = styled.div`
-    padding: 8px 16px;
-    margin-left: auto;
-    margin-right: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 800px;
-`;
-
-const ArticleHeader = styled.header`
-    width: 100%;
-`;
-
-const ArticleTitle = styled.h1`
-    font-family: ${styleConstants.fontPrimary};
-    font-size: 32px;
-    color: ${styleConstants.colorBodyText};
-`;
-
-const ArticleDescription = styled.p`
-    font-family: ${styleConstants.fontSecondary};
-    font-weight: 400;
-    font-size: 20px;
-    color: ${styleConstants.colorBodyText};
-`;
-
-const ArticleFigure = styled.figure`
-    margin: 0;
-    width: 100%;
-`;
-
-const ArticleImage = styled.div`
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-image: ${props => `url('${props.imageUrl}')`};
-    width: 100%;
-    padding-bottom: 50%;
-`;
-
-const ArticleImageCaption = styled.figcaption`
-    text-align: center;
-    font-family: ${styleConstants.fontSecondary};
-    font-size: 14px;
-    font-weight: 400;
-    color: ${styleConstants.colorBodyText};
-    margin-top: 8px;
-`;
-
-const ArticleParagraph = styled.p`
-    font-family: ${styleConstants.fontSecondary};
-    color: ${styleConstants.colorBodyText};
-    font-weight: 300;
-    line-height: 1.4;
-    margin-top: 20px;
-    margin-bottom: 20px;
-`;
-
-const ArticleQuote = styled.blockquote`
-    color: ${styleConstants.colorBodyText};
-    border-left: solid 2px;
-    font-family: ${styleConstants.fontSecondary};
-    font-weight: 400;
-    font-size: 20px;
-    padding: 8px 16px;
-    margin-top: 32px;
-    margin-bottom: 32px;
-`;
-
-const ArticleQuoteText = styled.p`
-    margin: 0;
-    line-height: 1.6;
-`;
-
-const EditArticleButton = styled(AnchorButton)`
-    margin-bottom: 16px;
-`;
+import { Wrapper } from '../Layout';
+import Comment from '../Comment';
 
 const KudosStatsContainer = styled.div`
     display: flex;
@@ -112,62 +33,88 @@ const KudosStat = styled.p`
     }
 `;
 
+const EditArticleButton = styled(AnchorButton)`
+    margin-bottom: 16px;
+    display: inline-block;
+`;
+
+const EditArticleButtonContainer = styled.div`
+    text-align: center;
+    padding: 16px;
+`;
+
+const ArticleLayoutContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+    @media(min-width: 768px) {
+        flex-direction: ${props => props.isInlineLayout ? 'row' : 'column'};
+        padding-right: ${props => props.isInlineLayout ? '16px' : '0'};
+        align-items: ${props => props.isInlineLayout ? 'center' : 'stretch'};
+        max-width: ${props => props.isInlineLayout ? '1400px' : '100%'};
+    }
+`;
+
+const TitleAndDescriptionContainer = styled.div`
+    width: 100%;
+    max-width: 832px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 16px;
+`;
+
+/*
+Need:
+ArticleLayoutContainer
+TitleAndDescriptionContainer
+
+*/
+
+
 const Article = props => (
-    <ArticleOuter>
-        <ArticleIntroContainer tight>
-            {props.isAuthor && <Link 
-                        passHref 
-                        as={`/edit-post/${props.article_id}`} 
-                        href={`/edit-post?post=${props.article_id}`}
-                    >
+    <div>
+        {props.isAuthor && 
+            <EditArticleButtonContainer>
+                <Link 
+                    passHref 
+                    as={`/edit-post/${props.article_id}`} 
+                    href={`/edit-post?post=${props.article_id}`}
+                >
                     <EditArticleButton>Edit this article</EditArticleButton>
                 </Link>
-            }
-            <AuthorBlock article_id={props.article_id} />
-            <ArticleHeader>
-                <ArticleTitle>{props.articleTitle}</ArticleTitle>
-                <ArticleDescription>{props.articleDescription}</ArticleDescription>
+            </EditArticleButtonContainer>
+        }
+        <ArticleLayoutContainer isInlineLayout={props.isInline}>
+            <TitleAndDescriptionContainer>
+                <AuthorBlock user_id={props.author_id} />
+                <ArticleTitleDisplay article_id={props.article_id} />
+                <ArticleDescriptionDisplay article_id={props.article_id} />
                 <KudosStatsContainer>
                     <KudosStat><span>{props.articleKudos}</span> Kudos</KudosStat>
                     <KudosButton article_id={props.article_id} />
                 </KudosStatsContainer>
-            </ArticleHeader>
-        </ArticleIntroContainer>
-        <section>
-            <Wrapper wide>
-                <ArticleFigure>
-                    <ArticleImage imageUrl={props.articleImage}/>
-                    <ArticleImageCaption>I haven't added these yet...</ArticleImageCaption>
-                </ArticleFigure>
-            </Wrapper>
-            <Wrapper tight>
-                <ArticleParagraph>{props.articleText}</ArticleParagraph>
-                <ArticleQuote>
-                    <ArticleQuoteText>“This is where my inspirational quotes would go IF I HAD ANY”</ArticleQuoteText>
-                </ArticleQuote>
-            </Wrapper>
-        </section>
-        <section>
-            <Wrapper tight>
-                {props.isLoggedIn && <ArticleCommentBoxContainer article_id={props.article_id}/>}
-                {props.commentIds.map(comment_id => (
+            </TitleAndDescriptionContainer>
+            <ArticleFeatureImageDisplay article_id={props.article_id} />
+        </ArticleLayoutContainer>
+        <ArticleBodyDisplay article_id={props.article_id} />
+        <Wrapper tight>
+            {props.isLoggedIn && <ArticleCommentBoxContainer article_id={props.article_id}/>}
+            {props.commentIds.map(comment_id => (
                     <Comment comment_id={comment_id} key={comment_id} />
                 ))}
-            </Wrapper>
-        </section>
-    </ArticleOuter>
+        </Wrapper>
+    </div>
 );
 
 Article.propTypes = {
     article_id: PropTypes.string.isRequired,
-    articleTitle: PropTypes.string.isRequired,
-    articleDescription: PropTypes.string.isRequired,
-    articleImage: PropTypes.string.isRequired,
-    articleText: PropTypes.string.isRequired,
+    author_id: PropTypes.string.isRequired,
     articleKudos: PropTypes.number.isRequired,
+    isInline: PropTypes.bool.isRequired,
     commentIds: PropTypes.arrayOf(PropTypes.string),
     isLoggedIn: PropTypes.bool.isRequired,
-    isAuthor: PropTypes.bool.isRequired,
-}
+    isAuthor: PropTypes.bool.isRequired
+};
 
 export default Article;

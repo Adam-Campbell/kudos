@@ -43,7 +43,7 @@ export class OwnCommentContainer extends Component {
     handleDelete(e) {
         e.preventDefault();
         this.props.deleteComment(
-            this.props._id,
+            this.props.comment_id,
             this.props.currentUser_id,
             this.props.token
         );

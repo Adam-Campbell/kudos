@@ -15,7 +15,8 @@ class CommentContainer extends Component {
     }
 
     boundReplyToComment(commentText) {
-        this.props.replyToComment(commentText, this.props.comment_id, this.props.token);
+        this.props.replyToComment(commentText, this.props.comment_id, this.props.token)
+        .then(() => this.toggleReplyForm());
     }
 
     toggleReplyForm() {

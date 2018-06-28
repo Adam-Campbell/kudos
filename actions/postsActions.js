@@ -1,5 +1,6 @@
 import * as actionTypes from '../actionTypes';
 import fetch from 'isomorphic-fetch';
+import { rootApiUrl } from '../globalConstants';
 import { handleNormalize, sortComments, objectToArray } from '../utils';
 import Router from 'next/router';
 
@@ -23,7 +24,7 @@ const fetchPostsFailed = err => ({
 export const fetchPosts = () => async dispatch => {
     dispatch(fetchPostsRequest());
     try {
-        const posts = await fetch('http://localhost:5000/api/posts');
+        const posts = await fetch(`${rootApiUrl}/api/posts`);
         const postsJSON = await posts.json();
         dispatch(
             fetchPostsSuccess(handleNormalize(postsJSON, 'posts'), Date.now())
@@ -51,7 +52,7 @@ const fetchCategoriesPostsFailed = () => ({
 export const fetchCategoriesPosts = category => async dispatch => {
     dispatch(fetchCategoriesPostsRequest());
     try {
-        const posts = await fetch(`http://localhost:5000/api/posts?category=${category}`);
+        const posts = await fetch(`${rootApiUrl}/api/posts?category=${category}`);
         const postsJSON = await posts.json();
         dispatch(
             fetchCategoriesPostsSuccess(handleNormalize(postsJSON, 'posts'), category, Date.now())
@@ -63,7 +64,7 @@ export const fetchCategoriesPosts = category => async dispatch => {
 
 const fetchPostInfo = async _id => {
     try {
-        const postInfo = await fetch(`http://localhost:5000/api/posts/${_id}`);
+        const postInfo = await fetch(`${rootApiUrl}/api/posts/${_id}`);
         if (!postInfo.ok) {
             return Promise.reject();
         }
@@ -76,7 +77,7 @@ const fetchPostInfo = async _id => {
 
 const fetchPostComments = async _id => {
     try {
-        const comments = await fetch(`http://localhost:5000/api/posts/${_id}/comments`);
+        const comments = await fetch(`${rootApiUrl}/api/posts/${_id}/comments`);
         if (!comments.ok) {
             return Promise.reject();
         }
@@ -89,7 +90,7 @@ const fetchPostComments = async _id => {
 
 const fetchPostKudos = async _id => {
     try {
-        const kudos = await fetch(`http://localhost:5000/api/posts/${_id}/kudos`);
+        const kudos = await fetch(`${rootApiUrl}/api/posts/${_id}/kudos`);
         if (!kudos.ok) {
             return Promise.reject();
         }
@@ -167,22 +168,24 @@ const createPostFailed = () => ({
 });
 
 
-export const createPost = (formData, currentUser_id, token) => async dispatch => {
+export const createPost = (articleObject, currentUser_id, token) => async dispatch => {
     dispatch(createPostRequest());
     const settings = {
         headers: {
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
         },
         method: 'post',
-        body: formData
+        body: JSON.stringify(articleObject)
     }
     try {
-        const createPostReq = await fetch('http://localhost:5000/api/posts', settings);
+        const createPostReq = await fetch(`${rootApiUrl}/api/posts`, settings);
         if (!createPostReq.ok) {
             return dispatch(createPostFailed());
         }
         const postJSON = await createPostReq.json();
         const newPost_id = postJSON._id;
+        //postJSON.text = JSON.parse(postJSON.text);
         const newPostCategory = postJSON.category;
         dispatch(createPostSuccess(postJSON, currentUser_id, newPostCategory, newPost_id));
         Router.push(`/post?post=${newPost_id}`, `/post/${newPost_id}`);
@@ -215,22 +218,24 @@ const editPostFailed = () => ({
 
 
 
-export const editPost = (formData, post_id, oldCategory, newCategory, token) => async dispatch => {
+export const editPost = (articleObject, post_id, oldCategory, newCategory, token) => async dispatch => {
     dispatch(editPostRequest());
     const settings = {
         headers: {
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
         },
         method: 'PUT',
-        body: formData
+        body: JSON.stringify(articleObject)
     }
     try {
-        const editPostReq = await fetch(`http://localhost:5000/api/posts/${post_id}`, settings);
+        const editPostReq = await fetch(`${rootApiUrl}/api/posts/${post_id}`, settings);
         if (!editPostReq.ok) {
             return dispatch(editPostFailed());
         }
         const editedPostJSON = await editPostReq.json();
         editedPostJSON.author = editedPostJSON.author._id;
+        //editedPostJSON.text = JSON.parse(editedPostJSON.text);
         const editedPost_id = editedPostJSON._id;
         dispatch(editPostSuccess(editedPostJSON, post_id));
         if (oldCategory !== newCategory) {

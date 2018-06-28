@@ -1,6 +1,7 @@
 import * as actionTypes from '../actionTypes';
 import fetch from 'isomorphic-fetch';
 import Router from 'next/router';
+import { rootApiUrl } from '../globalConstants';
 import { fetchCurrentUser } from './currentUserActions';
 import { emailNotFoundErrorRegister } from './errorActions';
 import { passwordResetEmailSentRegister } from './successActions';
@@ -32,7 +33,7 @@ const makeSignInRequest = async (username, password, dispatch) => {
         })
     };
     try {
-        const token = await fetch('http://localhost:5000/auth/signin', settings);
+        const token = await fetch(`${rootApiUrl}/auth/signin`, settings);
         if (!token.ok) {
             dispatch(signInFailed(token.status));
             return Promise.reject();
@@ -93,7 +94,7 @@ const makeSignUpRequest = async (username, email, password, dispatch) => {
         })
     };
     try {
-        const token = await fetch('http://localhost:5000/api/users', settings);
+        const token = await fetch(`${rootApiUrl}/api/users`, settings);
         if (!token.ok) {
             const error = await token.text();
             return Promise.reject(error);
@@ -150,7 +151,7 @@ export const getPasswordResetEmail = email => async dispatch => {
         })
     };
     try {
-        const emailReq = await fetch('http://localhost:5000/auth/forgot', settings);
+        const emailReq = await fetch(`${rootApiUrl}/auth/forgot`, settings);
         if (!emailReq.ok) {
             const httpStatusCode = emailReq.status;
             const errorMessage = await emailReq.text();
@@ -196,7 +197,7 @@ export const setNewPassword = (password, resetPasswordToken) => async dispatch =
         })
     }; 
     try {
-        const newPasswordReq = await fetch(`http://localhost:5000/auth/reset/${resetPasswordToken}`, settings);
+        const newPasswordReq = await fetch(`${rootApiUrl}/auth/reset/${resetPasswordToken}`, settings);
         if (!newPasswordReq.ok) {
             const httpStatusCode = newPasswordReq.status;
             const errorMessage = await newPasswordReq.text();
