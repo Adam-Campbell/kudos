@@ -62,15 +62,17 @@ class AddImageButtonContainer extends Component {
         this.checkForFile = this.checkForFile.bind(this);
         this.uploadImage = this.uploadImage.bind(this);
         this.state = {
-
+            isUploading: false
         };
     }
 
-    checkForFile(e) {
+    async checkForFile(e) {
         e.preventDefault();
         const imageFile = this.imageFileInput.current.files[0];
         if (imageFile) {
-            this.uploadImage(imageFile);
+            this.setState({ isUploading: true });
+            await this.uploadImage(imageFile);
+            this.setState({ isUploading: false });
         }
     }
 

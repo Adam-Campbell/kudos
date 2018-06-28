@@ -15,24 +15,11 @@ highlights - an array of highlights
 
 */
 
-const deserializeComment = comment => ({
-    ...comment,
-    text: JSON.parse(comment.text)
-});
-
-const deserializePost = post => ({
-    ...post,
-    titleRaw: JSON.parse(post.titleRaw),
-    descriptionRaw: JSON.parse(post.descriptionRaw),
-    bodyRaw: JSON.parse(post.bodyRaw),
-    image: JSON.parse(post.image)
-});
-
 
 //const user = new schema.Entity('users', {}, {idAttribute: '_id', processStrategy: decorateUser});
 const user = new schema.Entity('users', {}, {idAttribute: '_id'});
-const post = new schema.Entity('posts', {author: user}, {idAttribute: '_id', processStrategy: deserializePost});
-const comment = new schema.Entity('comments', {author: user}, {idAttribute: '_id', processStrategy: deserializeComment});
+const post = new schema.Entity('posts', {author: user}, {idAttribute: '_id'});
+const comment = new schema.Entity('comments', {author: user}, {idAttribute: '_id'});
 const aKudos = new schema.Entity('kudos', {post: post}, {idAttribute: '_id'});
 const highlight = new schema.Entity('highlights', {post: post, user: user}, {idAttribute: '_id'});
 const posts = [ post ];

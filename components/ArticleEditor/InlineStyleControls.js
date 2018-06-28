@@ -324,6 +324,8 @@ class InlineStyleControlsContainer extends Component {
     }
 
     handleResize(e) {
+        if (!window.getSelection().rangeCount) return;
+        console.log("didn't return early");
         const selectionRect = window.getSelection().getRangeAt(0).getBoundingClientRect();
         const newTopOffset = this.calculateTopOffset(selectionRect);
         const newLeftOffset = this.calculateLeftOffset(selectionRect);

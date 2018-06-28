@@ -10,8 +10,8 @@ const Container = styled.figure`
     position: relative;
     border: solid #eee 2px;
     overflow: hidden;
-    margin-left: 0;
-    margin-right: 0;
+    margin-left: auto;
+    margin-right: auto;
     max-width: ${props => `${props.maxWidth}px`};
 `;
 

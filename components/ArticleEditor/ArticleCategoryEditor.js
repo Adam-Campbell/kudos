@@ -22,8 +22,8 @@ const ArticleCategoryEditor = props => (
             <Select
                 id="category"
                 name="category"
-                value={props.articleCategory}
-                onChange={props.handleCategoryUpdate}
+                value={props.editorState}
+                onChange={(e) => props.updateEditorState(e.target.value)}
             >
                 <Option value="">Choose One:</Option>
                 <Option value="javascript">JavaScript</Option>

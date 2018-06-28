@@ -198,6 +198,7 @@ class ArticleEditorContainer extends Component {
     }
 
     updateCategory(newCategory) {
+        console.log(newCategory);
         this.setState({ articleCategory: newCategory });
     }
 
@@ -245,15 +246,14 @@ class ArticleEditorContainer extends Component {
         // there should be validation here but I am skipping this for now
         const articleObject = {
             titleText: titleText,
-            titleRaw: JSON.stringify(titleRaw),
+            titleRaw: titleRaw,
             descriptionText: descriptionText,
-            descriptionRaw: JSON.stringify(descriptionRaw),
-            image: JSON.stringify(imageEditorState),
-            bodyRaw: JSON.stringify(bodyRaw),
+            descriptionRaw: descriptionRaw,
+            image: imageEditorState,
+            bodyRaw: bodyRaw,
             category: articleCategory,
             isInline: isInline
         };
-        // articleObject, post_id, oldCategory, newCategory, token
         if (this.props.isNewArticle) {
             this.props.createPost(articleObject, this.props.currentUser_id, this.props.token);
         } else {
