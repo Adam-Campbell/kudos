@@ -53,14 +53,14 @@ const usersReducer = (state=initialState, action) => {
                 }
             }
 
-        case actionTypes.FETCH_CURRENT_USER_SUCCESS:
-            return {
-                ...state,
-                models: {
-                    ...addOrMerge(state.models, action.payload.users),
-                    ...addOrMerge(state.models, action.payload.currentUser, action.key)
-                }
-            }
+        // case actionTypes.FETCH_CURRENT_USER_SUCCESS:
+        //     return {
+        //         ...state,
+        //         models: {
+        //             ...addOrMerge(state.models, action.payload.users),
+        //             ...addOrMerge(state.models, action.payload.currentUser, action.key)
+        //         }
+        //     }
 
         case actionTypes.GIVE_KUDOS_SUCCESS:
             return {
@@ -144,6 +144,30 @@ const usersReducer = (state=initialState, action) => {
                                     []
                     }
                 }
+            }
+
+        case actionTypes.STORE_USERS:
+            return {
+                ...state,
+                models: addOrMerge(state.models, action.payload)
+            }
+
+        case actionTypes.STORE_CURRENT_USER:
+            return {
+                ...state,
+                models: addOrMerge(state.models, action.payload, action.meta.entityKey)
+            }
+
+        case actionTypes.STORE_CURRENT_USERS_HIGHLIGHTS:
+            return {
+                ...state,
+                models: addOrMerge(state.models, {highlightIds: action.payload.result}, action.meta.entityKey)
+            }
+
+        case actionTypes.STORE_CURRENT_USERS_KUDOS:
+            return {
+                ...state,
+                models: addOrMerge(state.models, {kudosIds: action.payload.result}, action.meta.entityKey)
             }
 
         default:

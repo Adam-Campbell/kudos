@@ -10,11 +10,17 @@ const highlightsReducer = (state=initialState, action) => {
                 ...action.payload.highlights
             };
 
-        case actionTypes.FETCH_CURRENT_USER_SUCCESS:
+        // case actionTypes.FETCH_CURRENT_USER_SUCCESS:
+        //     return {
+        //         ...state,
+        //         ...action.payload.highlights
+        //     };
+
+        case actionTypes.STORE_HIGHLIGHTS:
             return {
                 ...state,
-                ...action.payload.highlights
-            };
+                ...action.payload
+            }
 
         default:
             return state;

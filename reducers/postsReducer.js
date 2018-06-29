@@ -44,11 +44,11 @@ const postsReducer = (state=initialState, action) => {
                 models: addOrMerge(state.models, action.payload.posts)
             };
 
-        case actionTypes.FETCH_CURRENT_USER_SUCCESS:
-            return {
-                ...state,
-                models: addOrMerge(state.models, action.payload.posts)
-            }
+        // case actionTypes.FETCH_CURRENT_USER_SUCCESS:
+        //     return {
+        //         ...state,
+        //         models: addOrMerge(state.models, action.payload.posts)
+        //     }
 
         case actionTypes.CREATE_POST_SUCCESS:
             return {
@@ -90,6 +90,12 @@ const postsReducer = (state=initialState, action) => {
                         commentIds: [...action.sortedComments]
                     }
                 }
+            }
+
+        case actionTypes.STORE_POSTS:
+            return {
+                ...state,
+                models: addOrMerge(state.models, action.payload)
             }
 
         default:

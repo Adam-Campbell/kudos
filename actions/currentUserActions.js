@@ -25,61 +25,270 @@ const fetchCurrentUserFailed = err => ({
     payload: err
 });
 
-const fetchCurrentUsersProfile = async (settings) => {
+// const fetchCurrentUsersProfile = async (settings) => {
+//     try {
+//         const currentUsersProfile = await fetch(`${rootApiUrl}/api/me`, settings);
+//         if (!currentUsersProfile.ok) {
+//             return Promise.reject();
+//         }
+//         const currentUsersProfileJSON = await currentUsersProfile.json();
+//         return currentUsersProfileJSON;
+//     } catch (err) {
+//         return Promise.reject(err);  
+//     }
+// }
+
+// const fetchCurrentUsersFollows = async (settings) => {
+//     try {
+//         const currentUsersFollows = await fetch(`${rootApiUrl}/api/me/follows/`, settings);
+//         if (!currentUsersFollows.ok) {
+//             return Promise.reject();
+//         }
+//         const currentUsersFollowsJSON = await currentUsersFollows.json();
+//         return handleNormalize(currentUsersFollowsJSON.follows, 'users');
+//     } catch (err) {
+//         return Promise.reject(err);  
+//     }
+// }
+
+// const fetchCurrentUsersKudos = async (settings) => {
+//     try {
+//         const currentUsersKudos = await fetch(`${rootApiUrl}/api/me/kudos`, settings);
+//         if (!currentUsersKudos.ok) {
+//             return Promise.reject();
+//         }
+//         const currentUsersKudosJSON = await currentUsersKudos.json();
+//         const normalizedKudos = handleNormalize(currentUsersKudosJSON.kudos, 'kudos');
+//         normalizedKudos.result = normalizedKudos.result.map(kudos_id => {
+//             return normalizedKudos.entities.kudos[kudos_id].post
+//         });
+//         return normalizedKudos;
+//     } catch (err) {
+//         return Promise.reject(err);
+//     }
+// }
+
+// const fetchCurrentUsersHighlights = async (settings) => {
+//     try {
+//         const currentUsersHighlights = await fetch(`${rootApiUrl}/api/me/highlights`, settings);
+//         if (!currentUsersHighlights.ok) {
+//             return Promise.reject();
+//         }
+//         const currentUsersHighlightsJSON = await currentUsersHighlights.json();
+//         return handleNormalize(currentUsersHighlightsJSON.highlights, 'highlights');
+//     } catch (err) {
+//         return Promise.reject(err);
+//     }
+// }
+
+// export const fetchCurrentUser = token => async dispatch => {
+//     dispatch(fetchCurrentUserRequest());
+//     const settings = {
+//         headers: {
+//             'Authorization': `Bearer ${token}`
+//         }
+//     };
+//     try {
+//         const currentUserReq = fetchCurrentUsersProfile(settings);
+//         const currentUsersFollowsReq = fetchCurrentUsersFollows(settings);
+//         const currentUsersKudosReq = fetchCurrentUsersKudos(settings);
+//         const currentUsersHighlightsReq = fetchCurrentUsersHighlights(settings);
+
+//         const currentUser = await currentUserReq;
+//         const currentUsersFollows = await currentUsersFollowsReq;
+//         const currentUsersKudos = await currentUsersKudosReq;
+//         console.log(currentUsersKudos);
+//         const currentUsersHighlights = await currentUsersHighlightsReq;
+        
+//         const currentUserObject = { 
+//             ...currentUser,
+//             kudosIds: currentUsersKudos.result,
+//             highlightIds: currentUsersHighlights.result
+//         };
+//         const currentUser_id = currentUserObject._id;
+//         const currentUserEmail = currentUserObject.email;
+//         const users = {
+//             ...currentUsersFollows.entities.users,
+//             ...currentUsersKudos.entities.users,
+//             ...currentUsersHighlights.entities.users
+//         };
+//         const posts = {
+//             ...currentUsersKudos.entities.posts,
+//             ...currentUsersHighlights.entities.posts
+//         };
+//         const highlights = {
+//             ...currentUsersHighlights.entities.highlights
+//         };
+//         delete currentUserObject.email;
+        
+//         dispatch(fetchCurrentUserSuccess(
+//             currentUser_id, 
+//             currentUserObject, 
+//             currentUserEmail,
+//             currentUsersFollows.result,
+//             users,
+//             posts,
+//             highlights
+//         ));
+//     } catch (err) {
+//         dispatch(fetchCurrentUserFailed(err));
+//     }
+// }  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const tempSuccess = () => ({
+    type: 'TEMP_SUCCESS'
+});
+
+
+const storeUsers = (users) => ({
+    type: actionTypes.STORE_USERS,
+    payload: users
+});
+
+const storePosts = (posts) => ({
+    type: actionTypes.STORE_POSTS,
+    payload: posts
+});
+
+const storeHighlights = (highlights) => ({
+    type: actionTypes.STORE_HIGHLIGHTS,
+    payload: highlights
+});
+
+const storeCurrentUser = (currentUser) => ({
+    type: actionTypes.STORE_CURRENT_USER,
+    payload: currentUser,
+    meta: {
+        entityKey: currentUser._id
+    }
+});
+
+const storeCurrentUsersHighlights = (highlightsResults, currentUser_id) => ({
+    type: actionTypes.STORE_CURRENT_USERS_HIGHLIGHTS,
+    payload: {
+        result: highlightsResults
+    },
+    meta: {
+        entityKey: currentUser_id,
+    }
+});
+
+const storeCurrentUsersFollows = (followsResult, currentUser_id) => ({
+    type: actionTypes.STORE_CURRENT_USERS_FOLLOWS,
+    payload: {
+        result: followsResult
+    },
+    meta: {
+        entityKey: currentUser_id
+    }
+});
+
+const storeCurrentUsersKudos = (kudosResult, currentUser_id) => ({
+    type: actionTypes.STORE_CURRENT_USERS_KUDOS,
+    payload: {
+        result: kudosResult
+    },
+    meta: {
+        entityKey: currentUser_id
+    }
+});
+
+
+const fetchCurrentUsersInfo = settings => async dispatch => {
     try {
-        const currentUsersProfile = await fetch(`${rootApiUrl}/api/me`, settings);
-        if (!currentUsersProfile.ok) {
+        const response = await fetch(`${rootApiUrl}/api/me`, settings);
+        if (!response.ok) {
             return Promise.reject();
         }
-        const currentUsersProfileJSON = await currentUsersProfile.json();
-        return currentUsersProfileJSON;
+        const responseJSON = await response.json();
+        dispatch(storeCurrentUser(responseJSON));
+        return Promise.resolve();
     } catch (err) {
         return Promise.reject(err);  
     }
 }
 
-const fetchCurrentUsersFollows = async (settings) => {
+const fetchCurrentUsersHighlights = settings => async dispatch => {
     try {
-        const currentUsersFollows = await fetch(`${rootApiUrl}/api/me/follows/`, settings);
-        if (!currentUsersFollows.ok) {
+        const response = await fetch(`${rootApiUrl}/api/me/highlights`, settings);
+        if (!response.ok) {
             return Promise.reject();
         }
-        const currentUsersFollowsJSON = await currentUsersFollows.json();
-        return handleNormalize(currentUsersFollowsJSON, 'users');
+        const responseJSON = await response.json();
+        const currentUser_id = responseJSON.user_id;
+        const normalizedResponse = handleNormalize(responseJSON.highlights, 'highlights');
+        dispatch(storeHighlights(normalizedResponse.entities.highlights));
+        dispatch(storeCurrentUsersHighlights(normalizedResponse.result, currentUser_id));
+        return Promise.resolve();
+    } catch (err) {
+        return Promise.reject(err);
+    }
+}
+
+const fetchCurrentUsersFollows = settings => async dispatch => {
+    try {
+        const response = await fetch(`${rootApiUrl}/api/me/follows/`, settings);
+        if (!response.ok) {
+            return Promise.reject();
+        }
+        const responseJSON = await response.json();
+        const currentUser_id = responseJSON.user_id;
+        const normalizedResponse = handleNormalize(responseJSON.follows, 'users');
+        dispatch(storeUsers(normalizedResponse.entities.users));
+        dispatch(storeCurrentUsersFollows(normalizedResponse.result, currentUser_id));
+        return Promise.resolve();
     } catch (err) {
         return Promise.reject(err);  
     }
 }
 
-const fetchCurrentUsersKudos = async (settings) => {
+const fetchCurrentUsersKudos = settings => async dispatch => {
     try {
-        const currentUsersKudos = await fetch(`${rootApiUrl}/api/me/kudos`, settings);
-        if (!currentUsersKudos.ok) {
+        const response = await fetch(`${rootApiUrl}/api/me/kudos`, settings);
+        if (!response.ok) {
             return Promise.reject();
         }
-        const currentUsersKudosJSON = await currentUsersKudos.json();
-        const normalizedKudos = handleNormalize(currentUsersKudosJSON, 'kudos');
-        normalizedKudos.result = normalizedKudos.result.map(kudos_id => {
-            return normalizedKudos.entities.kudos[kudos_id].post
+        const responseJSON = await response.json();
+        const currentUser_id = responseJSON.user_id;
+        const normalizedResponse = handleNormalize(responseJSON.kudos, 'kudos');
+        // The result array returned from the handleNormalize function is an array of the ids for
+        // the Kudos entities themselves. However for the frontend all we want is an array of the
+        // ids of the posts that Kudos was given to. So here we map over the array supplied to create
+        // a new array of the details we actually want.
+        const arrayOfPost_ids = normalizedResponse.result.map(kudos_id => {
+            return normalizedResponse.entities.kudos[kudos_id].post
         });
-        return normalizedKudos;
+        dispatch(storeUsers(normalizedResponse.entities.users));
+        dispatch(storePosts(normalizedResponse.entities.posts));
+        dispatch(storeCurrentUsersKudos(arrayOfPost_ids, currentUser_id));
+        return Promise.resolve();
     } catch (err) {
         return Promise.reject(err);
     }
 }
 
-const fetchCurrentUsersHighlights = async (settings) => {
-    try {
-        const currentUsersHighlights = await fetch(`${rootApiUrl}/api/me/highlights`, settings);
-        if (!currentUsersHighlights.ok) {
-            return Promise.reject();
-        }
-        const currentUsersHighlightsJSON = await currentUsersHighlights.json();
-        return handleNormalize(currentUsersHighlightsJSON, 'highlights');
-    } catch (err) {
-        return Promise.reject(err);
-    }
-}
 
 export const fetchCurrentUser = token => async dispatch => {
     dispatch(fetchCurrentUserRequest());
@@ -88,51 +297,129 @@ export const fetchCurrentUser = token => async dispatch => {
             'Authorization': `Bearer ${token}`
         }
     };
-    try {
-        const currentUserReq = fetchCurrentUsersProfile(settings);
-        const currentUsersFollowsReq = fetchCurrentUsersFollows(settings);
-        const currentUsersKudosReq = fetchCurrentUsersKudos(settings);
-        const currentUsersHighlightsReq = fetchCurrentUsersHighlights(settings);
 
-        const currentUser = await currentUserReq;
-        const currentUsersFollows = await currentUsersFollowsReq;
-        const currentUsersKudos = await currentUsersKudosReq;
-        const currentUsersHighlights = await currentUsersHighlightsReq;
-        
-        const currentUserObject = { 
-            ...currentUser,
-            kudosIds: currentUsersKudos.result,
-            highlightIds: currentUsersHighlights.result
-        };
-        const currentUser_id = currentUserObject._id;
-        const currentUserEmail = currentUserObject.email;
-        const users = {
-            ...currentUsersFollows.entities.users,
-            ...currentUsersKudos.entities.users,
-            ...currentUsersHighlights.entities.users
-        };
-        const posts = {
-            ...currentUsersKudos.entities.posts,
-            ...currentUsersHighlights.entities.posts
-        };
-        const highlights = {
-            ...currentUsersHighlights.entities.highlights
-        };
-        delete currentUserObject.email;
-        
-        dispatch(fetchCurrentUserSuccess(
-            currentUser_id, 
-            currentUserObject, 
-            currentUserEmail,
-            currentUsersFollows.result,
-            users,
-            posts,
-            highlights
-        ));
-    } catch (err) {
+    const promiseArr = [
+        dispatch(fetchCurrentUsersInfo(settings)),
+        dispatch(fetchCurrentUsersHighlights(settings)),
+        dispatch(fetchCurrentUsersFollows(settings)),
+        dispatch(fetchCurrentUsersKudos(settings))
+    ];
+
+    return Promise.all(promiseArr)
+    .then(() => {
+        dispatch(fetchCurrentUserSuccess());
+    }, (err) => {
         dispatch(fetchCurrentUserFailed(err));
-    }
-}  
+    });
+}
+
+
+/*
+main function fetchCurrentUser
+dispatches -
+    fetchCurrentUsersInfo
+        STORE_CURRENT_USER
+    fetchCurrentUsersHighlights
+        STORE_CURRENT_USERS_HIGHLIGHTS
+    fetchCurrentUsersFollows
+        STORE_USERS
+        STORE_CURRENT_USERS_FOLLOWS
+    fetchCurrentUsersKudos
+        STORE_USERS
+        STORE_POSTS
+        STORE_CURRENT_USERS_KUDOS
+
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const followUserRequest = user_id => ({
     type:actionTypes.FOLLOW_USER_REQUEST,
