@@ -3,47 +3,61 @@ import fetch from 'isomorphic-fetch';
 import { rootApiUrl } from '../globalConstants';
 import { handleNormalize, sortComments, objectToArray } from '../utils';
 import Router from 'next/router';
+import { storePosts } from './documentActions';
+import { storePostsForCategory } from './index';
 
 const fetchPostsRequest = () => ({
     type: actionTypes.FETCH_POSTS_REQUEST
 });
 
-const fetchPostsSuccess = (data, timestamp) => ({
-    type: actionTypes.FETCH_POSTS_SUCCESS,
-    payload: data,
-    timestamp: timestamp
+const fetchPostsSuccess = () => ({
+    type: actionType.FETCH_POSTS_SUCCESS
 });
+
+// const fetchPostsSuccess = (data, timestamp) => ({
+//     type: actionTypes.FETCH_POSTS_SUCCESS,
+//     payload: data,
+//     timestamp: timestamp
+// });
 
 const fetchPostsFailed = err => ({
     type: actionTypes.FETCH_POSTS_FAILED,
     payload: err
 });
 
-
-
 export const fetchPosts = () => async dispatch => {
     dispatch(fetchPostsRequest());
     try {
-        const posts = await fetch(`${rootApiUrl}/api/posts`);
-        const postsJSON = await posts.json();
-        dispatch(
-            fetchPostsSuccess(handleNormalize(postsJSON, 'posts'), Date.now())
-        );
+        const response = await fetch(`${rootApiUrl}/api/posts`);
+        const responseJSON = await response.json();
+        const normalizedResponse = handleNormalize(responseJSON, 'posts');
+        const timestamp = Date.now();
+        dispatch(storePosts(normalizedResponse.entities.posts), timestamp);
+        dispatch(fetchPostsSuccess());
+        // dispatch(
+        //     fetchPostsSuccess(handleNormalize(postsJSON, 'posts'), Date.now())
+        // );
     } catch (err) {
         dispatch(fetchPostsFailed());
     }
 }
 
+
+
 const fetchCategoriesPostsRequest = () => ({
     type: actionTypes.FETCH_CATEGORIES_POSTS_REQUEST
 });
 
-const fetchCategoriesPostsSuccess = (posts, category, timestamp) => ({
-    type: actionTypes.FETCH_CATEGORIES_POSTS_SUCCESS,
-    payload: posts,
-    key: category,
-    timestamp: timestamp 
+const fetchCategoriesPostsSuccess = () => ({
+    type: actionTypes.FETCH_CATEGORIES_POSTS_SUCCESS
 });
+
+// const fetchCategoriesPostsSuccess = (posts, category, timestamp) => ({
+//     type: actionTypes.FETCH_CATEGORIES_POSTS_SUCCESS,
+//     payload: posts,
+//     key: category,
+//     timestamp: timestamp 
+// });
 
 const fetchCategoriesPostsFailed = () => ({
     type: actionTypes.FETCH_CATEGORIES_POSTS_FAILED
@@ -52,15 +66,29 @@ const fetchCategoriesPostsFailed = () => ({
 export const fetchCategoriesPosts = category => async dispatch => {
     dispatch(fetchCategoriesPostsRequest());
     try {
-        const posts = await fetch(`${rootApiUrl}/api/posts?category=${category}`);
-        const postsJSON = await posts.json();
+        const response = await fetch(`${rootApiUrl}/api/posts?category=${category}`);
+        const responseJSON = await response.json();
+        const normalizedResponse = handleNormalize(responseJSON, 'posts');
+        const timestamp = Date.now();
         dispatch(
-            fetchCategoriesPostsSuccess(handleNormalize(postsJSON, 'posts'), category, Date.now())
+            storePostsForCategory(
+                normalizedResponse.entities.posts,
+                normalizedResponse.result,
+                category,
+                timestamp
+            )
         );
+        dispatch(fetchCategoriesPostsSuccess());
+        // dispatch(
+        //     fetchCategoriesPostsSuccess(handleNormalize(postsJSON, 'posts'), category, Date.now())
+        // );
     } catch (err) {
         dispatch(fetchCategoriesPostsFailed());
     }
 } 
+
+
+
 
 const fetchPostInfo = async _id => {
     try {

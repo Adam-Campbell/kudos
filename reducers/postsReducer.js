@@ -24,7 +24,7 @@ const postsReducer = (state=initialState, action) => {
         case actionTypes.FETCH_POSTS_SUCCESS:
             return {
                 isFetching: false,
-                models: addOrMerge(state.models, action.payload.entities.posts)
+                //models: addOrMerge(state.models, action.payload.entities.posts)
             };
         
         case actionTypes.FETCH_POST_SUCCESS:
@@ -68,26 +68,38 @@ const postsReducer = (state=initialState, action) => {
                 models: addOrMerge(state.models, action.payload.entities.posts)
             }
 
-        case actionTypes.REPLY_TO_POST_SUCCESS:
-            return {
-                ...state,
-                models: {
-                    ...state.models,
-                    [action.discussion_id]: {
-                        ...state.models[action.discussion_id],
-                        commentIds: [...action.sortedComments]
-                    }
-                }
-            }
+        // case actionTypes.REPLY_TO_POST_SUCCESS:
+        //     return {
+        //         ...state,
+        //         models: {
+        //             ...state.models,
+        //             [action.discussion_id]: {
+        //                 ...state.models[action.discussion_id],
+        //                 commentIds: [...action.sortedComments]
+        //             }
+        //         }
+        //     }
 
-        case actionTypes.REPLY_TO_COMMENT_SUCCESS:
+        // case actionTypes.REPLY_TO_COMMENT_SUCCESS:
+        //     return {
+        //         ...state,
+        //         models: {
+        //             ...state.models,
+        //             [action.discussion_id]: {
+        //                 ...state.models[action.discussion_id],
+        //                 commentIds: [...action.sortedComments]
+        //             }
+        //         }
+        //     }
+
+        case actionTypes.STORE_COMMENT:
             return {
                 ...state,
                 models: {
                     ...state.models,
-                    [action.discussion_id]: {
-                        ...state.models[action.discussion_id],
-                        commentIds: [...action.sortedComments]
+                    [action.meta.discussion_id] : {
+                        ...state.models[action.meta.discussion_id],
+                        commentIds: [...action.payload.sortedComments]
                     }
                 }
             }

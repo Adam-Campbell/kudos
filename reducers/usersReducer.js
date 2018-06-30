@@ -67,9 +67,9 @@ const usersReducer = (state=initialState, action) => {
                 ...state,
                 models: {
                     ...state.models,
-                    [action.key]: {
-                        ...state.models[action.key],
-                        kudosIds: [...state.models[action.key].kudosIds, action.payload]
+                    [action.meta.currentUser_id]: {
+                        ...state.models[action.meta.currentUser_id],
+                        kudosIds: [...state.models[action.meta.currentUser_id].kudosIds, action.payload]
                     }
                 }
             };
@@ -79,24 +79,28 @@ const usersReducer = (state=initialState, action) => {
                 ...state,
                 models: {
                     ...state.models,
-                    [action.key]: {
-                        ...state.models[action.key],
-                        kudosIds: [...state.models[action.key].kudosIds.filter(kudos => kudos !== action.payload)]
+                    [action.meta.currentUser_id]: {
+                        ...state.models[action.meta.currentUser_id],
+                        kudosIds: [
+                            ...state.models[action.meta.currentUser_id].kudosIds.filter(kudos => {
+                                return kudos !== action.payload
+                            })
+                        ]
                     }
                 }
             };
 
-        case actionTypes.UPDATE_USER_DETAILS_SUCCESS:
-            return {
-                ...state,
-                models: addOrMerge(state.models, action.payload.currentUser, action.key)
-            }
+        // case actionTypes.UPDATE_USER_DETAILS_SUCCESS:
+        //     return {
+        //         ...state,
+        //         models: addOrMerge(state.models, action.payload.currentUser, action.key)
+        //     }
 
-        case actionTypes.UPDATE_USER_AVATAR_SUCCESS:
-            return {
-                ...state,
-                models: addOrMerge(state.models, action.payload, action.key)
-            }
+        // case actionTypes.UPDATE_USER_AVATAR_SUCCESS:
+        //     return {
+        //         ...state,
+        //         models: addOrMerge(state.models, action.payload, action.key)
+        //     }
 
         case actionTypes.FETCH_CATEGORIES_POSTS_SUCCESS:
             return {
@@ -104,30 +108,44 @@ const usersReducer = (state=initialState, action) => {
                 models: addOrMerge(state.models, action.payload.entities.users)
             }
 
-        case actionTypes.REPLY_TO_POST_SUCCESS:
-            return {
-                ...state,
-                models: {
-                    ...state.models,
-                    [action.author_id]: {
-                        ...state.models[action.author_id],
-                        commentIds: state.models[action.author_id].commentIds ? 
-                                    [...state.models[action.author_id].commentIds, action.comment_id] :
-                                    [action.comment_id]
-                    }
-                }
-            }
+        // case actionTypes.REPLY_TO_POST_SUCCESS:
+        //     return {
+        //         ...state,
+        //         models: {
+        //             ...state.models,
+        //             [action.author_id]: {
+        //                 ...state.models[action.author_id],
+        //                 commentIds: state.models[action.author_id].commentIds ? 
+        //                             [...state.models[action.author_id].commentIds, action.comment_id] :
+        //                             [action.comment_id]
+        //             }
+        //         }
+        //     }
 
-        case actionTypes.REPLY_TO_COMMENT_SUCCESS:
+        // case actionTypes.REPLY_TO_COMMENT_SUCCESS:
+        //     return {
+        //         ...state,
+        //         models: {
+        //             ...state.models,
+        //             [action.author_id]: {
+        //                 ...state.models[action.author_id],
+        //                 commentIds: state.models[action.author_id].commentIds ? 
+        //                             [...state.models[action.author_id].commentIds, action.comment_id] :
+        //                             [action.comment_id]
+        //             }
+        //         }
+        //     }
+
+        case actionTypes.STORE_COMMENT: 
             return {
                 ...state,
                 models: {
                     ...state.models,
-                    [action.author_id]: {
-                        ...state.models[action.author_id],
-                        commentIds: state.models[action.author_id].commentIds ? 
-                                    [...state.models[action.author_id].commentIds, action.comment_id] :
-                                    [action.comment_id]
+                    [action.meta.author_id]: {
+                        ...state.models[action.meta.author_id],
+                        commentIds: state.models[action.meta.author_id] ?
+                        [...state.models[action.author_id].commentIds, action.payload.comment_id] :
+                        [action.payload.comment_id]
                     }
                 }
             }
@@ -137,10 +155,14 @@ const usersReducer = (state=initialState, action) => {
                 ...state,
                 models: {
                     ...state.models,
-                    [action.author_id]: {
-                        ...state.models[action.author_id],
-                        commentIds: state.models[action.author_id].commentIds ?
-                                    [...state.models[action.author_id].commentIds.filter(_id => _id !== action.comment_id)] :
+                    [action.meta.author_id]: {
+                        ...state.models[action.meta.author_id],
+                        commentIds: state.models[action.meta.author_id].commentIds ?
+                                    [
+                                        ...state.models[action.meta.author_id].commentIds.filter(_id => {
+                                            return _id !== action.payload.comment_id
+                                        })
+                                    ] :
                                     []
                     }
                 }

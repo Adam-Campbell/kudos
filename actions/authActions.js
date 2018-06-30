@@ -6,11 +6,15 @@ import { fetchCurrentUser } from './currentUserActions';
 import { emailNotFoundErrorRegister } from './errorActions';
 import { passwordResetEmailSentRegister } from './successActions';
 
+/************
+    signIn
+************/
+
 const signInRequest = () => ({
     type: actionTypes.SIGN_IN_REQUEST
 });
 
-const signInSuccess = token => ({
+const signInSuccess = (token) => ({
     type: actionTypes.SIGN_IN_SUCCESS,
     payload: token
 });
@@ -19,7 +23,6 @@ const signInFailed = (responseCode) => ({
     type: actionTypes.SIGN_IN_FAILED,
     responseCode: responseCode
 });
-
 
 const makeSignInRequest = async (username, password, dispatch) => {
     const settings = {
@@ -33,13 +36,13 @@ const makeSignInRequest = async (username, password, dispatch) => {
         })
     };
     try {
-        const token = await fetch(`${rootApiUrl}/auth/signin`, settings);
-        if (!token.ok) {
-            dispatch(signInFailed(token.status));
+        const response = await fetch(`${rootApiUrl}/auth/signin`, settings);
+        if (!response.ok) {
+            dispatch(signInFailed(response.status));
             return Promise.reject();
         }
-        const tokenJSON = await token.json();
-        return tokenJSON;
+        const responseJSON = await response.json();
+        return responseJSON;
     } catch (err) {
         return Promise.reject(err);
     }
@@ -58,6 +61,10 @@ export const signIn = (username, password) => async dispatch => {
     }
 }
 
+/*************
+    signOut
+*************/
+
 const signOutSuccess = () => ({
     type: actionTypes.SIGN_OUT_SUCCESS
 });
@@ -66,6 +73,10 @@ export const signOut = () => async dispatch => {
     document.cookie = `token=;expires=${new Date(Date.now() - 3600000).toUTCString()}`;
     dispatch(signOutSuccess());
 }
+
+/************
+    signUp
+************/
 
 const signUpRequest = () => ({
     type: actionTypes.SIGN_UP_REQUEST
@@ -94,13 +105,13 @@ const makeSignUpRequest = async (username, email, password, dispatch) => {
         })
     };
     try {
-        const token = await fetch(`${rootApiUrl}/api/users`, settings);
-        if (!token.ok) {
-            const error = await token.text();
+        const response = await fetch(`${rootApiUrl}/api/users`, settings);
+        if (!response.ok) {
+            const error = await response.text();
             return Promise.reject(error);
         }
-        const tokenJSON = await token.json();
-        return tokenJSON;
+        const responseJSON = await response.json();
+        return responseJSON;
     } catch (err) {
         return Promise.reject(err);
     }
@@ -120,6 +131,9 @@ export const signUp = (username, email, password) => async dispatch => {
     }
 } 
 
+/***************************
+    getPasswordResetEmail
+***************************/
 
 const getPasswordResetEmailRequest = () => ({
     type: actionTypes.GET_PASSWORD_RESET_EMAIL_REQUEST
@@ -137,8 +151,6 @@ const getPasswordResetEmailFailed = (httpStatusCode, errorMessage) => ({
     }
 });
 
-
-
 export const getPasswordResetEmail = email => async dispatch => {
     dispatch(getPasswordResetEmailRequest());
     const settings = {
@@ -151,10 +163,10 @@ export const getPasswordResetEmail = email => async dispatch => {
         })
     };
     try {
-        const emailReq = await fetch(`${rootApiUrl}/auth/forgot`, settings);
-        if (!emailReq.ok) {
-            const httpStatusCode = emailReq.status;
-            const errorMessage = await emailReq.text();
+        const response = await fetch(`${rootApiUrl}/auth/forgot`, settings);
+        if (!response.ok) {
+            const httpStatusCode = response.status;
+            const errorMessage = await response.text();
             dispatch(getPasswordResetEmailFailed(httpStatusCode, errorMessage));
             if (httpStatusCode === 401) {
                 dispatch(emailNotFoundErrorRegister());
@@ -168,6 +180,9 @@ export const getPasswordResetEmail = email => async dispatch => {
     }
 };
 
+/********************
+    setNewPassword
+********************/
 
 const setNewPasswordRequest = () => ({
     type: actionTypes.SET_NEW_PASSWORD_REQUEST
@@ -197,10 +212,10 @@ export const setNewPassword = (password, resetPasswordToken) => async dispatch =
         })
     }; 
     try {
-        const newPasswordReq = await fetch(`${rootApiUrl}/auth/reset/${resetPasswordToken}`, settings);
-        if (!newPasswordReq.ok) {
-            const httpStatusCode = newPasswordReq.status;
-            const errorMessage = await newPasswordReq.text();
+        const response = await fetch(`${rootApiUrl}/auth/reset/${resetPasswordToken}`, settings);
+        if (!response.ok) {
+            const httpStatusCode = response.status;
+            const errorMessage = await response.text();
             return dispatch(setNewPasswordFailed(httpStatusCode, errorMessage));
         }
         dispatch(setNewPasswordSuccess());

@@ -17,23 +17,29 @@ const commentsReducer = (state=initialState, action) => {
                 ...action.payload.comments
             };
 
-        case actionTypes.REPLY_TO_POST_SUCCESS:
-            return {
-                ...state, 
-                [action.comment_id]: { ...action.payload }
-            };
+        // case actionTypes.REPLY_TO_POST_SUCCESS:
+        //     return {
+        //         ...state, 
+        //         [action.comment_id]: { ...action.payload }
+        //     };
 
-        case actionTypes.REPLY_TO_COMMENT_SUCCESS:
+        // case actionTypes.REPLY_TO_COMMENT_SUCCESS:
+        //     return {
+        //         ...state,
+        //         [action.comment_id]: { ...action.payload }
+        //     };
+
+        case actionTypes.STORE_COMMENT:
             return {
                 ...state,
-                [action.comment_id]: { ...action.payload }
-            };
+                [action.payload.comment_id]: action.payload.comment
+            }
 
         case actionTypes.DELETE_COMMENT_SUCCESS:
-            return addOrMerge(state, action.payload, action.comment_id)
+            return addOrMerge(state, action.payload.comment, action.payload.comment_id)
 
         case actionTypes.EDIT_COMMENT_SUCCESS:
-            return addOrMerge(state, action.payload, action.key)
+            return addOrMerge(state, action.payload, action.meta.comment_id)
 
         default:
             return state;

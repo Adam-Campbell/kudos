@@ -2,186 +2,18 @@ import * as actionTypes from '../actionTypes';
 import fetch from 'isomorphic-fetch';
 import { rootApiUrl } from '../globalConstants';
 import { handleNormalize } from '../utils';
-
-const fetchCurrentUserRequest = () => ({
-    type: actionTypes.FETCH_CURRENT_USER_REQUEST
-});
-
-const fetchCurrentUserSuccess = (_id, userData, userEmail, userFollows, users, posts, highlights) => ({
-    type: actionTypes.FETCH_CURRENT_USER_SUCCESS,
-    payload: {
-        currentUser: userData,
-        email: userEmail,
-        follows: userFollows,
-        users: users,
-        posts: posts,
-        highlights: highlights
-    },
-    key: _id
-});
-
-const fetchCurrentUserFailed = err => ({
-    type: actionTypes.FETCH_CURRENT_USER_FAILED,
-    payload: err
-});
-
-// const fetchCurrentUsersProfile = async (settings) => {
-//     try {
-//         const currentUsersProfile = await fetch(`${rootApiUrl}/api/me`, settings);
-//         if (!currentUsersProfile.ok) {
-//             return Promise.reject();
-//         }
-//         const currentUsersProfileJSON = await currentUsersProfile.json();
-//         return currentUsersProfileJSON;
-//     } catch (err) {
-//         return Promise.reject(err);  
-//     }
-// }
-
-// const fetchCurrentUsersFollows = async (settings) => {
-//     try {
-//         const currentUsersFollows = await fetch(`${rootApiUrl}/api/me/follows/`, settings);
-//         if (!currentUsersFollows.ok) {
-//             return Promise.reject();
-//         }
-//         const currentUsersFollowsJSON = await currentUsersFollows.json();
-//         return handleNormalize(currentUsersFollowsJSON.follows, 'users');
-//     } catch (err) {
-//         return Promise.reject(err);  
-//     }
-// }
-
-// const fetchCurrentUsersKudos = async (settings) => {
-//     try {
-//         const currentUsersKudos = await fetch(`${rootApiUrl}/api/me/kudos`, settings);
-//         if (!currentUsersKudos.ok) {
-//             return Promise.reject();
-//         }
-//         const currentUsersKudosJSON = await currentUsersKudos.json();
-//         const normalizedKudos = handleNormalize(currentUsersKudosJSON.kudos, 'kudos');
-//         normalizedKudos.result = normalizedKudos.result.map(kudos_id => {
-//             return normalizedKudos.entities.kudos[kudos_id].post
-//         });
-//         return normalizedKudos;
-//     } catch (err) {
-//         return Promise.reject(err);
-//     }
-// }
-
-// const fetchCurrentUsersHighlights = async (settings) => {
-//     try {
-//         const currentUsersHighlights = await fetch(`${rootApiUrl}/api/me/highlights`, settings);
-//         if (!currentUsersHighlights.ok) {
-//             return Promise.reject();
-//         }
-//         const currentUsersHighlightsJSON = await currentUsersHighlights.json();
-//         return handleNormalize(currentUsersHighlightsJSON.highlights, 'highlights');
-//     } catch (err) {
-//         return Promise.reject(err);
-//     }
-// }
-
-// export const fetchCurrentUser = token => async dispatch => {
-//     dispatch(fetchCurrentUserRequest());
-//     const settings = {
-//         headers: {
-//             'Authorization': `Bearer ${token}`
-//         }
-//     };
-//     try {
-//         const currentUserReq = fetchCurrentUsersProfile(settings);
-//         const currentUsersFollowsReq = fetchCurrentUsersFollows(settings);
-//         const currentUsersKudosReq = fetchCurrentUsersKudos(settings);
-//         const currentUsersHighlightsReq = fetchCurrentUsersHighlights(settings);
-
-//         const currentUser = await currentUserReq;
-//         const currentUsersFollows = await currentUsersFollowsReq;
-//         const currentUsersKudos = await currentUsersKudosReq;
-//         console.log(currentUsersKudos);
-//         const currentUsersHighlights = await currentUsersHighlightsReq;
-        
-//         const currentUserObject = { 
-//             ...currentUser,
-//             kudosIds: currentUsersKudos.result,
-//             highlightIds: currentUsersHighlights.result
-//         };
-//         const currentUser_id = currentUserObject._id;
-//         const currentUserEmail = currentUserObject.email;
-//         const users = {
-//             ...currentUsersFollows.entities.users,
-//             ...currentUsersKudos.entities.users,
-//             ...currentUsersHighlights.entities.users
-//         };
-//         const posts = {
-//             ...currentUsersKudos.entities.posts,
-//             ...currentUsersHighlights.entities.posts
-//         };
-//         const highlights = {
-//             ...currentUsersHighlights.entities.highlights
-//         };
-//         delete currentUserObject.email;
-        
-//         dispatch(fetchCurrentUserSuccess(
-//             currentUser_id, 
-//             currentUserObject, 
-//             currentUserEmail,
-//             currentUsersFollows.result,
-//             users,
-//             posts,
-//             highlights
-//         ));
-//     } catch (err) {
-//         dispatch(fetchCurrentUserFailed(err));
-//     }
-// }  
+import { storeUsers, storePosts, storeHighlights } from './documentActions';
 
 
+/*******************************
+    Document storage actions
+*******************************/
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const tempSuccess = () => ({
-    type: 'TEMP_SUCCESS'
-});
-
-
-const storeUsers = (users) => ({
-    type: actionTypes.STORE_USERS,
-    payload: users
-});
-
-const storePosts = (posts) => ({
-    type: actionTypes.STORE_POSTS,
-    payload: posts
-});
-
-const storeHighlights = (highlights) => ({
-    type: actionTypes.STORE_HIGHLIGHTS,
-    payload: highlights
-});
-
-const storeCurrentUser = (currentUser) => ({
+const storeCurrentUser = (currentUser, currentUser_id) => ({
     type: actionTypes.STORE_CURRENT_USER,
     payload: currentUser,
     meta: {
-        entityKey: currentUser._id
+        entityKey: currentUser_id
     }
 });
 
@@ -215,6 +47,25 @@ const storeCurrentUsersKudos = (kudosResult, currentUser_id) => ({
     }
 });
 
+/***********************
+    fetchCurrentUser
+************************/
+
+const fetchCurrentUserRequest = () => ({
+    type: actionTypes.FETCH_CURRENT_USER_REQUEST
+});
+
+const fetchCurrentUserSuccess = (currentUser_id) => ({
+    type: actionTypes.FETCH_CURRENT_USER_SUCCESS,
+    meta: {
+        currentUser_id
+    }
+});
+
+const fetchCurrentUserFailed = err => ({
+    type: actionTypes.FETCH_CURRENT_USER_FAILED,
+    payload: err
+});
 
 const fetchCurrentUsersInfo = settings => async dispatch => {
     try {
@@ -223,7 +74,7 @@ const fetchCurrentUsersInfo = settings => async dispatch => {
             return Promise.reject();
         }
         const responseJSON = await response.json();
-        dispatch(storeCurrentUser(responseJSON));
+        dispatch(storeCurrentUser(responseJSON, responseJSON._id));
         return Promise.resolve();
     } catch (err) {
         return Promise.reject(err);  
@@ -280,8 +131,9 @@ const fetchCurrentUsersKudos = settings => async dispatch => {
         const arrayOfPost_ids = normalizedResponse.result.map(kudos_id => {
             return normalizedResponse.entities.kudos[kudos_id].post
         });
+        const timestamp = Date.now();
         dispatch(storeUsers(normalizedResponse.entities.users));
-        dispatch(storePosts(normalizedResponse.entities.posts));
+        dispatch(storePosts(normalizedResponse.entities.posts, timestamp));
         dispatch(storeCurrentUsersKudos(arrayOfPost_ids, currentUser_id));
         return Promise.resolve();
     } catch (err) {
@@ -289,8 +141,7 @@ const fetchCurrentUsersKudos = settings => async dispatch => {
     }
 }
 
-
-export const fetchCurrentUser = token => async dispatch => {
+export const fetchCurrentUser = token => async (dispatch, getState) => {
     dispatch(fetchCurrentUserRequest());
     const settings = {
         headers: {
@@ -307,118 +158,17 @@ export const fetchCurrentUser = token => async dispatch => {
 
     return Promise.all(promiseArr)
     .then(() => {
-        dispatch(fetchCurrentUserSuccess());
+        const currentUser_id = getState().currentUser._id;
+        dispatch(fetchCurrentUserSuccess(currentUser_id));
     }, (err) => {
         dispatch(fetchCurrentUserFailed(err));
     });
 }
 
 
-/*
-main function fetchCurrentUser
-dispatches -
-    fetchCurrentUsersInfo
-        STORE_CURRENT_USER
-    fetchCurrentUsersHighlights
-        STORE_CURRENT_USERS_HIGHLIGHTS
-    fetchCurrentUsersFollows
-        STORE_USERS
-        STORE_CURRENT_USERS_FOLLOWS
-    fetchCurrentUsersKudos
-        STORE_USERS
-        STORE_POSTS
-        STORE_CURRENT_USERS_KUDOS
-
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/****************
+    followUser
+****************/
 
 
 const followUserRequest = user_id => ({
@@ -435,7 +185,6 @@ const followUserFailed = user_id => ({
     type: actionTypes.FOLLOW_USER_FAILED,
     payload: user_id
 });
-
 
 export const followUser = (user_id, token) => async dispatch => {
     dispatch(followUserRequest(user_id));
@@ -457,6 +206,9 @@ export const followUser = (user_id, token) => async dispatch => {
     }
 }
 
+/*******************
+    unfollowUser
+*******************/
 
 const unfollowUserRequest = user_id => ({
     type: actionTypes.UNFOLLOW_USER_REQUEST,
@@ -492,7 +244,9 @@ export const unfollowUser = (user_id, token) => async dispatch => {
     }
 }
 
-
+/***************
+    giveKudos
+***************/
 
 const giveKudosRequest = post_id => ({
     type: actionTypes.GIVE_KUDOS_REQUEST,
@@ -502,7 +256,9 @@ const giveKudosRequest = post_id => ({
 const giveKudosSuccess = (post_id, currentUser_id) => ({
     type: actionTypes.GIVE_KUDOS_SUCCESS,
     payload: post_id,
-    key: currentUser_id
+    meta: {
+        currentUser_id
+    }
 });
 
 const giveKudosFailed = post_id => ({
@@ -529,6 +285,9 @@ export const giveKudos = (post_id, currentUser_id, token) => async dispatch => {
     }
 };
 
+/*****************
+    removeKudos
+*****************/
 
 const removeKudosRequest = post_id => ({
     type:actionTypes.REMOVE_KUDOS_REQUEST,
@@ -538,7 +297,9 @@ const removeKudosRequest = post_id => ({
 const removeKudosSuccess = (post_id, currentUser_id) => ({
     type:actionTypes.REMOVE_KUDOS_SUCCESS,
     payload: post_id,
-    key: currentUser_id
+    meta: {
+        currentUser_id
+    }
 });
 
 const removeKudosFailed = post_id => ({
@@ -565,24 +326,24 @@ export const removeKudos = (post_id, currentUser_id, token) => async dispatch =>
     }
 };
 
+
+/***********************
+    updateUserDetails
+************************/
+
 const updateUserDetailsRequest = () => ({
     type: actionTypes.UPDATE_USER_DETAILS_REQUEST
 });
 
-const updateUserDetailsSuccess = (newUserDetails, userEmail, _id) => ({
-    type: actionTypes.UPDATE_USER_DETAILS_SUCCESS,
-    payload: {
-        currentUser: newUserDetails,
-        email: userEmail
-    },
-    key: _id
+const updateUserDetailsSuccess = () => ({
+    type: actionTypes.UPDATE_USER_DETAILS_SUCCESS
 });
 
 const updateUserDetailsFailed = () => ({
     type: actionTypes.UPDATE_USER_DETAILS_FAILED
 });
 
-export const updateUserDetails = (newDetails, _id, token) => async dispatch => {
+export const updateUserDetails = (newDetails, currentUser_id, token) => async dispatch => {
     dispatch(updateUserDetailsRequest());
     const settings = {
         headers: {
@@ -597,28 +358,28 @@ export const updateUserDetails = (newDetails, _id, token) => async dispatch => {
         })
     };
     try {
-        const updateUserDetailsReq = await fetch(`${rootApiUrl}/api/me`, settings);
-        if (!updateUserDetailsReq.ok) {
+        const response = await fetch(`${rootApiUrl}/api/me`, settings);
+        if (!response.ok) {
             return dispatch(updateUserDetailsFailed());
         }
-        const newUserDetails = await updateUserDetailsReq.json();
-        const newUserObject = { ...newUserDetails };
-        const email = newUserDetails.email;
-        delete newUserObject.email;
-        return dispatch(updateUserDetailsSuccess(newUserObject, email, _id));
+        const responseJSON = await response.json();
+        dispatch(storeCurrentUser(responseJSON, currentUser_id));
+        return dispatch(updateUserDetailsSuccess());
     } catch (err) {
         console.log(err);
     }
 }
 
+/**********************
+    updateUserAvatar
+***********************/
+
 const updateUserAvatarRequest = () => ({
     type: actionTypes.UPDATE_USER_AVATAR_REQUEST
 });
 
-const updateUserAvatarSuccess = (newUserDetails, _id) => ({
-    type: actionTypes.UPDATE_USER_AVATAR_SUCCESS,
-    payload: newUserDetails,
-    key: _id
+const updateUserAvatarSuccess = () => ({
+    type: actionTypes.UPDATE_USER_AVATAR_SUCCESS
 });
 
 const updateUserAvatarFailed = () => ({
@@ -635,17 +396,21 @@ export const updateUserAvatar = (formData, token) => async dispatch => {
         body: formData
     }
     try {
-        const updateAvatarRequest = await fetch(`${rootApiUrl}/api/me/images`, settings);
-        if (!updateAvatarRequest.ok) {
+        const response = await fetch(`${rootApiUrl}/api/me/images`, settings);
+        if (!response.ok) {
             return dispatch(updateUserAvatarFailed());
         }
-        const newUserDetails = await updateAvatarRequest.json();
-        return dispatch(updateUserAvatarSuccess(newUserDetails, newUserDetails._id));
+        const responseJSON = await response.json();
+        dispatch(storeCurrentUser(responseJSON, responseJSON._id));
+        return dispatch(updateUserAvatarSuccess());
     } catch (err) {
         console.log(err);
     }
 }
 
+/************************
+    updateUserPassword
+************************/
 
 const updateUserPasswordRequest = () => ({
     type: actionTypes.UPDATE_USER_PASSWORD_REQUEST
@@ -673,8 +438,8 @@ export const updateUserPassword = (currentPw, newPw, token,) => async dispatch =
         })
     }
     try {
-        const updatePasswordReq = await fetch(`${rootApiUrl}/api/me/password`, settings);
-        if (!updatePasswordReq.ok) {
+        const response = await fetch(`${rootApiUrl}/api/me/password`, settings);
+        if (!response.ok) {
             return dispatch(updateUserPasswordFailed());
         }
         return dispatch(updateUserPasswordSuccess());

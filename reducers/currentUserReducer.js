@@ -37,10 +37,7 @@ const currentUserReducer = (state=initialState, action) => {
         case actionTypes.FETCH_CURRENT_USER_SUCCESS:
             return {
                 ...state,
-                hasFetched: true,
-                //_id: action.payload.currentUser._id,
-                //email: action.payload.email,
-                //follows: action.payload.follows
+                hasFetched: true
             }
 
         case actionTypes.SIGN_OUT_SUCCESS:
@@ -58,11 +55,11 @@ const currentUserReducer = (state=initialState, action) => {
                 follows: state.follows.filter(follow => follow !== action.payload)
             }
 
-        case actionTypes.UPDATE_USER_DETAILS_SUCCESS:
-            return {
-                ...state,
-                email: action.payload.email
-            };
+        // case actionTypes.UPDATE_USER_DETAILS_SUCCESS:
+        //     return {
+        //         ...state,
+        //         email: action.payload.email
+        //     };
 
         case actionTypes.STORE_CURRENT_USER:
             return {

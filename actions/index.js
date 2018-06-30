@@ -6,3 +6,4 @@ export * from './currentUserActions';
 export * from './errorActions';
 export * from './successActions';
 export * from './commentActions';
+export * from './documentActions';
