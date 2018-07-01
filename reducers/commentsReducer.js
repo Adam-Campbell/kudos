@@ -5,17 +5,17 @@ const initialState = {};
 
 const commentsReducer = (state=initialState, action) => {
     switch (action.type) {
-        case actionTypes.FETCH_USER_SUCCESS:
-            return {
-                ...state,
-                ...action.payload.comments
-            };
+        // case actionTypes.FETCH_USER_SUCCESS:
+        //     return {
+        //         ...state,
+        //         ...action.payload.comments
+        //     };
 
-        case actionTypes.FETCH_POST_SUCCESS:
-            return {
-                ...state,
-                ...action.payload.comments
-            };
+        // case actionTypes.FETCH_POST_SUCCESS:
+        //     return {
+        //         ...state,
+        //         ...action.payload.comments
+        //     };
 
         // case actionTypes.REPLY_TO_POST_SUCCESS:
         //     return {
@@ -34,6 +34,10 @@ const commentsReducer = (state=initialState, action) => {
                 ...state,
                 [action.payload.comment_id]: action.payload.comment
             }
+
+        case actionTypes.STORE_COMMENTS: {
+            return addOrMerge(state, action.payload)
+        }
 
         case actionTypes.DELETE_COMMENT_SUCCESS:
             return addOrMerge(state, action.payload.comment, action.payload.comment_id)

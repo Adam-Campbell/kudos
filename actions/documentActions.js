@@ -12,12 +12,14 @@ export const storeUsers = (users) => ({
     payload: users
 });
 
-export const storePosts = (posts, timestamp) => ({
+export const storePosts = (posts) => ({
     type: actionTypes.STORE_POSTS,
-    payload: posts,
-    meta: {
-        timestamp
-    }
+    payload: posts
+});
+
+export const storeComments = (comments) => ({
+    type: actionTypes.STORE_COMMENTS,
+    payload: comments
 });
 
 export const storePostsForCategory = (posts, post_ids, category, timestamp) => ({
@@ -26,6 +28,51 @@ export const storePostsForCategory = (posts, post_ids, category, timestamp) => (
         posts,
         post_ids
     },
+    meta: {
+        category,
+        timestamp
+    }
+});
+
+
+export const storePost = (post, post_id) => ({
+    type: actionTypes.STORE_POST,
+    payload: post,
+    meta: {
+        post_id
+    }
+});
+
+// export const storePostsComment_ids = (comment_ids, post_id) => ({
+//     type: actionTypes.STORE_POSTS_COMMENT_IDS,
+//     payload: comment_ids,
+//     meta: {
+//         post_id
+//     }
+// });
+
+export const storePostsComment_ids = (comment_ids, post_id) => {
+    console.log(comment_ids, post_id);
+    return {
+        type: actionTypes.STORE_POSTS_COMMENT_IDS,
+        payload: comment_ids,
+        meta: {
+            post_id
+        }
+    }
+};
+
+export const storePostsKudos = (kudos, post_id) => ({
+    type: actionTypes.STORE_POSTS_KUDOS,
+    payload: kudos,
+    meta: {
+        post_id
+    }
+});
+
+export const updateIdsForCategory = (post_ids, category='all', timestamp) => ({
+    type: actionTypes.UPDATE_IDS_FOR_CATEGORY,
+    payload: post_ids,
     meta: {
         category,
         timestamp

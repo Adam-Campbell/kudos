@@ -17,7 +17,7 @@ const post = props => {
         </React.Fragment>  
     );
 };
-
+//<Article article_id={props._id} isAuthor={isAuthor} />
 post.getInitialProps = async ({store, isServer, req, pathname, query}) => {
     const currentState = store.getState();
     cleanseErrorsAndSuccesses(store);

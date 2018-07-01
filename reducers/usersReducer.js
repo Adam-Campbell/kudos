@@ -32,17 +32,17 @@ The shape of one user is as follows:
 const usersReducer = (state=initialState, action) => {
     switch (action.type) {
        
-        case actionTypes.FETCH_POSTS_SUCCESS:
-            return {
-                ...state,
-                models: addOrMerge(state.models, action.payload.entities.users)
-            }; 
+        // case actionTypes.FETCH_POSTS_SUCCESS:
+        //     return {
+        //         ...state,
+        //         models: addOrMerge(state.models, action.payload.entities.users)
+        //     }; 
 
-        case actionTypes.FETCH_POST_SUCCESS:
-            return {
-                ...state,
-                models: addOrMerge(state.models, action.payload.users)
-            }
+        // case actionTypes.FETCH_POST_SUCCESS:
+        //     return {
+        //         ...state,
+        //         models: addOrMerge(state.models, action.payload.users)
+        //     }
 
         case actionTypes.FETCH_USER_SUCCESS:
             return {
@@ -102,11 +102,11 @@ const usersReducer = (state=initialState, action) => {
         //         models: addOrMerge(state.models, action.payload, action.key)
         //     }
 
-        case actionTypes.FETCH_CATEGORIES_POSTS_SUCCESS:
-            return {
-                ...state,
-                models: addOrMerge(state.models, action.payload.entities.users)
-            }
+        // case actionTypes.FETCH_CATEGORIES_POSTS_SUCCESS:
+        //     return {
+        //         ...state,
+        //         models: addOrMerge(state.models, action.payload.entities.users)
+        //     }
 
         // case actionTypes.REPLY_TO_POST_SUCCESS:
         //     return {

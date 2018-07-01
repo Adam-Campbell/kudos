@@ -23,6 +23,7 @@ const postsReducer = (state=initialState, action) => {
 
         case actionTypes.FETCH_POSTS_SUCCESS:
             return {
+                ...state,
                 isFetching: false,
                 //models: addOrMerge(state.models, action.payload.entities.posts)
             };
@@ -32,8 +33,10 @@ const postsReducer = (state=initialState, action) => {
                 ...state,
                 models: {
                     ...state.models,
-                    [action.key]: {
-                        ...action.payload.post
+                    [action.meta.post_id]: {
+                        ...state.models[action.meta.post_id],
+                        isFullPost: true,
+                        fetchedAt: action.meta.timestamp
                     }
                 }
             };
@@ -50,17 +53,17 @@ const postsReducer = (state=initialState, action) => {
         //         models: addOrMerge(state.models, action.payload.posts)
         //     }
 
-        case actionTypes.CREATE_POST_SUCCESS:
-            return {
-                ...state, 
-                models: addOrMerge(state.models, action.payload, action.post_id)
-            }
+        // case actionTypes.CREATE_POST_SUCCESS:
+        //     return {
+        //         ...state, 
+        //         models: addOrMerge(state.models, action.payload, action.post_id)
+        //     }
 
-        case actionTypes.EDIT_POST_SUCCESS:
-            return {
-                ...state,
-                models: addOrMerge(state.models, action.payload, action.key)
-            }
+        // case actionTypes.EDIT_POST_SUCCESS:
+        //     return {
+        //         ...state,
+        //         models: addOrMerge(state.models, action.payload, action.key)
+        //     }
 
         case actionTypes.FETCH_CATEGORIES_POSTS_SUCCESS:
             return {
@@ -108,6 +111,24 @@ const postsReducer = (state=initialState, action) => {
             return {
                 ...state,
                 models: addOrMerge(state.models, action.payload)
+            }
+
+        case actionTypes.STORE_POST:
+            return {
+                ...state,
+                models: addOrMerge(state.models, action.payload, action.meta.post_id)
+            }
+
+        case actionTypes.STORE_POSTS_COMMENT_IDS:
+            return {
+                ...state,
+                models: addOrMerge(state.models, {commentIds: action.payload}, action.meta.post_id)
+            }
+
+        case actionTypes.STORE_POSTS_KUDOS:
+            return {
+                ...state,
+                models: addOrMerge(state.models, {kudos: action.payload}, action.meta.post_id)
             }
 
         default:
