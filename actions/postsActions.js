@@ -40,7 +40,6 @@ export const fetchPosts = () => async dispatch => {
         const responseJSON = await response.json();
         const normalizedResponse = handleNormalize(responseJSON, 'posts');
         const timestamp = Date.now();
-        console.log(normalizedResponse);
         dispatch(storePosts(normalizedResponse.entities.posts));
         dispatch(storeUsers(normalizedResponse.entities.users));
         dispatch(updateIdsForCategory(normalizedResponse.result, 'all', timestamp));
@@ -60,13 +59,6 @@ const fetchCategoriesPostsRequest = () => ({
 const fetchCategoriesPostsSuccess = () => ({
     type: actionTypes.FETCH_CATEGORIES_POSTS_SUCCESS
 });
-
-// const fetchCategoriesPostsSuccess = (posts, category, timestamp) => ({
-//     type: actionTypes.FETCH_CATEGORIES_POSTS_SUCCESS,
-//     payload: posts,
-//     key: category,
-//     timestamp: timestamp 
-// });
 
 const fetchCategoriesPostsFailed = () => ({
     type: actionTypes.FETCH_CATEGORIES_POSTS_FAILED
@@ -89,12 +81,10 @@ export const fetchCategoriesPosts = category => async dispatch => {
         );
         dispatch(storePosts(normalizedResponse.entities.posts));
         dispatch(storeUsers(normalizedResponse.entities.users));
-        dispatch(updateIdsForCategory(normalizedResponse.result, 'all', timestamp,));
+        dispatch(updateIdsForCategory(normalizedResponse.result, category, timestamp,));
         dispatch(fetchCategoriesPostsSuccess());
-        // dispatch(
-        //     fetchCategoriesPostsSuccess(handleNormalize(postsJSON, 'posts'), category, Date.now())
-        // );
     } catch (err) {
+        console.log(err);
         dispatch(fetchCategoriesPostsFailed());
     }
 } 
@@ -194,103 +184,6 @@ export const fetchPost = post_id => async dispatch => {
 
 
 
-
-
-
-
-// const fetchPostInfo = async _id => {
-//     try {
-//         const response = await fetch(`${rootApiUrl}/api/posts/${_id}`);
-//         if (!response.ok) {
-//             return Promise.reject();
-//         }
-//         const responseJSON = await response.json();
-//         const normalized =  handleNormalize(responseJSON, 'post');
-//         console.log(normalized);
-//         return normalized;
-//     } catch (err) {
-//       return err;  
-//     }
-// }
-
-// const fetchPostComments = async _id => {
-//     try {
-//         const comments = await fetch(`${rootApiUrl}/api/posts/${_id}/comments`);
-//         if (!comments.ok) {
-//             return Promise.reject();
-//         }
-//         const commentsJSON = await comments.json();
-//         return handleNormalize(commentsJSON, 'comments');
-//     } catch (err) {
-//       return err;  
-//     }
-// }
-
-// const fetchPostKudos = async _id => {
-//     try {
-//         const kudos = await fetch(`${rootApiUrl}/api/posts/${_id}/kudos`);
-//         if (!kudos.ok) {
-//             return Promise.reject();
-//         }
-//         const kudosJSON = await kudos.json();
-//         return kudosJSON;
-//     } catch (err) {
-//         return Promise.reject(err);
-//     }
-// }
-
-
-// const fetchPostRequest = () => ({
-//     type: actionTypes.FETCH_POST_REQUEST
-// });
-
-// const fetchPostSuccess = (_id, data) => ({
-//     type: actionTypes.FETCH_POST_SUCCESS,
-//     key: _id,
-//     payload: data
-// });
-
-// const fetchPostFailed = err => ({
-//     type: actionTypes.FETCH_POST_FAILED,
-//     payload: err
-// });
-
-// export const fetchPost = _id => async dispatch => {
-//     dispatch(fetchPostRequest());
-//     try {
-//         const postReq = fetchPostInfo(_id);
-//         const commentsReq = fetchPostComments(_id);
-//         const kudosReq = fetchPostKudos(_id);
-//         const post = await postReq;
-//         const comments = await commentsReq;
-//         const kudos = await kudosReq;
-        
-//         const fetchPostResults = {
-//             post: {
-//                 ...post.entities.posts[_id],
-//                 commentIds: sortComments(objectToArray({...comments.entities.comments})),
-//                 kudos: kudos.kudos,
-//                 isFullPost: true,
-//                 fetchedAt: Date.now()
-//             },
-//             users: {
-//                 ...post.entities.users,
-//                 ...comments.entities.users
-//             },
-//             comments: {
-//                 ...comments.entities.comments
-//             }
-//         };
-
-//         dispatch(fetchPostSuccess(_id, fetchPostResults));
-//     } catch (err) {
-//         dispatch(fetchPostFailed(err));
-//     }
-// }
-
-
-
-
 const createPostRequest = () => ({
     type: actionTypes.CREATE_POST_REQUEST
 });
@@ -338,51 +231,6 @@ export const createPost = (articleObject, currentUser_id, token) => async dispat
 
 
 
-
-
-// const createPostRequest = () => ({
-//     type: actionTypes.CREATE_POST_REQUEST
-// });
-
-// const createPostSuccess = (post, _id, category, post_id) => ({
-//     type: actionTypes.CREATE_POST_SUCCESS,
-//     payload: post,
-//     key: _id,
-//     category,
-//     post_id
-// });
-
-// const createPostFailed = () => ({
-//     type: actionTypes.CREATE_POST_FAILED
-// });
-
-
-// export const createPost = (articleObject, currentUser_id, token) => async dispatch => {
-//     dispatch(createPostRequest());
-//     const settings = {
-//         headers: {
-//             'Authorization': `Bearer ${token}`,
-//             'Content-Type': 'application/json'
-//         },
-//         method: 'post',
-//         body: JSON.stringify(articleObject)
-//     }
-//     try {
-//         const createPostReq = await fetch(`${rootApiUrl}/api/posts`, settings);
-//         if (!createPostReq.ok) {
-//             return dispatch(createPostFailed());
-//         }
-//         const postJSON = await createPostReq.json();
-//         const newPost_id = postJSON._id;
-//         //postJSON.text = JSON.parse(postJSON.text);
-//         const newPostCategory = postJSON.category;
-//         dispatch(createPostSuccess(postJSON, currentUser_id, newPostCategory, newPost_id));
-//         Router.push(`/post?post=${newPost_id}`, `/post/${newPost_id}`);
-//     } catch (err) {
-//         console.log(err);
-//     }
-// }
-
 const updateCategoryPostIds = (oldCategory, newCategory, post_id) => ({
     type: actionTypes.UPDATE_CATEGORY_POST_IDS,
     meta: {
@@ -396,12 +244,6 @@ const updateCategoryPostIds = (oldCategory, newCategory, post_id) => ({
 const editPostRequest = () => ({
     type: actionTypes.EDIT_POST_REQUEST
 });
-
-// const editPostSuccess = (post, post_id) => ({
-//     type: actionTypes.EDIT_POST_SUCCESS,
-//     payload: post,
-//     key: _id
-// });
 
 const editPostSuccess = () => ({
     type: actionTypes.EDIT_POST_SUCCESS

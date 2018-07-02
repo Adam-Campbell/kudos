@@ -6,6 +6,54 @@ Generally they will not be called directly but are called by the more complex ac
 once they have retreived the data that they will add to the store.
 */
 
+export const storeUser = (user, user_id) => ({
+    type: actionTypes.STORE_USER,
+    payload: user,
+    meta: {
+        user_id
+    }
+});
+
+export const storeUsersPosts = (post_ids, user_id) => ({
+    type: actionTypes.STORE_USERS_POSTS,
+    payload: post_ids,
+    meta: {
+        user_id
+    }
+});
+
+export const storeUsersFollowers = (followers, user_id) => ({
+    type: actionTypes.STORE_USERS_FOLLOWERS,
+    payload: followers,
+    meta: {
+        user_id
+    }
+});
+
+export const storeUsersComments = (comment_ids, user_id) => ({
+    type: actionTypes.STORE_USERS_COMMENTS,
+    payload: comment_ids,
+    meta: {
+        user_id
+    }
+});
+
+export const storeUsersKudos = (post_ids, user_id) => ({
+    type: actionTypes.STORE_USERS_KUDOS,
+    payload: post_ids,
+    meta: {
+        user_id
+    }
+});
+
+export const storeUsersHighlights = (highlight_ids, user_id) => ({
+    type: actionTypes.STORE_USERS_HIGHLIGHTS,
+    payload: highlight_ids,
+    meta: {
+        user_id
+    }
+});
+
 
 export const storeUsers = (users) => ({
     type: actionTypes.STORE_USERS,
@@ -43,24 +91,13 @@ export const storePost = (post, post_id) => ({
     }
 });
 
-// export const storePostsComment_ids = (comment_ids, post_id) => ({
-//     type: actionTypes.STORE_POSTS_COMMENT_IDS,
-//     payload: comment_ids,
-//     meta: {
-//         post_id
-//     }
-// });
-
-export const storePostsComment_ids = (comment_ids, post_id) => {
-    console.log(comment_ids, post_id);
-    return {
-        type: actionTypes.STORE_POSTS_COMMENT_IDS,
-        payload: comment_ids,
-        meta: {
-            post_id
-        }
+export const storePostsComment_ids = (comment_ids, post_id) => ({
+    type: actionTypes.STORE_POSTS_COMMENT_IDS,
+    payload: comment_ids,
+    meta: {
+        post_id
     }
-};
+});
 
 export const storePostsKudos = (kudos, post_id) => ({
     type: actionTypes.STORE_POSTS_KUDOS,

@@ -149,6 +149,12 @@ export const STORE_CURRENT_USERS_KUDOS = '[store one] STORE_CURRENT_USERS_KUDOS'
 export const STORE_CURRENT_USERS_HIGHLIGHTS = '[store one] STORE_CURRENT_USERS_HIGHLIGHTS';
 
 export const STORE_USER = '[store one] STORE_USER';
+export const STORE_USERS_POSTS = '[store reference] STORE_USERS_POSTS';
+export const STORE_USERS_FOLLOWERS = '[store one] STORE_USERS_FOLLOWERS';
+export const STORE_USERS_COMMENTS = '[store reference] STORE_USERS_COMMENTS';
+export const STORE_USERS_KUDOS = '[store reference] STORE_USERS_KUDOS';
+export const STORE_USERS_HIGHLIGHTS = '[store reference] STORE_USERS_HIGHLIGHTS';
+
 export const STORE_USERS = '[store many] STORE_USERS';
 
 

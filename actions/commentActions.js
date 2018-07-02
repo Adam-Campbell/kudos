@@ -16,15 +16,6 @@ const replyToPostSuccess = () => ({
     type: actionTypes.REPLY_TO_POST_SUCCESS
 });
 
-// const replyToPostSuccess = (comment, comment_id, discussion_id, author_id, sortedComments) => ({
-//     type: actionTypes.REPLY_TO_POST_SUCCESS,
-//     payload: comment,
-//     comment_id,
-//     discussion_id,
-//     author_id,
-//     sortedComments
-// });
-
 const replyToPostFailed = () => ({
     type: actionTypes.REPLY_TO_POST_FAILED
 });

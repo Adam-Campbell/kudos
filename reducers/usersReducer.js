@@ -31,36 +31,19 @@ The shape of one user is as follows:
 
 const usersReducer = (state=initialState, action) => {
     switch (action.type) {
-       
-        // case actionTypes.FETCH_POSTS_SUCCESS:
-        //     return {
-        //         ...state,
-        //         models: addOrMerge(state.models, action.payload.entities.users)
-        //     }; 
-
-        // case actionTypes.FETCH_POST_SUCCESS:
-        //     return {
-        //         ...state,
-        //         models: addOrMerge(state.models, action.payload.users)
-        //     }
 
         case actionTypes.FETCH_USER_SUCCESS:
             return {
                 ...state,
                 models: {
-                    ...addOrMerge(state.models, action.payload.users),
-                    ...addOrMerge(state.models, action.payload.user, action.key)
+                    ...state.models,
+                    [action.meta.user_id]: {
+                        ...state.models[action.meta.user_id],
+                        fetchedAt: action.meta.timestamp,
+                        isFullProfile: true
+                    }
                 }
             }
-
-        // case actionTypes.FETCH_CURRENT_USER_SUCCESS:
-        //     return {
-        //         ...state,
-        //         models: {
-        //             ...addOrMerge(state.models, action.payload.users),
-        //             ...addOrMerge(state.models, action.payload.currentUser, action.key)
-        //         }
-        //     }
 
         case actionTypes.GIVE_KUDOS_SUCCESS:
             return {
@@ -89,52 +72,6 @@ const usersReducer = (state=initialState, action) => {
                     }
                 }
             };
-
-        // case actionTypes.UPDATE_USER_DETAILS_SUCCESS:
-        //     return {
-        //         ...state,
-        //         models: addOrMerge(state.models, action.payload.currentUser, action.key)
-        //     }
-
-        // case actionTypes.UPDATE_USER_AVATAR_SUCCESS:
-        //     return {
-        //         ...state,
-        //         models: addOrMerge(state.models, action.payload, action.key)
-        //     }
-
-        // case actionTypes.FETCH_CATEGORIES_POSTS_SUCCESS:
-        //     return {
-        //         ...state,
-        //         models: addOrMerge(state.models, action.payload.entities.users)
-        //     }
-
-        // case actionTypes.REPLY_TO_POST_SUCCESS:
-        //     return {
-        //         ...state,
-        //         models: {
-        //             ...state.models,
-        //             [action.author_id]: {
-        //                 ...state.models[action.author_id],
-        //                 commentIds: state.models[action.author_id].commentIds ? 
-        //                             [...state.models[action.author_id].commentIds, action.comment_id] :
-        //                             [action.comment_id]
-        //             }
-        //         }
-        //     }
-
-        // case actionTypes.REPLY_TO_COMMENT_SUCCESS:
-        //     return {
-        //         ...state,
-        //         models: {
-        //             ...state.models,
-        //             [action.author_id]: {
-        //                 ...state.models[action.author_id],
-        //                 commentIds: state.models[action.author_id].commentIds ? 
-        //                             [...state.models[action.author_id].commentIds, action.comment_id] :
-        //                             [action.comment_id]
-        //             }
-        //         }
-        //     }
 
         case actionTypes.STORE_COMMENT: 
             return {
@@ -190,6 +127,42 @@ const usersReducer = (state=initialState, action) => {
             return {
                 ...state,
                 models: addOrMerge(state.models, {kudosIds: action.payload.result}, action.meta.entityKey)
+            }
+
+        case actionTypes.STORE_USER:
+            return {
+                ...state,
+                models: addOrMerge(state.models, action.payload, action.meta.user_id)
+            }
+
+        case actionTypes.STORE_USERS_FOLLOWERS:
+            return {
+                ...state,
+                models: addOrMerge(state.models, action.payload, action.meta.user_id)
+            }
+
+        case actionTypes.STORE_USERS_POSTS:
+            return {
+                ...state,
+                models: addOrMerge(state.models, {postIds: action.payload}, action.meta.user_id)
+            }
+
+        case actionTypes.STORE_USERS_COMMENTS:
+            return {
+                ...state,
+                models: addOrMerge(state.models, {commentIds: action.payload}, action.meta.user_id)
+            }
+
+        case actionTypes.STORE_USERS_KUDOS:
+            return {
+                ...state,
+                models: addOrMerge(state.models, {kudosIds: action.payload}, action.meta.user_id)
+            }
+
+        case actionTypes.STORE_USERS_HIGHLIGHTS:
+            return {
+                ...state, 
+                models: addOrMerge(state.models, {highlightIds: action.payload}, action.meta.user_id)
             }
 
         default:

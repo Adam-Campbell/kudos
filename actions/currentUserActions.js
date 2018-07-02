@@ -133,7 +133,7 @@ const fetchCurrentUsersKudos = settings => async dispatch => {
         });
         const timestamp = Date.now();
         dispatch(storeUsers(normalizedResponse.entities.users));
-        dispatch(storePosts(normalizedResponse.entities.posts, timestamp));
+        dispatch(storePosts(normalizedResponse.entities.posts));
         dispatch(storeCurrentUsersKudos(arrayOfPost_ids, currentUser_id));
         return Promise.resolve();
     } catch (err) {

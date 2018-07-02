@@ -55,12 +55,6 @@ const currentUserReducer = (state=initialState, action) => {
                 follows: state.follows.filter(follow => follow !== action.payload)
             }
 
-        // case actionTypes.UPDATE_USER_DETAILS_SUCCESS:
-        //     return {
-        //         ...state,
-        //         email: action.payload.email
-        //     };
-
         case actionTypes.STORE_CURRENT_USER:
             return {
                 ...state,

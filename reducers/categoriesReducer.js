@@ -20,24 +20,6 @@ export const initialState = {
 const categoriesReducer = (state=initialState, action) => {
     switch (action.type) {
 
-        // case actionTypes.FETCH_POSTS_SUCCESS:
-        //     return {
-        //         ...state,
-        //         all: {
-        //             postIds: mergeAndDedupArrays(state.all, action.payload.result),
-        //             fetchedAt: action.timestamp
-        //         }
-        //     }
-
-        // case actionTypes.FETCH_CATEGORIES_POSTS_SUCCESS:
-        //     return {
-        //         ...state,
-        //         [action.key]: {
-        //             postIds: mergeAndDedupArrays(state[action.key] ,action.payload.result),
-        //             fetchedAt: action.timestamp
-        //         }
-        //     }
-
         // this action is for when we update the category of an existing post
         case actionTypes.UPDATE_CATEGORY_POST_IDS:
             return {

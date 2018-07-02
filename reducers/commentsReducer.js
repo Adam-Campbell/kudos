@@ -5,35 +5,9 @@ const initialState = {};
 
 const commentsReducer = (state=initialState, action) => {
     switch (action.type) {
-        // case actionTypes.FETCH_USER_SUCCESS:
-        //     return {
-        //         ...state,
-        //         ...action.payload.comments
-        //     };
-
-        // case actionTypes.FETCH_POST_SUCCESS:
-        //     return {
-        //         ...state,
-        //         ...action.payload.comments
-        //     };
-
-        // case actionTypes.REPLY_TO_POST_SUCCESS:
-        //     return {
-        //         ...state, 
-        //         [action.comment_id]: { ...action.payload }
-        //     };
-
-        // case actionTypes.REPLY_TO_COMMENT_SUCCESS:
-        //     return {
-        //         ...state,
-        //         [action.comment_id]: { ...action.payload }
-        //     };
-
+        
         case actionTypes.STORE_COMMENT:
-            return {
-                ...state,
-                [action.payload.comment_id]: action.payload.comment
-            }
+            return addOrMerge(state, action.payload.comment, action.payload.comment_id)
 
         case actionTypes.STORE_COMMENTS: {
             return addOrMerge(state, action.payload)
