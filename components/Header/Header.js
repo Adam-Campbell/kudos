@@ -46,7 +46,7 @@ const Header = props => (
         <HeaderContentWrapper>
             <Logo />
             {
-                props.isLoggedIn ? (
+                (props.isLoggedIn && props.currentUser_id) ? (
                     <Avatar handleClick={props.toggleNav}/>
                 ) : (
                     <React.Fragment>
@@ -71,7 +71,8 @@ Header.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     isLoggedIn: PropTypes.bool.isRequired,
     hasFetched: PropTypes.bool.isRequired,
-    toggleNav: PropTypes.func.isRequired
+    toggleNav: PropTypes.func.isRequired,
+    currentUser_id: PropTypes.string.isRequired
 };
 
 export default Header;

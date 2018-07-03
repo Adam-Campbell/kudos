@@ -3,6 +3,8 @@ import fetch from 'isomorphic-fetch';
 import { rootApiUrl } from '../globalConstants';  
 import { sortComments } from '../utils';
 import { storeComment } from './documentActions';
+import { fetchData } from '../utils';
+import { tokenExpired } from './authActions';
 
 /*****************
     replyToPost
@@ -16,8 +18,9 @@ const replyToPostSuccess = () => ({
     type: actionTypes.REPLY_TO_POST_SUCCESS
 });
 
-const replyToPostFailed = () => ({
-    type: actionTypes.REPLY_TO_POST_FAILED
+const replyToPostFailed = (error) => ({
+    type: actionTypes.REPLY_TO_POST_FAILED,
+    error
 });
 
 export const replyToPost = (commentRaw, post_id, token) => async (dispatch, getState) => {
@@ -33,35 +36,38 @@ export const replyToPost = (commentRaw, post_id, token) => async (dispatch, getS
         })
     };
     try {
-        const response = await fetch(`${rootApiUrl}/api/posts/${post_id}/comments`, settings);
-        if (!response.ok) {
-            return dispatch(replyToPostFailed());
-        }
-        const responseJSON = await response.json();
+        const response = await fetchData(`${rootApiUrl}/api/posts/${post_id}/comments`, settings);
+        // if (!response.ok) {
+        //     return dispatch(replyToPostFailed());
+        // }
+        // const responseJSON = await response.json();
 
         // We need to re-sort the comments before handing them back to the reducer, this ensures the commment we
         // just added appears in the right place. 
         const currentState = getState();
-        const parentPost_id = responseJSON.discussion;
+        const parentPost_id = response.discussion;
         // In order to sort we need the full comment objects not just the comment _ids
         const existingComments = currentState.posts.models[parentPost_id].commentIds.map(comment_id => {
             return currentState.comments[comment_id]
         });
         // Now sort the comments
-        const sortedComments = sortComments([...existingComments, {...commentObject}]);
+        const sortedComments = sortComments([...existingComments, {...response}]);
 
         dispatch(
             storeComment(
-                responseJSON, 
-                responseJSON._id, 
-                responseJSON.discussion, 
-                responseJSON.author,
+                response, 
+                response._id, 
+                response.discussion, 
+                response.author,
                 sortedComments
             )
         );
         dispatch(replyToPostSuccess());
     } catch (err) {
-        console.log(err);
+        dispatch(replyToPostFailed());
+        if (err.status && err.status === 401) {
+            dispatch(tokenExpired());
+        }
     }
 };
 
@@ -86,8 +92,9 @@ const replyToCommentSuccess = () => ({
 //     sortedComments
 // });
 
-const replyToCommentFailed = () => ({
-    type: actionTypes.REPLY_TO_COMMENT_FAILED
+const replyToCommentFailed = (error) => ({
+    type: actionTypes.REPLY_TO_COMMENT_FAILED,
+    error
 });
 
 export const replyToComment = (commentRaw, parentComment_id, token) => async (dispatch, getState) => {
@@ -103,31 +110,35 @@ export const replyToComment = (commentRaw, parentComment_id, token) => async (di
         })
     };
     try {
-        const response = await fetch(`${rootApiUrl}/api/comments/${parentComment_id}`, settings);
-        if (!response.ok) {
-            return dispatch(replyToCommentFailed());
-        }
-        const responseJSON = await response.json();
+        const response = await fetchData(`${rootApiUrl}/api/comments/${parentComment_id}`, settings);
+        // if (!response.ok) {
+        //     return dispatch(replyToCommentFailed());
+        // }
+        // const responseJSON = await response.json();
+
         // We need to re-sort the comments before handing them back to the reducer, this ensures the commment we
         // just added appears in the right place. 
         const currentState = getState();
-        const parentPost_id = responseJSON.discussion;
+        const parentPost_id = response.discussion;
         const existingComments = currentState.posts.models[parentPost_id].commentIds.map(comment_id => {
             return currentState.comments[comment_id]
         });
-        const sortedComments = sortComments([...existingComments, {...commentObject}]);
+        const sortedComments = sortComments([...existingComments, {...response}]);
         dispatch(
             storeComment(
-                responseJSON, 
-                responseJSON._id,
-                responseJSON.discussion,
-                responseJSON.author,
+                response, 
+                response._id,
+                response.discussion,
+                response.author,
                 sortedComments
             )
         );
         dispatch(replyToCommentSuccess());
     } catch (err) {
-        console.log(err);
+        dispatch(replyToCommentFailed(err));
+        if (err.status && err.status === 401) {
+            dispatch(tokenExpired());
+        }
     }
 }
 
@@ -150,8 +161,9 @@ const deleteCommentSuccess = (comment, comment_id, author_id) => ({
     }
 });
 
-const deleteCommentFailed = () => ({
-    type: actionTypes.DELETE_COMMENT_FAILED
+const deleteCommentFailed = (err) => ({
+    type: actionTypes.DELETE_COMMENT_FAILED,
+    error
 });
 
 export const deleteComment = (comment_id, currentUser_id, token) => async dispatch => {
@@ -163,14 +175,18 @@ export const deleteComment = (comment_id, currentUser_id, token) => async dispat
         method: 'delete',
     };
     try {
-        const response = await fetch(`${rootApiUrl}/api/comments/${comment_id}`, settings);
-        if (!response.ok) {
-            return dispatch(deleteCommentFailed());
-        }
-        const responseJSON = await response.json();
-        dispatch(deleteCommentSuccess(responseJSON, comment_id, currentUser_id));
+        const response = await fetchData(`${rootApiUrl}/api/comments/${comment_id}`, settings);
+        // if (!response.ok) {
+        //     return dispatch(deleteCommentFailed());
+        // }
+        // const responseJSON = await response.json();
+
+        dispatch(deleteCommentSuccess(response, comment_id, currentUser_id));
     } catch (err) {
-        console.log(err);
+        dispatch(deleteCommentFailed());
+        if (err.status && err.status === 401) {
+            dispatch(tokenExpired());
+        }
     }
 }
 
@@ -190,8 +206,9 @@ const editCommentSuccess = (comment, comment_id) => ({
     }
 });
 
-const editCommentFailed = () => ({
-    type: actionTypes.EDIT_COMMENT_FAILED
+const editCommentFailed = (error) => ({
+    type: actionTypes.EDIT_COMMENT_FAILED,
+    error
 });
 
 export const editComment = (commentText, comment_id, token) => async dispatch => {
@@ -207,14 +224,17 @@ export const editComment = (commentText, comment_id, token) => async dispatch =>
         })
     };
     try {
-        const response = await fetch(`${rootApiUrl}/api/comments/${comment_id}`, settings);
-        if (!response.ok) {
-            return dispatch(editCommentFailed());
-        }
-        const responseJSON = await response.json();
-        responseJSON.author = responseJSON.author._id;
-        dispatch(editCommentSuccess(responseJSON, responseJSON._id));
+        const response = await fetchData(`${rootApiUrl}/api/comments/${comment_id}`, settings);
+        // if (!response.ok) {
+        //     return dispatch(editCommentFailed());
+        // }
+        // const responseJSON = await response.json();
+        response.author = response.author._id;
+        dispatch(editCommentSuccess(response, response._id));
     } catch (err) {
-        console.log(err);
+        dispatch(editCommentFailed());
+        if (err.status && err.status === 401) {
+            dispatch(tokenExpired());
+        }
     }
 }

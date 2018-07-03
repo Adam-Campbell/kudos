@@ -7,21 +7,32 @@ import Router from 'next/router';
 import { Wrapper } from '../components/Layout';
 
 const signin = props => {
-    if (!props.isLoggedIn) {
-        return (
-            <React.Fragment>
-                <Header />
-                <Wrapper tight>
-                    <SignInForm />
-                </Wrapper>
-            </React.Fragment>
-        )
-    } else if (!props.hasFetched) {
-        return null;
-    } else {
-        return <p style={{color: 'red', backgroundColor: 'yellow'}}>You shouldn't be here!!!</p>;
-    }
+    return (
+        <React.Fragment>
+            <Header />
+            <Wrapper tight>
+                <SignInForm />
+            </Wrapper>
+        </React.Fragment>
+    );
 }
+
+// const signin = props => {
+//     if (!props.isLoggedIn) {
+//         return (
+//             <React.Fragment>
+//                 <Header />
+//                 <Wrapper tight>
+//                     <SignInForm />
+//                 </Wrapper>
+//             </React.Fragment>
+//         )
+//     } else if (!props.hasFetched) {
+//         return null;
+//     } else {
+//         return <p style={{color: 'red', backgroundColor: 'yellow'}}>You shouldn't be here!!!</p>;
+//     }
+// }
 
 signin.getInitialProps = async ({store, isServer, req, pathname, query}) => {
     const currentState = store.getState();

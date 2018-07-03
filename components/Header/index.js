@@ -23,6 +23,7 @@ export class HeaderContainer extends Component {
                 isLoggedIn={this.props.isLoggedIn} 
                 hasFetched={this.props.hasFetched} 
                 toggleNav={this.toggleNav}
+                currentUser_id={this.props.currentUser_id}
             />    
         )
     }
@@ -30,7 +31,8 @@ export class HeaderContainer extends Component {
 
 const mapStateToProps = state => ({
     isLoggedIn: state.currentUser.isLoggedIn,
-    hasFetched: state.currentUser.hasFetched
+    hasFetched: state.currentUser.hasFetched,
+    currentUser_id: state.currentUser._id
 });
 
 export default connect(mapStateToProps)(HeaderContainer); 

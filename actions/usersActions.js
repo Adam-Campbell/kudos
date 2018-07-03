@@ -14,16 +14,17 @@ import {
     storeComments,
     storeHighlights,
 } from './documentActions';
-
+import { fetchData } from '../utils';
+import { tokenExpired } from './authActions';
 
 const fetchUsersInfo = user_id => async dispatch => {
     try {
-        const response = await fetch(`${rootApiUrl}/api/users/${user_id}`);
-        if (!response.ok) {
-            return Promise.reject();
-        }
-        const responseJSON = await response.json();
-        dispatch(storeUser(responseJSON, user_id));
+        const response = await fetchData(`${rootApiUrl}/api/users/${user_id}`);
+        // if (!response.ok) {
+        //     return Promise.reject();
+        // }
+        // const responseJSON = await response.json();
+        dispatch(storeUser(response, user_id));
         return Promise.resolve();
     } catch (err) {
         return Promise.reject(err);
@@ -32,12 +33,12 @@ const fetchUsersInfo = user_id => async dispatch => {
 
 const fetchUsersFollowers = user_id => async dispatch => {
     try {
-        const response = await fetch(`${rootApiUrl}/api/users/${user_id}/followers`);
-        if (!response.ok) {
-            return Promise.reject();
-        }
-        const responseJSON = await response.json(); 
-        dispatch(storeUsersFollowers(responseJSON, user_id));
+        const response = await fetchData(`${rootApiUrl}/api/users/${user_id}/followers`);
+        // if (!response.ok) {
+        //     return Promise.reject();
+        // }
+        // const responseJSON = await response.json(); 
+        dispatch(storeUsersFollowers(response, user_id));
         return Promise.resolve();
     } catch (err) {
         return Promise.reject(err);
@@ -46,12 +47,12 @@ const fetchUsersFollowers = user_id => async dispatch => {
 
 const fetchUsersPosts = user_id => async dispatch => {
     try {
-        const response = await fetch(`${rootApiUrl}/api/users/${user_id}/posts`);
-        if (!response.ok) {
-            return Promise.reject();
-        }
-        const responseJSON = await response.json();
-        const normalizedResponse = handleNormalize(responseJSON, 'posts');
+        const response = await fetchData(`${rootApiUrl}/api/users/${user_id}/posts`);
+        // if (!response.ok) {
+        //     return Promise.reject();
+        // }
+        // const responseJSON = await response.json();
+        const normalizedResponse = handleNormalize(response, 'posts');
         dispatch(storePosts(normalizedResponse.entities.posts));
         dispatch(storeUsersPosts(normalizedResponse.result, user_id));
         return Promise.resolve();
@@ -62,12 +63,12 @@ const fetchUsersPosts = user_id => async dispatch => {
 
 const fetchUsersComments = user_id => async dispatch => {
     try {
-        const response = await fetch(`${rootApiUrl}/api/users/${user_id}/comments`);
-        if (!response.ok) {
-            return Promise.reject();
-        }
-        const responseJSON = await response.json();
-        const normalizedResponse = handleNormalize(responseJSON, 'comments');
+        const response = await fetchData(`${rootApiUrl}/api/users/${user_id}/comments`);
+        // if (!response.ok) {
+        //     return Promise.reject();
+        // }
+        // const responseJSON = await response.json();
+        const normalizedResponse = handleNormalize(response, 'comments');
         dispatch(storeComments(normalizedResponse.entities.comments));
         dispatch(storeUsersComments(normalizedResponse.result, user_id));
         return Promise.resolve()
@@ -78,12 +79,12 @@ const fetchUsersComments = user_id => async dispatch => {
 
 const fetchUsersKudos = user_id => async dispatch => {
     try {
-        const response = await fetch(`${rootApiUrl}/api/users/${user_id}/kudos`);
-        if (!response.ok) {
-            return Promise.reject();
-        }
-        const responseJSON = await response.json();
-        const normalizedResponse = handleNormalize(usersKudosJSON, 'kudos');
+        const response = await fetchData(`${rootApiUrl}/api/users/${user_id}/kudos`);
+        // if (!response.ok) {
+        //     return Promise.reject();
+        // }
+        // const responseJSON = await response.json();
+        const normalizedResponse = handleNormalize(response, 'kudos');
         const arrayOfPost_ids = normalizedResponse.result.map(kudos_id => {
             return normalizedResponse.entities.kudos[kudos_id].post
         });
@@ -98,12 +99,12 @@ const fetchUsersKudos = user_id => async dispatch => {
 
 const fetchUsersHighlights = user_id => async dispatch => {
     try {
-        const response = await fetch(`${rootApiUrl}/api/users/${user_id}/highlights`);
-        if (!response.ok) {
-            return Promise.reject();
-        }
-        const responseJSON = await response.json();
-        const normalizedResponse = handleNormalize(responseJSON, 'highlights');
+        const response = await fetchData(`${rootApiUrl}/api/users/${user_id}/highlights`);
+        // if (!response.ok) {
+        //     return Promise.reject();
+        // }
+        // const responseJSON = await response.json();
+        const normalizedResponse = handleNormalize(response, 'highlights');
         dispatch(storeHighlights(normalizedResponse.entities.highlights));
         dispatch(storePosts(normalizedResponse.entities.posts));
         dispatch(storeUsers(normalizedResponse.entities.users));
@@ -126,9 +127,9 @@ const fetchUserSuccess = (user_id, timestamp) => ({
     }
 });
 
-const fetchUserFailed = err => ({
+const fetchUserFailed = (error) => ({
     type: actionTypes.FETCH_USER_FAILED,
-    payload: err
+    error
 });
 
 export const fetchUser = user_id => async dispatch => {
@@ -145,8 +146,12 @@ export const fetchUser = user_id => async dispatch => {
     return Promise.all(promiseArr)
     .then(() => {
         const timestamp = Date.now();
-        dispatch(fetchUserSuccess(user_id, timestampt))
+        dispatch(fetchUserSuccess(user_id, timestamp))
     }, (err) => {
-        dispatch(fetchUserFailed());
+        console.log(err);
+        dispatch(fetchUserFailed(err));
+        if (err.status && err.status === 401) {
+            dispatch(tokenExpired());
+        }
     });
 }

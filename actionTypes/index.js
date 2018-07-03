@@ -176,7 +176,7 @@ export const STORE_COMMENTS = '[store many] STORE_COMMENTS';
 export const STORE_HIGHLIGHTS = '[store many] STORE_HIGHLIGHTS';
 
 
-
+export const TOKEN_EXPIRED = '[hook] TOKEN_EXPIRED';
 
 
 
