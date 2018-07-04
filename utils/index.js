@@ -1,5 +1,4 @@
 export * from './addOrMerge';
-export * from './cleanseErrorsAndSuccesses';
 export * from './fetchCurrentUserIfNeeded';
 export * from './fetchData';
 export * from './fetchPostIfNeeded';

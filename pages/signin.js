@@ -2,7 +2,7 @@ import makeStore from '../store';
 import withRedux from 'next-redux-wrapper';
 import SignInForm from '../components/SignInForm';
 import Header from '../components/Header';
-import { fetchCurrentUserIfNeeded, cleanseErrorsAndSuccesses } from '../utils';
+import { fetchCurrentUserIfNeeded } from '../utils';
 import Router from 'next/router';
 import { Wrapper } from '../components/Layout';
 
@@ -36,7 +36,6 @@ const signin = props => {
 
 signin.getInitialProps = async ({store, isServer, req, pathname, query}) => {
     const currentState = store.getState();
-    cleanseErrorsAndSuccesses(store);
     await fetchCurrentUserIfNeeded(currentState, store);
     return;
 };

@@ -1,7 +1,5 @@
-import * as actionTypes from '../actionTypes';
-import fetch from 'isomorphic-fetch';
-import { rootApiUrl } from '../globalConstants'; 
-import { handleNormalize } from '../utils';
+import * as actionTypes from '../../actionTypes';
+import { rootApiUrl } from '../../globalConstants'; 
 import {
     storeUser,
     storeUsers,
@@ -13,17 +11,13 @@ import {
     storePosts,
     storeComments,
     storeHighlights,
-} from './documentActions';
-import { fetchData } from '../utils';
-import { tokenExpired } from './authActions';
+} from '../documentActions';
+import { fetchData, handleNormalize } from '../../utils';
+import { tokenExpired } from '../authActions';
 
 const fetchUsersInfo = user_id => async dispatch => {
     try {
         const response = await fetchData(`${rootApiUrl}/api/users/${user_id}`);
-        // if (!response.ok) {
-        //     return Promise.reject();
-        // }
-        // const responseJSON = await response.json();
         dispatch(storeUser(response, user_id));
         return Promise.resolve();
     } catch (err) {
@@ -34,10 +28,6 @@ const fetchUsersInfo = user_id => async dispatch => {
 const fetchUsersFollowers = user_id => async dispatch => {
     try {
         const response = await fetchData(`${rootApiUrl}/api/users/${user_id}/followers`);
-        // if (!response.ok) {
-        //     return Promise.reject();
-        // }
-        // const responseJSON = await response.json(); 
         dispatch(storeUsersFollowers(response, user_id));
         return Promise.resolve();
     } catch (err) {
@@ -48,10 +38,6 @@ const fetchUsersFollowers = user_id => async dispatch => {
 const fetchUsersPosts = user_id => async dispatch => {
     try {
         const response = await fetchData(`${rootApiUrl}/api/users/${user_id}/posts`);
-        // if (!response.ok) {
-        //     return Promise.reject();
-        // }
-        // const responseJSON = await response.json();
         const normalizedResponse = handleNormalize(response, 'posts');
         dispatch(storePosts(normalizedResponse.entities.posts));
         dispatch(storeUsersPosts(normalizedResponse.result, user_id));
@@ -64,10 +50,6 @@ const fetchUsersPosts = user_id => async dispatch => {
 const fetchUsersComments = user_id => async dispatch => {
     try {
         const response = await fetchData(`${rootApiUrl}/api/users/${user_id}/comments`);
-        // if (!response.ok) {
-        //     return Promise.reject();
-        // }
-        // const responseJSON = await response.json();
         const normalizedResponse = handleNormalize(response, 'comments');
         dispatch(storeComments(normalizedResponse.entities.comments));
         dispatch(storeUsersComments(normalizedResponse.result, user_id));
@@ -80,10 +62,6 @@ const fetchUsersComments = user_id => async dispatch => {
 const fetchUsersKudos = user_id => async dispatch => {
     try {
         const response = await fetchData(`${rootApiUrl}/api/users/${user_id}/kudos`);
-        // if (!response.ok) {
-        //     return Promise.reject();
-        // }
-        // const responseJSON = await response.json();
         const normalizedResponse = handleNormalize(response, 'kudos');
         const arrayOfPost_ids = normalizedResponse.result.map(kudos_id => {
             return normalizedResponse.entities.kudos[kudos_id].post
@@ -100,10 +78,6 @@ const fetchUsersKudos = user_id => async dispatch => {
 const fetchUsersHighlights = user_id => async dispatch => {
     try {
         const response = await fetchData(`${rootApiUrl}/api/users/${user_id}/highlights`);
-        // if (!response.ok) {
-        //     return Promise.reject();
-        // }
-        // const responseJSON = await response.json();
         const normalizedResponse = handleNormalize(response, 'highlights');
         dispatch(storeHighlights(normalizedResponse.entities.highlights));
         dispatch(storePosts(normalizedResponse.entities.posts));

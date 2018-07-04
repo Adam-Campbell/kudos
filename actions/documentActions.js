@@ -54,7 +54,6 @@ export const storeUsersHighlights = (highlight_ids, user_id) => ({
     }
 });
 
-
 export const storeUsers = (users) => ({
     type: actionTypes.STORE_USERS,
     payload: users
@@ -82,7 +81,6 @@ export const storePostsForCategory = (posts, post_ids, category, timestamp) => (
     }
 });
 
-
 export const storePost = (post, post_id) => ({
     type: actionTypes.STORE_POST,
     payload: post,
@@ -91,13 +89,16 @@ export const storePost = (post, post_id) => ({
     }
 });
 
-export const storePostsComment_ids = (comment_ids, post_id) => ({
-    type: actionTypes.STORE_POSTS_COMMENT_IDS,
-    payload: comment_ids,
-    meta: {
-        post_id
+export const storePostsComment_ids = (comment_ids, post_id) => {
+    console.log(comment_ids);
+    return {
+        type: actionTypes.STORE_POSTS_COMMENT_IDS,
+        payload: comment_ids,
+        meta: {
+            post_id
+        }
     }
-});
+};
 
 export const storePostsKudos = (kudos, post_id) => ({
     type: actionTypes.STORE_POSTS_KUDOS,
@@ -126,10 +127,48 @@ export const storeComment = (comment, comment_id, discussion_id, author_id, sort
     payload: {
         comment,
         comment_id,
-        sortedCommentsArray
+        sortedComments
     },
     meta: {
         discussion_id,
         author_id
+    }
+});
+
+export const storeCurrentUser = (currentUser, currentUser_id) => ({
+    type: actionTypes.STORE_CURRENT_USER,
+    payload: currentUser,
+    meta: {
+        entityKey: currentUser_id
+    }
+});
+
+export const storeCurrentUsersHighlights = (highlightsResults, currentUser_id) => ({
+    type: actionTypes.STORE_CURRENT_USERS_HIGHLIGHTS,
+    payload: {
+        result: highlightsResults
+    },
+    meta: {
+        entityKey: currentUser_id,
+    }
+});
+
+export const storeCurrentUsersFollows = (followsResult, currentUser_id) => ({
+    type: actionTypes.STORE_CURRENT_USERS_FOLLOWS,
+    payload: {
+        result: followsResult
+    },
+    meta: {
+        entityKey: currentUser_id
+    }
+});
+
+export const storeCurrentUsersKudos = (kudosResult, currentUser_id) => ({
+    type: actionTypes.STORE_CURRENT_USERS_KUDOS,
+    payload: {
+        result: kudosResult
+    },
+    meta: {
+        entityKey: currentUser_id
     }
 });

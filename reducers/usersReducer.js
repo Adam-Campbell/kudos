@@ -80,8 +80,8 @@ const usersReducer = (state=initialState, action) => {
                     ...state.models,
                     [action.meta.author_id]: {
                         ...state.models[action.meta.author_id],
-                        commentIds: state.models[action.meta.author_id] ?
-                        [...state.models[action.author_id].commentIds, action.payload.comment_id] :
+                        commentIds: state.models[action.meta.author_id] && state.models[action.meta.author_id].commentIds ?
+                        [...state.models[action.meta.author_id].commentIds, action.payload.comment_id] :
                         [action.payload.comment_id]
                     }
                 }

@@ -1,7 +1,7 @@
 import withRedux from 'next-redux-wrapper';
 import makeStore from '../store';
 import { fetchPost, fetchCurrentUser } from '../actions';
-import { fetchCurrentUserIfNeeded, fetchPostIfNeeded, cleanseErrorsAndSuccesses } from '../utils';
+import { fetchCurrentUserIfNeeded, fetchPostIfNeeded } from '../utils';
 import Link from 'next/link';
 import Article from '../components/Article';
 import Header from '../components/Header';
@@ -20,7 +20,6 @@ const post = props => {
 //<Article article_id={props._id} isAuthor={isAuthor} />
 post.getInitialProps = async ({store, isServer, req, pathname, query}) => {
     const currentState = store.getState();
-    cleanseErrorsAndSuccesses(store);
     const currentUser = fetchCurrentUserIfNeeded(currentState, store);
     const post = fetchPostIfNeeded(currentState, store, query.post);
     await Promise.all([currentUser, post]);
