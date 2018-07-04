@@ -5,7 +5,7 @@ import Header from '../components/Header';
 import UserDetailsForm from '../components/UserDetailsForm';
 import UserImageUploadForm from '../components/UserImageUploadForm';
 import UserPasswordForm from '../components/UserPasswordForm';
-import { fetchCurrentUserIfNeeded, cleanseErrorsAndSuccesses } from '../utils';
+import { fetchCurrentUserIfNeeded } from '../utils';
 import Router from 'next/router';
 
 const accountDetails = props => {
@@ -26,7 +26,6 @@ const accountDetails = props => {
 
 accountDetails.getInitialProps = async ({store, isServer, req, pathname, query}) => {
     const currentState = store.getState();
-    cleanseErrorsAndSuccesses(store);
     await fetchCurrentUserIfNeeded(currentState, store);
     return;
 }

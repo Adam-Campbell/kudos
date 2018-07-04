@@ -1,8 +1,19 @@
 import { createStore, compose, applyMiddleware } from 'redux';
+import * as actionTypes from './actionTypes';
 import thunk from 'redux-thunk';
 import reducer from './reducers';
+import Router from 'next/router';
 
 const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
+
+const handleExpiredToken = store => next => action => {
+    //console.log(`The ${action.type} action was called`);
+    if (action.type === actionTypes.TOKEN_EXPIRED && typeof window !== 'undefined') {
+        Router.push('/signin');
+    } else {
+        return next(action);
+    }
+}
 
 const makeStore = (initialState, options) => {
     // This logic will grab the token cookie from the request if it exists,
@@ -13,7 +24,11 @@ const makeStore = (initialState, options) => {
             currentUser: {
                 isLoggedIn: true,
                 _id: '',
-                token: options.req.headers.cookie.split('=')[1]
+                token: options.req.headers.cookie.split('=')[1],
+                email: '',
+                follows: [],
+                hasFetched: false,
+                signUpDuplicateError: false
             }
         }
     }
@@ -22,7 +37,7 @@ const makeStore = (initialState, options) => {
         reducer,
         initialState,
         composeEnhancers(
-            applyMiddleware(thunk)
+            applyMiddleware(thunk, handleExpiredToken)
         )
     );
 }

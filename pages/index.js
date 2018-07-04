@@ -1,7 +1,7 @@
 import makeStore from '../store';
 import withRedux from 'next-redux-wrapper';
 import { fetchPosts, fetchCurrentUser } from '../actions';
-import { fetchCurrentUserIfNeeded, fetchPostsIfNeeded, cleanseErrorsAndSuccesses } from '../utils';
+import { fetchCurrentUserIfNeeded, fetchPostsIfNeeded } from '../utils';
 import JumboArticleCard from '../components/JumboArticleCard';
 import Header from '../components/Header';
 import { Wrapper, Column } from '../components/Layout';
@@ -23,7 +23,6 @@ const index = props => (
 
 index.getInitialProps = async ({store, isServer, req, pathname, query}) => {
     const currentState = store.getState();
-    cleanseErrorsAndSuccesses(store);
     const currentUser = fetchCurrentUserIfNeeded(currentState, store);
     const posts = fetchPostsIfNeeded(currentState, store, 'all');
     await Promise.all([currentUser, posts]);

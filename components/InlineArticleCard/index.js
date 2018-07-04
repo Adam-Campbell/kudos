@@ -9,7 +9,7 @@ export const InlineArticleCardContainer = props => {
     return <InlineArticleCard 
         article_id={article._id}
         articleImage={articleImage}
-        articleTitle={article.title}
+        articleTitle={article.titleText}
         authorUsername={author.username}
         author_id={author._id}
     />

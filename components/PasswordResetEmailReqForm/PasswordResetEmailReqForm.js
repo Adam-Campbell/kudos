@@ -36,7 +36,7 @@ const PasswordResetEmailReqForm = props => (
             <Portal> <ErrorModal closeModal={props.closeErrorModal}/> </Portal>
         }
         {
-            props.passwordResetEmailSent && 
+            props.emailSent && 
             <Portal> <SuccessModal closeModal={props.closeSuccessModal}/> </Portal>
         }
     </Wrapper>
@@ -47,7 +47,7 @@ PasswordResetEmailReqForm.propTypes = {
     handleEmailUpdate: PropTypes.func.isRequired,
     email: PropTypes.string.isRequired,
     emailNotFound: PropTypes.bool.isRequired,
-    passwordResetEmailSent: PropTypes.bool.isRequired,
+    emailSent: PropTypes.bool.isRequired,
     closeSuccessModal: PropTypes.func.isRequired,
     closeErrorModal: PropTypes.func.isRequired,
 };

@@ -10,8 +10,12 @@ export class PasswordResetEmailReqFormContainer extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.closeErrorModal = this.closeErrorModal.bind(this);
         this.closeSuccessModal = this.closeSuccessModal.bind(this);
+        this.acknowledgeEmailNotFound = this.acknowledgeEmailNotFound.bind(this);
+        this.acknowledgeEmailSent = this.acknowledgeEmailSent.bind(this);
         this.state = {
-            email: ''
+            email: '',
+            showEmailNotFoundState: false,
+            showEmailSentState: false
         };
     }
 
@@ -21,19 +25,32 @@ export class PasswordResetEmailReqFormContainer extends Component {
         }
     }
 
-    handleSubmit(e) {
+    acknowledgeEmailNotFound() {
+        this.setState({ showEmailNotFoundState: false });
+    }
+
+    acknowledgeEmailSent() {
+        this.setState({ showEmailSentState: false });
+    }
+
+    async handleSubmit(e) {
         e.preventDefault();
         const email = this.state.email;
-        this.props.getPasswordResetEmail(email);
-        this.setState({email: ''});
+        const submitResponse = await this.props.getPasswordResetEmail(email);
+        console.log(submitResponse);
+        if (submitResponse === 'email_sent') {
+            this.setState({ email: '', showEmailSentState: true });
+        } else if (submitResponse === 'email_not_found') {
+            this.setState({ showEmailNotFoundState: true });
+        }
     }
 
     closeErrorModal() {
-        this.props.emailNotFoundErrorAcknowledge();
+        //this.props.emailNotFoundErrorAcknowledge();
     }
 
     closeSuccessModal() {
-        this.props.passwordResetEmailSentAcknowledge();
+        //this.props.passwordResetEmailSentAcknowledge();
     }
 
     render() {
@@ -41,24 +58,17 @@ export class PasswordResetEmailReqFormContainer extends Component {
             handleSubmit={this.handleSubmit}
             handleEmailUpdate={this.handleFieldUpdate('email')}
             email={this.state.email}
-            emailNotFound={this.props.emailNotFound}
-            passwordResetEmailSent={this.props.passwordResetEmailSent}
+            emailNotFound={this.state.showEmailNotFoundState}
+            emailSent={this.state.showEmailSentState}
             closeSuccessModal={this.closeSuccessModal}
             closeErrorModal={this.closeErrorModal}
         />
     }
 } 
 
-const mapStateToProps = state => ({
-    emailNotFound: state.errors.emailNotFound,
-    passwordResetEmailSent: state.successes.passwordResetEmailSent
-});
-
 export default connect(
-    mapStateToProps,
+    null,
     {
         getPasswordResetEmail: ActionCreators.getPasswordResetEmail,
-        emailNotFoundErrorAcknowledge: ActionCreators.emailNotFoundErrorAcknowledge,
-        passwordResetEmailSentAcknowledge: ActionCreators.passwordResetEmailSentAcknowledge
     }
 )(PasswordResetEmailReqFormContainer);

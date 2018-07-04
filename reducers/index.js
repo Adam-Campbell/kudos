@@ -6,8 +6,6 @@ import kudos from './kudosReducer';
 import highlights from './highlightsReducer';
 import token from './tokenReducer';
 import currentUser from './currentUserReducer';
-import errors from './errorsReducer';
-import successes from './successesReducer';
 import categories from './categoriesReducer';
 
 export default combineReducers({
@@ -16,7 +14,5 @@ export default combineReducers({
     comments,
     highlights,
     currentUser,
-    errors,
-    successes,
     categories
 });
