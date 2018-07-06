@@ -19,7 +19,11 @@ const user = props => (
 
 user.getInitialProps = async ({store, isServer, req, pathname, query}) => {
     const currentState = store.getState();
-    const currentUser = fetchCurrentUserIfNeeded(currentState, store);
+    let token = null;
+    if (isServer && req.cookies && req.cookies.token) {
+        token = req.cookies.token;
+    }
+    const currentUser = fetchCurrentUserIfNeeded(currentState, store, token);
     const user = fetchUserIfNeeded(currentState, store, query.user);
     await Promise.all([currentUser, user]);
     return {

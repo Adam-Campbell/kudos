@@ -19,6 +19,7 @@
     "@fortawesome/react-fontawesome": "0.0.20",
     "babel-core": "^6.26.3",
     "babel-plugin-styled-components": "^1.5.1",
+    "cookie-parser": "^1.4.3",
     "draft-js": "^0.10.5",
     "enzyme-to-json": "^3.3.4",
     "express": "^4.16.3",

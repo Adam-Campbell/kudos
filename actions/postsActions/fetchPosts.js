@@ -18,8 +18,9 @@ const fetchPostsFailed = error => ({
 
 export const fetchPosts = () => async dispatch => {
     dispatch(fetchPostsRequest());
+    const settings = { credentials: 'include' };
     try {
-        const response = await fetchData(`${rootApiUrl}/api/posts`);
+        const response = await fetchData(`${rootApiUrl}/api/posts`, settings);
         const normalizedResponse = handleNormalize(response, 'posts');
         const timestamp = Date.now();
         dispatch(storePosts(normalizedResponse.entities.posts));

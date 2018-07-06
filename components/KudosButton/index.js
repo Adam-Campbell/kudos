@@ -14,16 +14,14 @@ export class KudosButtonContainer extends Component {
     handleGiveKudos() {
         this.props.giveKudos(
             this.props.article_id, 
-            this.props.currentUser_id, 
-            this.props.token
+            this.props.currentUser_id
         );
     }
 
     handleRemoveKudos() {
         this.props.removeKudos(
             this.props.article_id, 
-            this.props.currentUser_id, 
-            this.props.token
+            this.props.currentUser_id
         );
     }
 
@@ -46,7 +44,6 @@ KudosButtonContainer.propTypes = {
 const mapStateToProps = state => ({
     users: state.users.models,
     currentUser_id: state.currentUser._id,
-    token: state.currentUser.token,
     isLoggedIn: state.currentUser.isLoggedIn
 });
 

@@ -3,7 +3,6 @@ import * as actionTypes from '../actionTypes';
 const initialState = {
     isLoggedIn: false,
     _id: '',
-    token: '',
     email: '',
     follows: [],
     hasFetched: false,
@@ -16,14 +15,12 @@ const currentUserReducer = (state=initialState, action) => {
         case actionTypes.SIGN_IN_SUCCESS:
             return {
                 ...state,
-                token: action.payload,
                 isLoggedIn: true
             }
 
         case actionTypes.SIGN_UP_SUCCESS:
             return {
                 ...state,
-                token: action.payload,
                 isLoggedIn: true,
                 signUpDuplicateError: false
             }

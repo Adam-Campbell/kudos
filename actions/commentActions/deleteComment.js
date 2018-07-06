@@ -23,13 +23,11 @@ const deleteCommentFailed = (err) => ({
     error
 });
 
-export const deleteComment = (comment_id, currentUser_id, token) => async dispatch => {
+export const deleteComment = (comment_id, currentUser_id) => async dispatch => {
     dispatch(deleteCommentRequest());
     const settings = {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        },
         method: 'delete',
+        credentials: 'include'
     };
     try {
         const response = await fetchData(`${rootApiUrl}/api/comments/${comment_id}`, settings);

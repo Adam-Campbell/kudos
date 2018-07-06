@@ -18,12 +18,10 @@ const unfollowUserFailed = error => ({
     error
 });
 
-export const unfollowUser = (user_id, token) => async dispatch => {
+export const unfollowUser = (user_id) => async dispatch => {
     dispatch(unfollowUserRequest(user_id));
     const settings = {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        },
+        credentials: 'include',
         method: 'DELETE'
     };
     try {

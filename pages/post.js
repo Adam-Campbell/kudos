@@ -20,7 +20,11 @@ const post = props => {
 //<Article article_id={props._id} isAuthor={isAuthor} />
 post.getInitialProps = async ({store, isServer, req, pathname, query}) => {
     const currentState = store.getState();
-    const currentUser = fetchCurrentUserIfNeeded(currentState, store);
+    let token = null;
+    if (isServer && req.cookies && req.cookies.token) {
+        token = req.cookies.token;
+    }
+    const currentUser = fetchCurrentUserIfNeeded(currentState, store, token);
     const post = fetchPostIfNeeded(currentState, store, query.post);
     await Promise.all([currentUser, post]);
     return {

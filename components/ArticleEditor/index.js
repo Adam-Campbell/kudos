@@ -130,7 +130,6 @@ class ArticleEditorContainer extends Component {
         isNewArticle: PropTypes.bool.isRequired,
         article_id: PropTypes.string,
         articles: PropTypes.object.isRequired,
-        token: PropTypes.string.isRequired,
         currentUser_id: PropTypes.string.isRequired
     }
     
@@ -255,14 +254,13 @@ class ArticleEditorContainer extends Component {
             isInline: isInline
         };
         if (this.props.isNewArticle) {
-            this.props.createPost(articleObject, this.props.currentUser_id, this.props.token);
+            this.props.createPost(articleObject, this.props.currentUser_id);
         } else {
             this.props.editPost(
                 articleObject, 
                 this.props.article_id, 
                 this.article.category, 
-                articleCategory,
-                this.props.token
+                articleCategory
             );
         }
     }
@@ -326,7 +324,6 @@ class ArticleEditorContainer extends Component {
 }
 
 const mapStateToProps = state => ({
-    token: state.currentUser.token,
     currentUser_id: state.currentUser._id,
     articles: state.posts.models
 });

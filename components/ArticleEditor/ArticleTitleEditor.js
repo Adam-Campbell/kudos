@@ -67,8 +67,7 @@ export class ArticleTitleEditorContainer extends Component {
         article_id: PropTypes.string,
         isNewArticle: PropTypes.bool.isRequired,
         articles: PropTypes.object.isRequired,
-        currentUser_id: PropTypes.string.isRequired,
-        token: PropTypes.string.isRequired
+        currentUser_id: PropTypes.string.isRequired
     }
 
     constructor(props) {
@@ -149,7 +148,6 @@ export class ArticleTitleEditorContainer extends Component {
 const mapStateToProps = state => ({
     articles: state.posts.models,
     currentUser_id: state.currentUser._id,
-    token: state.currentUser.token
 });
 
 export default connect(

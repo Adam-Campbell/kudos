@@ -41,7 +41,7 @@ export class UserPasswordFormContainer extends Component {
                 missingFieldsError: false,
                 nonMatchingPasswordsError: false
             });
-            this.props.updateUserPassword(currentPassword, newPassword, this.props.token);
+            this.props.updateUserPassword(currentPassword, newPassword);
         }
     }
 
@@ -58,11 +58,7 @@ export class UserPasswordFormContainer extends Component {
     }
 }
 
-const mapStateToProps = state => ({
-    token: state.currentUser.token
-});
-
 export default connect(
-    mapStateToProps,
+    null,
     { updateUserPassword: ActionCreators.updateUserPassword }
 )(UserPasswordFormContainer);

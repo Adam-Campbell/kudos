@@ -36,7 +36,7 @@ export class OwnCommentContainer extends Component {
     handleEditSubmit(e) {
         e.preventDefault();
         const { commentEditorText } = this.state;
-        this.props.editComment(commentEditorText, this.props.comment_id, this.props.token);
+        this.props.editComment(commentEditorText, this.props.comment_id);
         this.setState({ isEditing: false });
     }
 
@@ -44,18 +44,17 @@ export class OwnCommentContainer extends Component {
         e.preventDefault();
         this.props.deleteComment(
             this.props.comment_id,
-            this.props.currentUser_id,
-            this.props.token
+            this.props.currentUser_id
         );
     }
 
     boundReplyToComment(commentText) {
-        this.props.replyToComment(commentText, this.props.comment_id, this.props.token)
+        this.props.replyToComment(commentText, this.props.comment_id)
         .then(() => this.toggleReplyForm());
     }
 
     boundSubmitEditComment(commentText) {
-        this.props.editComment(commentText, this.props.comment_id, this.props.token)
+        this.props.editComment(commentText, this.props.comment_id)
         .then(() => this.toggleEditing());
     }
 
@@ -88,8 +87,7 @@ OwnCommentContainer.propTypes = {
 const mapStateToProps = state => ({
     comments: state.comments,
     users: state.users.models,
-    currentUser_id: state.currentUser._id,
-    token: state.currentUser.token
+    currentUser_id: state.currentUser._id
 });
 
 export default connect(

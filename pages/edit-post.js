@@ -27,7 +27,11 @@ const editPost = props => {
 
 editPost.getInitialProps = async ({store, isServer, req, pathname, query}) => {
     const currentState = store.getState();
-    const currentUser = fetchCurrentUserIfNeeded(currentState, store);
+    let token = null;
+    if (isServer && req.cookies && req.cookies.token) {
+        token = req.cookies.token;
+    }
+    const currentUser = fetchCurrentUserIfNeeded(currentState, store, token);
     const post = store.dispatch(fetchPost(query.post));
     await Promise.all([currentUser, post]);
     return {

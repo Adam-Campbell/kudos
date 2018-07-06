@@ -21,13 +21,13 @@ const editCommentFailed = (error) => ({
     error
 });
 
-export const editComment = (commentText, comment_id, token) => async dispatch => {
+export const editComment = (commentText, comment_id) => async dispatch => {
     dispatch(editCommentRequest());
     const settings = {
         headers: {
-            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
         },
+        credentials: 'include',
         method: 'PUT',
         body: JSON.stringify({
             text: commentText

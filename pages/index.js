@@ -22,9 +22,16 @@ const index = props => (
 )
 
 index.getInitialProps = async ({store, isServer, req, pathname, query}) => {
+    //console.log(req.cookies);
     const currentState = store.getState();
-    const currentUser = fetchCurrentUserIfNeeded(currentState, store);
+    let token = null;
+    if (isServer && req.cookies && req.cookies.token) {
+        token = req.cookies.token;
+    }
+    const currentUser = fetchCurrentUserIfNeeded(currentState, store, token);
     const posts = fetchPostsIfNeeded(currentState, store, 'all');
+    // const currentUser = store.dispatch(fetchCurrentUser(token));
+    // const posts = store.dispatch(fetchPosts());
     await Promise.all([currentUser, posts]);
     return {};
 };

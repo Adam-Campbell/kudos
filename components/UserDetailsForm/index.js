@@ -24,7 +24,7 @@ export class UserDetailsFormContainer extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        this.props.updateUserDetails(this.state, this.props.currentUser_id, this.props.token);
+        this.props.updateUserDetails(this.state, this.props.currentUser_id);
     }
 
     render() {
@@ -43,7 +43,6 @@ export class UserDetailsFormContainer extends Component {
 const mapStateToProps = state => ({
     users: state.users.models,
     currentUser_id: state.currentUser._id,
-    token: state.currentUser.token,
     email: state.currentUser.email
 });
 

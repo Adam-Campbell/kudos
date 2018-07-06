@@ -12,11 +12,11 @@ export class FollowButtonContainer extends Component {
     }
 
     handleFollow() {
-        this.props.followUser(this.props.user_id, this.props.token);
+        this.props.followUser(this.props.user_id);
     }
 
     handleUnfollow() {
-        this.props.unfollowUser(this.props.user_id, this.props.token);
+        this.props.unfollowUser(this.props.user_id);
     }
 
     render() {
@@ -37,8 +37,7 @@ FollowButtonContainer.propTypes = {
 
 const mapStateToProps = state => ({
     isLoggedIn: state.currentUser.isLoggedIn,
-    currentUserFollows: state.currentUser.follows,
-    token: state.currentUser.token
+    currentUserFollows: state.currentUser.follows
 });
 
 export default connect(

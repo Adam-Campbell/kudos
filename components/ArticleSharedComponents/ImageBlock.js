@@ -182,9 +182,4 @@ class EditorImageBlock extends Component {
     }
 }
 
-
-const mapStateToProps = state => ({
-    token: state.currentUser.token
-});
-//export default ImageBlock;
-export const ImageBlock = connect(mapStateToProps)(EditorImageBlock);
+export const ImageBlock = EditorImageBlock;

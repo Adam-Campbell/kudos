@@ -375,7 +375,6 @@ ArticleBodyEditorContainer.propTypes = {
 const mapStateToProps = state => ({
     articles: state.posts.models,
     currentUser_id: state.currentUser._id,
-    token: state.currentUser.token
 });
 
 export default connect(

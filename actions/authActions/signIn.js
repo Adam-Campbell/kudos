@@ -24,6 +24,7 @@ const makeSignInRequest = async (username, password, dispatch) => {
         headers: {
             'Content-Type': 'application/json'
         },
+        credentials: 'include',
         method: 'post',
         body: JSON.stringify({
             username: username,
@@ -42,7 +43,9 @@ export const signIn = (username, password) => async dispatch => {
     dispatch(signInRequest());
     try {
         const token = await makeSignInRequest(username, password, dispatch);
-        document.cookie = `token=${token.token};expires=${new Date(Date.now() + 36000000).toUTCString()}`;
+        //console.log(document.cookie);
+        //console.log(token);
+        //document.cookie = `token=${token.token};expires=${new Date(Date.now() + 36000000).toUTCString()}`;
         dispatch(signInSuccess(token.token));
         await dispatch(fetchCurrentUser(token.token));
         Router.push('/');

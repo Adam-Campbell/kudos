@@ -19,7 +19,11 @@ const category = props => (
 
 category.getInitialProps = async ({store, isServer, req, pathname, query}) => {
     const currentState = store.getState();
-    const currentUser = fetchCurrentUserIfNeeded(currentState, store);
+    let token = null;
+    if (isServer && req.cookies && req.cookies.token) {
+        token = req.cookies.token;
+    }
+    const currentUser = fetchCurrentUserIfNeeded(currentState, store, token);
     const categoriesPosts = fetchPostsIfNeeded(currentState, store, query.category);
     await Promise.all([currentUser, categoriesPosts]);
     return {

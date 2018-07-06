@@ -30,13 +30,13 @@ const editPostFailed = (error) => ({
 
 
 
-export const editPost = (articleObject, post_id, oldCategory, newCategory, token) => async dispatch => {
+export const editPost = (articleObject, post_id, oldCategory, newCategory) => async dispatch => {
     dispatch(editPostRequest());
     const settings = {
         headers: {
-            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
         },
+        credentials: 'include',
         method: 'PUT',
         body: JSON.stringify(articleObject)
     }

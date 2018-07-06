@@ -22,7 +22,11 @@ const signup = props => {
 
 signup.getInitialProps = async ({store, isServer, req, pathname, query}) => {
     const currentState = store.getState();
-    await fetchCurrentUserIfNeeded(currentState, store);
+    let token = null;
+    if (isServer && req.cookies && req.cookies.token) {
+        token = req.cookies.token;
+    }
+    await fetchCurrentUserIfNeeded(currentState, store, token);
     return;
 };
 

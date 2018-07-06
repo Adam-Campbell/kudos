@@ -23,13 +23,13 @@ const createPostFailed = (error) => ({
     error
 });
 
-export const createPost = (articleObject, currentUser_id, token) => async dispatch => {
+export const createPost = (articleObject, currentUser_id) => async dispatch => {
     dispatch(createPostRequest());
     const settings = {
         headers: {
-            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
         },
+        credentials: 'include',
         method: 'post',
         body: JSON.stringify(articleObject)
     }
