@@ -1,7 +1,7 @@
 import withRedux from 'next-redux-wrapper';
 import makeStore from '../store';
 import SignUpForm from '../components/SignUpForm';
-import { fetchCurrentUserIfNeeded } from '../utils';
+import { fetchCurrentUserIfNeeded, retrieveAuthTokensOnSSR } from '../utils';
 import Router from 'next/router';
 import Header from '../components/Header';
 
@@ -22,11 +22,8 @@ const signup = props => {
 
 signup.getInitialProps = async ({store, isServer, req, pathname, query}) => {
     const currentState = store.getState();
-    let token = null;
-    if (isServer && req.cookies && req.cookies.token) {
-        token = req.cookies.token;
-    }
-    await fetchCurrentUserIfNeeded(currentState, store, token);
+    const { token, refreshToken } = retrieveAuthTokensOnSSR(isServer, req);
+    await fetchCurrentUserIfNeeded(currentState, store, token, refreshToken);
     return;
 };
 

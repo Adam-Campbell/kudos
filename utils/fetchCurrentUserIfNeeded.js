@@ -9,10 +9,11 @@ If not, then it just returns a resolved promise. So in either case you just awai
 
 */
 
-export const fetchCurrentUserIfNeeded = (currentState, store, SSRToken) => {
+export const fetchCurrentUserIfNeeded = (currentState, store, SSRToken, SSRRefreshToken) => {
     const { isLoggedIn, hasFetched, token } = currentState.currentUser;
-    if (isLoggedIn && !hasFetched) {
-        return store.dispatch(fetchCurrentUser(SSRToken));
+    //if (isLoggedIn && !hasFetched) {
+    if (isLoggedIn) {
+        return store.dispatch(fetchCurrentUser(SSRToken, SSRRefreshToken));
     }
     return Promise.resolve();
 };

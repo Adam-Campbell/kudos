@@ -1,7 +1,7 @@
 import withRedux from 'next-redux-wrapper';
 import makeStore from '../store';
 import { fetchCurrentUser, fetchPost } from '../actions';
-import { fetchCurrentUserIfNeeded } from '../utils';
+import { fetchCurrentUserIfNeeded, retrieveAuthTokensOnSSR } from '../utils';
 import Header from '../components/Header';
 import EditArticleForm from '../components/EditArticleForm';
 import ArticleEditor from '../components/ArticleEditor';
@@ -27,11 +27,8 @@ const editPost = props => {
 
 editPost.getInitialProps = async ({store, isServer, req, pathname, query}) => {
     const currentState = store.getState();
-    let token = null;
-    if (isServer && req.cookies && req.cookies.token) {
-        token = req.cookies.token;
-    }
-    const currentUser = fetchCurrentUserIfNeeded(currentState, store, token);
+    const { token, refreshToken } = retrieveAuthTokensOnSSR(isServer, req);
+    const currentUser = fetchCurrentUserIfNeeded(currentState, store, token, refreshToken);
     const post = store.dispatch(fetchPost(query.post));
     await Promise.all([currentUser, post]);
     return {

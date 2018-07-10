@@ -47,6 +47,7 @@ export const signIn = (username, password) => async dispatch => {
         //console.log(token);
         //document.cookie = `token=${token.token};expires=${new Date(Date.now() + 36000000).toUTCString()}`;
         dispatch(signInSuccess(token.token));
+        //await dispatch(fetchCurrentUser(token.token));
         await dispatch(fetchCurrentUser(token.token));
         Router.push('/');
     } catch (err) {

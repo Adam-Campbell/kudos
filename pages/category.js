@@ -1,7 +1,7 @@
 import withRedux from 'next-redux-wrapper';
 import makeStore from '../store';
 import { fetchCurrentUser, cleanseErrors, fetchCategoriesPosts } from '../actions';
-import { fetchCurrentUserIfNeeded, fetchPostsIfNeeded } from '../utils';
+import { fetchCurrentUserIfNeeded, fetchPostsIfNeeded, retrieveAuthTokensOnSSR } from '../utils';
 import Header from '../components/Header';
 import InlineArticleCard from '../components/InlineArticleCard';
 import { Wrapper } from '../components/Layout';
@@ -19,11 +19,8 @@ const category = props => (
 
 category.getInitialProps = async ({store, isServer, req, pathname, query}) => {
     const currentState = store.getState();
-    let token = null;
-    if (isServer && req.cookies && req.cookies.token) {
-        token = req.cookies.token;
-    }
-    const currentUser = fetchCurrentUserIfNeeded(currentState, store, token);
+    const { token, refreshToken } = retrieveAuthTokensOnSSR(isServer, req);
+    const currentUser = fetchCurrentUserIfNeeded(currentState, store, token, refreshToken);
     const categoriesPosts = fetchPostsIfNeeded(currentState, store, query.category);
     await Promise.all([currentUser, categoriesPosts]);
     return {

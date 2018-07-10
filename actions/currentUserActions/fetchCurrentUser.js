@@ -87,7 +87,7 @@ const fetchCurrentUsersKudos = (settings) => async dispatch => {
     }
 }
 
-export const fetchCurrentUser = (SSRToken) => async (dispatch, getState) => {
+export const fetchCurrentUser = (SSRToken, SSRRefreshToken) => async (dispatch, getState) => {
     dispatch(fetchCurrentUserRequest());
     const settings = {
         headers: {
@@ -95,8 +95,9 @@ export const fetchCurrentUser = (SSRToken) => async (dispatch, getState) => {
         },
         credentials: 'include'
     };
-    if (SSRToken) {
-        settings.headers.Cookie = `token=${SSRToken}`;
+    if (SSRToken || SSRRefreshToken) {
+        settings.headers.Cookie = `refreshToken=${SSRRefreshToken}; token=${SSRToken};`;
+        //settings.headers.Cookie = `refreshToken=${SSRRefreshToken}`;
     }
     const promiseArr = [
         dispatch(fetchCurrentUsersInfo(settings)),

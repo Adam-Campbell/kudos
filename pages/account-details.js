@@ -5,7 +5,7 @@ import Header from '../components/Header';
 import UserDetailsForm from '../components/UserDetailsForm';
 import UserImageUploadForm from '../components/UserImageUploadForm';
 import UserPasswordForm from '../components/UserPasswordForm';
-import { fetchCurrentUserIfNeeded } from '../utils';
+import { fetchCurrentUserIfNeeded, retrieveAuthTokensOnSSR } from '../utils';
 import Router from 'next/router';
 
 const accountDetails = props => {
@@ -26,11 +26,8 @@ const accountDetails = props => {
 
 accountDetails.getInitialProps = async ({store, isServer, req, pathname, query}) => {
     const currentState = store.getState();
-    let token = null;
-    if (isServer && req.cookies && req.cookies.token) {
-        token = req.cookies.token;
-    }
-    await fetchCurrentUserIfNeeded(currentState, store, token);
+    const { token, refreshToken } = retrieveAuthTokensOnSSR(isServer, req);
+    await fetchCurrentUserIfNeeded(currentState, store, token, refreshToken);
     return;
 }
 
