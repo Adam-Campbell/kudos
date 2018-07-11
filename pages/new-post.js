@@ -1,7 +1,7 @@
 import withRedux from 'next-redux-wrapper';
 import makeStore from '../store';
 import { fetchCurrentUser } from '../actions';
-import { fetchCurrentUserIfNeeded } from '../utils';
+import { fetchCurrentUserIfNeeded, retrieveAuthTokensOnSSR } from '../utils';
 import Header from '../components/Header';
 import NewPostForm from '../components/NewPostForm';
 import Router from 'next/router';
@@ -37,7 +37,8 @@ const newPost = props => {
 
 newPost.getInitialProps = async ({store, isServer, req, pathname, query}) => {
     const currentState = store.getState();
-    await fetchCurrentUserIfNeeded(currentState, store);
+    const { token, refreshToken } = retrieveAuthTokensOnSSR(isServer, req);
+    await fetchCurrentUserIfNeeded(currentState, store, token, refreshToken);
     return;
 };
 

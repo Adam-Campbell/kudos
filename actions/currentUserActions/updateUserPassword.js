@@ -16,13 +16,13 @@ const updateUserPasswordFailed = (error) => ({
     error
 });
 
-export const updateUserPassword = (currentPw, newPw, token,) => async dispatch => {
+export const updateUserPassword = (currentPw, newPw) => async dispatch => {
     dispatch(updateUserPasswordRequest());
     const settings = {
         headers: {
-            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
         },
+        credentials: 'include',
         method: 'PUT',
         body: JSON.stringify({
             old: currentPw,

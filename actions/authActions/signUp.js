@@ -19,7 +19,7 @@ const signUpFailed = (error) => ({
     error
 });
 
-const makeSignUpRequest = async (username, email, password, dispatch) => {
+const makeSignUpRequest = async (username, email, password) => {
     const settings = {
         headers: {
             'Content-Type': 'application/json'
@@ -48,9 +48,9 @@ export const signUp = (username, email, password) => async dispatch => {
     dispatch(signUpRequest());
     try {
         const token = await makeSignUpRequest(username, email, password, dispatch);
-        document.cookie = `token=${token.token};expires=${new Date(Date.now() + 3600000).toUTCString()}`;
+        //document.cookie = `token=${token.token};expires=${new Date(Date.now() + 3600000).toUTCString()}`;
         dispatch(signUpSuccess(token.token));
-        await dispatch(fetchCurrentUser(token.token));
+        await dispatch(fetchCurrentUser());
         Router.push('/');
     } catch (err) {
         dispatch(signUpFailed(err));

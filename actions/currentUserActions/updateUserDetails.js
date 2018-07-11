@@ -17,13 +17,13 @@ const updateUserDetailsFailed = (error) => ({
     error
 });
 
-export const updateUserDetails = (newDetails, currentUser_id, token) => async dispatch => {
+export const updateUserDetails = (newDetails, currentUser_id) => async dispatch => {
     dispatch(updateUserDetailsRequest());
     const settings = {
         headers: {
-            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
         },
+        credentials: 'include',
         method: 'PUT',
         body: JSON.stringify({
             username: newDetails.username,

@@ -17,12 +17,10 @@ const updateUserAvatarFailed = (error) => ({
     error
 });
 
-export const updateUserAvatar = (formData, token) => async dispatch => {
+export const updateUserAvatar = (formData) => async dispatch => {
     dispatch(updateUserAvatarRequest());
     const settings = {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        },
+        credentials: 'include',
         method: 'PUT',
         body: formData
     }

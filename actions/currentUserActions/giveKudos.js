@@ -21,12 +21,10 @@ const giveKudosFailed = error => ({
     error
 });
 
-export const giveKudos = (post_id, currentUser_id, token) => async dispatch => {
+export const giveKudos = (post_id, currentUser_id) => async dispatch => {
     dispatch(giveKudosRequest(post_id));
     const settings = {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        },
+        credentials: 'include',
         method: 'PUT'
     };
     try {

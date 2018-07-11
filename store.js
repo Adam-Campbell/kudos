@@ -20,11 +20,12 @@ const makeStore = (initialState, options) => {
     // and pass that as the initial state for the token reducer so it loads
     // on the client with that info already in place. 
     if (options.isServer && options.req.headers.cookie) {
+        //console.log(options);
+        //console.log(options.req.headers.cookie);
         initialState = {
             currentUser: {
                 isLoggedIn: true,
                 _id: '',
-                token: options.req.headers.cookie.split('=')[1],
                 email: '',
                 follows: [],
                 hasFetched: false,

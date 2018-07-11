@@ -31,7 +31,7 @@ export class UserImageUploadFormContainer extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        this.props.updateUserAvatar(this.form, this.props.token);
+        this.props.updateUserAvatar(this.form);
     }
 
     render() {
@@ -44,7 +44,6 @@ export class UserImageUploadFormContainer extends Component {
 }
 
 const mapStateToProps = state => ({
-    token: state.currentUser.token,
     currentUser_id: state.currentUser._id
 });
 

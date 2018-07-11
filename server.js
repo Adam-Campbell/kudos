@@ -1,5 +1,6 @@
 const express = require('express');
 const next = require('next');
+const cookieParser = require('cookie-parser');
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -10,7 +11,7 @@ app.prepare()
     const server = express();
     
     server.use(express.static(__dirname + '/uploads'))
-
+    server.use(cookieParser())
     server.get('/category/:category', (req, res) => {
         const url = '/category';
         const params = { category: req.params.category };
@@ -48,6 +49,7 @@ app.prepare()
     });
 
     server.get('*', (req, res) => {
+        //console.log(req.cookies);
         return handle(req, res);
     });
 

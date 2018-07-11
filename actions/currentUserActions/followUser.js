@@ -18,12 +18,10 @@ const followUserFailed = error => ({
     error
 });
 
-export const followUser = (user_id, token) => async dispatch => {
+export const followUser = (user_id) => async dispatch => {
     dispatch(followUserRequest(user_id));
     const settings = {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        },
+        credentials: 'include',
         method: 'PUT'
     };
     try {

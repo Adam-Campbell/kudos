@@ -11,7 +11,7 @@ class ArticleCommentBoxContainer extends Component {
     }
 
     boundSubmitHandler(commentData, clearFieldCallback) {
-        this.props.replyToPost(commentData, this.props.article_id, this.props.token)
+        this.props.replyToPost(commentData, this.props.article_id)
         .then(() => clearFieldCallback());
     }
 
@@ -27,11 +27,7 @@ ArticleCommentBoxContainer.propTypes = {
     article_id: PropTypes.string.isRequired
 };
 
-const mapStateToProps = state => ({
-    token: state.currentUser.token
-});
-
 export default connect(
-    mapStateToProps, 
+    null, 
     { replyToPost: ActionCreators.replyToPost }
 )(ArticleCommentBoxContainer)

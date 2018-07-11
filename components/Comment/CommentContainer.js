@@ -15,7 +15,7 @@ class CommentContainer extends Component {
     }
 
     boundReplyToComment(commentText) {
-        this.props.replyToComment(commentText, this.props.comment_id, this.props.token)
+        this.props.replyToComment(commentText, this.props.comment_id)
         .then(() => this.toggleReplyForm());
     }
 
@@ -49,7 +49,6 @@ const mapStateToProps = state => ({
     comments: state.comments,
     users: state.users.models,
     isLoggedIn: state.currentUser.isLoggedIn,
-    token: state.currentUser.token
 });
 
 export default connect(

@@ -48,8 +48,7 @@ class EditArticleFormContainer extends Component {
             this.form, 
             this.props.article_id, 
             this.state.originalCategory,
-            this.state.articleCategory,
-            this.props.token
+            this.state.articleCategory
         );
     }
 
@@ -75,7 +74,6 @@ EditArticleFormContainer.propTypes = {
 }
 
 const mapStateToProps = state => ({
-    token: state.currentUser.token,
     currentUser_id: state.currentUser._id,
     articles: state.posts.models
 });

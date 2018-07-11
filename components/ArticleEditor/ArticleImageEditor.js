@@ -100,9 +100,7 @@ class ArticleImageEditorContainer extends Component {
         const form = new FormData();
         form.append('image', image);
         const settings = {
-            headers: {
-                'Authorization': `Bearer ${this.props.token}`
-            },
+            credentials: 'include',
             method: 'post',
             body: form
         };
@@ -123,8 +121,5 @@ class ArticleImageEditorContainer extends Component {
     }
 }
 
-const mapStateToProps = state => ({
-    token: state.currentUser.token
-});
 
-export default connect(mapStateToProps)(ArticleImageEditorContainer);
+export default ArticleImageEditorContainer;

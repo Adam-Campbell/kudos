@@ -29,7 +29,7 @@ const fetchCurrentUserFailed = (error) => ({
     error
 });
 
-const fetchCurrentUsersInfo = settings => async dispatch => {
+const fetchCurrentUsersInfo = (settings) => async dispatch => {
     try {
         const response = await fetchData(`${rootApiUrl}/api/me`, settings);
         dispatch(storeCurrentUser(response, response._id));
@@ -39,7 +39,7 @@ const fetchCurrentUsersInfo = settings => async dispatch => {
     }
 }
 
-const fetchCurrentUsersHighlights = settings => async dispatch => {
+const fetchCurrentUsersHighlights = (settings) => async dispatch => {
     try {
         const response = await fetchData(`${rootApiUrl}/api/me/highlights`, settings);
         const currentUser_id = response.user_id;
@@ -52,7 +52,7 @@ const fetchCurrentUsersHighlights = settings => async dispatch => {
     }
 }
 
-const fetchCurrentUsersFollows = settings => async dispatch => {
+const fetchCurrentUsersFollows = (settings) => async dispatch => {
     try {
         const response = await fetchData(`${rootApiUrl}/api/me/follows/`, settings);
         const currentUser_id = response.user_id;
@@ -65,7 +65,7 @@ const fetchCurrentUsersFollows = settings => async dispatch => {
     }
 }
 
-const fetchCurrentUsersKudos = settings => async dispatch => {
+const fetchCurrentUsersKudos = (settings) => async dispatch => {
     try {
         const response = await fetchData(`${rootApiUrl}/api/me/kudos`, settings);
         const currentUser_id = response.user_id;
@@ -87,13 +87,18 @@ const fetchCurrentUsersKudos = settings => async dispatch => {
     }
 }
 
-export const fetchCurrentUser = token => async (dispatch, getState) => {
+export const fetchCurrentUser = (SSRToken, SSRRefreshToken) => async (dispatch, getState) => {
     dispatch(fetchCurrentUserRequest());
     const settings = {
         headers: {
-            'Authorization': `Bearer ${token}`
-        }
+            
+        },
+        credentials: 'include'
     };
+    if (SSRToken || SSRRefreshToken) {
+        settings.headers.Cookie = `refreshToken=${SSRRefreshToken}; token=${SSRToken};`;
+        //settings.headers.Cookie = `refreshToken=${SSRRefreshToken}`;
+    }
     const promiseArr = [
         dispatch(fetchCurrentUsersInfo(settings)),
         dispatch(fetchCurrentUsersHighlights(settings)),

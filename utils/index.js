@@ -7,5 +7,6 @@ export * from './fetchUserIfNeeded';
 export * from './handleNormalize';
 export * from './mergeAndDedupArrays';
 export * from './objectToArray';
+export * from './retrieveAuthTokensOnSSR';
 export * from './sortComments';
 

@@ -1,7 +1,7 @@
 import withRedux from 'next-redux-wrapper';
 import makeStore from '../store';
 import { fetchUser, fetchCurrentUser } from '../actions';
-import { fetchCurrentUserIfNeeded, fetchUserIfNeeded } from '../utils';
+import { fetchCurrentUserIfNeeded, fetchUserIfNeeded, retrieveAuthTokensOnSSR } from '../utils';
 import { Wrapper } from '../components/Layout';
 import Header from '../components/Header';
 import UserProfileHeader from '../components/UserProfileHeader';
@@ -19,7 +19,8 @@ const user = props => (
 
 user.getInitialProps = async ({store, isServer, req, pathname, query}) => {
     const currentState = store.getState();
-    const currentUser = fetchCurrentUserIfNeeded(currentState, store);
+    const { token, refreshToken } = retrieveAuthTokensOnSSR(isServer, req);
+    const currentUser = fetchCurrentUserIfNeeded(currentState, store, token, refreshToken);
     const user = fetchUserIfNeeded(currentState, store, query.user);
     await Promise.all([currentUser, user]);
     return {

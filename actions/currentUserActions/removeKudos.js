@@ -21,12 +21,10 @@ const removeKudosFailed = error => ({
     error
 });
 
-export const removeKudos = (post_id, currentUser_id, token) => async dispatch => {
+export const removeKudos = (post_id, currentUser_id) => async dispatch => {
     dispatch(removeKudosRequest(post_id));
     const settings = {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        },
+        credentials: 'include',
         method: 'DELETE'
     };
     try {

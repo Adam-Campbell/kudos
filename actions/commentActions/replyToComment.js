@@ -17,13 +17,13 @@ const replyToCommentFailed = (error) => ({
     error
 });
 
-export const replyToComment = (commentRaw, parentComment_id, token) => async (dispatch, getState) => {
+export const replyToComment = (commentRaw, parentComment_id) => async (dispatch, getState) => {
     dispatch(replyToCommentRequest());
     const settings = {
         headers: {
-            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
         },
+        credentials: 'include',
         method: 'post',
         body: JSON.stringify({
             text: commentRaw
